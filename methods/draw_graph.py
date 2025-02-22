@@ -5,7 +5,8 @@ from dash import Dash, html, dcc
 
 def draw_static_graph(
         t_fr_bid:pd.DataFrame,
-        t_fr_ask:pd.DataFrame 
+        t_fr_ask:pd.DataFrame,
+        t_fr_joined:pd.DataFrame
         ):
     dot_size = 8
 
@@ -19,6 +20,7 @@ def draw_static_graph(
         increasing_line_color='purple',
         decreasing_line_color='darkviolet'
         )
+    
     candlestick_ask = go.Candlestick(
         x=t_fr_ask.index,
         open=t_fr_ask['Open'],
@@ -30,10 +32,24 @@ def draw_static_graph(
         decreasing_line_color='pink'
         )
     
-    fig = make_subplots(rows=1, cols=1, shared_xaxes=False, vertical_spacing=0.02, horizontal_spacing=0.05, row_heights=[1])
+    candlestick_joined = go.Candlestick(
+        x=t_fr_joined.index,
+        open=t_fr_joined['Open'],
+        high=t_fr_joined['High'],
+        low=t_fr_joined['Low'],
+        close=t_fr_joined['Close'],
+        name='Объединенные свечи',
+        increasing_line_color='green',
+        decreasing_line_color='red'
+        )
+    
+
+    
+    fig = make_subplots(rows=1, cols=2, shared_xaxes=False, vertical_spacing=0.02, horizontal_spacing=0.05, row_heights=[1])
 
     fig.append_trace(candlestick_bid, row=1, col=1)
     fig.append_trace(candlestick_ask, row=1, col=1)
+    fig.append_trace(candlestick_joined, row=1, col=2)
 
     fig.update_xaxes(rangeslider_visible=True)
 
