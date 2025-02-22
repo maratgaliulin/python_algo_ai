@@ -1,7 +1,16 @@
-from methods.make_time_series_data import make_time_series_data
-from methods.return_single_large_dataframe import return_single_large_dataframe
+# This is a sample Python script.
+
+# Press Shift+F10 to execute it or replace it with your code.
+# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
 
-# make_time_series_data('hist_data/', '1_min', '5_min', '5min')
+def print_hi(name):
+    # Use a breakpoint in the code line below to debug your script.
+    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
 
-return_single_large_dataframe('hist_data/EURUSD/', '5_min/', 'Bid')
+
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    print_hi('PyCharm')
+
+# See PyCharm help at https://www.jetbrains.com/help/pycharm/
