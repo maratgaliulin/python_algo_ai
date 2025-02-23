@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 
 def return_open_price(df:pd.DataFrame):
     if((df['open_ask'] != 999) and (df['open_bid'] != 999)):
@@ -39,7 +38,7 @@ def return_high_price(df:pd.DataFrame):
     
 def return_low_price(df:pd.DataFrame):
     if((df['low_bid'] != 999) and (df['low_ask'] != 999)):
-        if((df['low_bid'] < df['low_ask']) or (df['low_ask'] == np.nan)):
+        if((df['low_bid'] < df['low_ask'])):
             return df['low_bid']
         else:
             return df['low_ask']

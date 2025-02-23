@@ -12,10 +12,10 @@ def draw_static_graph(
 
     candlestick_bid = go.Candlestick(
         x=t_fr_bid.index,
-        open=t_fr_bid['Open'],
-        high=t_fr_bid['High'],
-        low=t_fr_bid['Low'],
-        close=t_fr_bid['Close'],
+        open=t_fr_bid['open'],
+        high=t_fr_bid['high'],
+        low=t_fr_bid['low'],
+        close=t_fr_bid['close'],
         name='Бидовые свечи',
         increasing_line_color='purple',
         decreasing_line_color='darkviolet'
@@ -23,10 +23,10 @@ def draw_static_graph(
     
     candlestick_ask = go.Candlestick(
         x=t_fr_ask.index,
-        open=t_fr_ask['Open'],
-        high=t_fr_ask['High'],
-        low=t_fr_ask['Low'],
-        close=t_fr_ask['Close'],
+        open=t_fr_ask['open'],
+        high=t_fr_ask['high'],
+        low=t_fr_ask['low'],
+        close=t_fr_ask['close'],
         name='Асковые свечи',
         increasing_line_color='red',
         decreasing_line_color='pink'
@@ -34,10 +34,10 @@ def draw_static_graph(
     
     candlestick_joined = go.Candlestick(
         x=t_fr_joined.index,
-        open=t_fr_joined['Open'],
-        high=t_fr_joined['High'],
-        low=t_fr_joined['Low'],
-        close=t_fr_joined['Close'],
+        open=t_fr_joined['open'],
+        high=t_fr_joined['high'],
+        low=t_fr_joined['low'],
+        close=t_fr_joined['close'],
         name='Объединенные свечи',
         increasing_line_color='green',
         decreasing_line_color='red'

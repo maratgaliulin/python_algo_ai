@@ -28,7 +28,7 @@ df_5min_joined = make_single_df_from_bid_ask(df_5min_bid, df_5min_ask)
 # print('********************')
 # print(df_5min_ask.tail(50))
 # print('********************')
-for i in range(0,90):
-    print(df_5min_joined.iloc[i].T)
+# for i in range(0,90):
+#     print(df_5min_joined.iloc[i].T)
 
-# draw_static_graph(df_5min_bid.tail(70), df_5min_ask.tail(70), df_5min_joined.tail(70))
+draw_static_graph(df_5min_bid.tail(70), df_5min_ask.tail(70), df_5min_joined.tail(70))
