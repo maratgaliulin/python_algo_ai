@@ -9,13 +9,6 @@ base_dir = "hist_data/EURUSD/5_min/"
 dir_bid = base_dir + "Bid/EURUSD_5min_Bid_01.01.2004-01.01.2007.csv"
 dir_ask = base_dir + "Ask/EURUSD_5min_Ask_01.01.2004-01.01.2007.csv"
 
-rename_columns_dict = {
-    'Open': 'open',
-    'High': 'high',
-    'Low': 'low',
-    'Close': 'close',
-    'Volume': 'volume'
-}
 
 # df_5min_bid = pd.read_csv(dir_bid, index_col="Gmt time").sort_index(ascending=True)
 # df_5min_ask = pd.read_csv(dir_ask, index_col="Gmt time").sort_index(ascending=True)
@@ -38,14 +31,17 @@ time_series_folder = "EURUSD/5_min/"
 bid_or_ask_folder_bid = "Bid/"
 bid_or_ask_folder_ask = "Ask/"
 
-df_5min_bid = return_single_large_dataframe(base_dir=bdir, time_series_folder=time_series_folder, Bid_or_Ask_folder=bid_or_ask_folder_bid)
-df_5min_ask = return_single_large_dataframe(base_dir=bdir, time_series_folder=time_series_folder, Bid_or_Ask_folder=bid_or_ask_folder_ask)
 
-df_5min_bid.rename(columns=rename_columns_dict, inplace=True)
-df_5min_ask.rename(columns=rename_columns_dict, inplace=True)
 
-df_5min_joined = make_single_df_from_bid_ask(df_5min_bid, df_5min_ask)
+
+df_5min_joined = make_single_df_from_bid_ask(
+    base_dir=bdir, 
+    time_series_folder=time_series_folder, 
+    bid_or_ask_folder_bid=bid_or_ask_folder_bid, 
+    bid_or_ask_folder_ask=bid_or_ask_folder_ask
+    )
 
 print(df_5min_joined.head(20))
 print(df_5min_joined.tail(20))
 print(len(df_5min_joined))
+# print()

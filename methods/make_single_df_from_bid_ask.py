@@ -1,4 +1,5 @@
 import pandas as pd
+from .return_single_large_dataframe import return_single_large_dataframe
 
 def return_open_price(df:pd.DataFrame):
     if((df['open_ask'] != 999) and (df['open_bid'] != 999)):
@@ -48,7 +49,7 @@ def return_low_price(df:pd.DataFrame):
     else:
         return df['low_bid']
 
-def make_single_df_from_bid_ask(df_bid:pd.DataFrame, df_ask:pd.DataFrame) -> pd.DataFrame:
+def make_single_df_from_bid_ask(base_dir:str, time_series_folder:str, bid_or_ask_folder_bid:str, bid_or_ask_folder_ask:str) -> pd.DataFrame:
     values = {
         'open_bid': 999, 
         'high_bid': 999, 
@@ -62,6 +63,20 @@ def make_single_df_from_bid_ask(df_bid:pd.DataFrame, df_ask:pd.DataFrame) -> pd.
         'volume_ask':0
     }
 
+    rename_columns_dict = {
+    'Open': 'open',
+    'High': 'high',
+    'Low': 'low',
+    'Close': 'close',
+    'Volume': 'volume'
+    }
+
+    df_bid = return_single_large_dataframe(base_dir=base_dir, time_series_folder=time_series_folder, Bid_or_Ask_folder=bid_or_ask_folder_bid)
+    df_ask = return_single_large_dataframe(base_dir=base_dir, time_series_folder=time_series_folder, Bid_or_Ask_folder=bid_or_ask_folder_ask)
+    
+    df_bid.rename(columns=rename_columns_dict, inplace=True)
+    df_ask.rename(columns=rename_columns_dict, inplace=True)
+
     df_joined = pd.merge(df_bid, df_ask, how='outer', left_index=True, right_index=True, suffixes=['_bid', '_ask'])
     df_joined.fillna(inplace=True, value=values)
     df_joined['open'] = df_joined.apply(return_open_price, axis=1)
@@ -69,7 +84,8 @@ def make_single_df_from_bid_ask(df_bid:pd.DataFrame, df_ask:pd.DataFrame) -> pd.
     df_joined['high'] = df_joined.apply(return_high_price, axis=1)
     df_joined['low'] = df_joined.apply(return_low_price, axis=1)
     df_joined['volume'] = df_joined['volume_bid'] + df_joined['volume_ask']
-    df_joined.drop(['open_bid', 'high_bid', 'low_bid', 'close_bid', 'open_ask', 'high_ask', 'low_ask', 'close_ask'], inplace=True, axis=1)
+    df_joined.drop(['open_bid', 'high_bid', 'low_bid', 'close_bid', 'open_ask', 'high_ask', 'low_ask', 'close_ask', 'volume_bid', 'volume_ask', 'Gmt time_bid', 'Gmt time_ask'], inplace=True, axis=1)
     
-    
+    df_joined = df_joined.loc[~df_joined.isna().any(axis=1)]
+
     return df_joined
