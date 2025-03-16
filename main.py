@@ -1,8 +1,12 @@
 import pandas as pd
-import numpy as np
 from methods.draw_graph import draw_static_graph
 from methods.make_single_df_from_bid_ask import make_single_df_from_bid_ask
-from methods.return_single_large_dataframe import return_single_large_dataframe
+
+
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', None)
+
+
 
 base_dir = "hist_data/EURUSD/5_min/"
 

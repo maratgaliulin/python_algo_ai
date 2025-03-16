@@ -1,10 +1,10 @@
 import pandas as pd
 
-def calculate_adx(data, period=14):
+def calculate_adx(data: pd.DataFrame, period=14) -> pd.DataFrame:
     """
     Рассчитывает ADX, +DI и -DI для DataFrame с ценами.
     
-    :param data: DataFrame с колонками 'High', 'Low', 'Close'.
+    :param data: DataFrame с колонками 'high', 'low', 'close'.
     :param period: Период для расчета ADX (по умолчанию 14).
     :return: DataFrame с колонками 'ADX', '+DI', '-DI'.
 
@@ -12,13 +12,13 @@ def calculate_adx(data, period=14):
     Пояснение:
     
         True Range (TR) — максимальное значение из:
-            Разницы между High и Low.
-            Разницы между High и предыдущим Close.
-            Разницы между Low и предыдущим Close.
+            Разницы между high и low.
+            Разницы между high и предыдущим close.
+            Разницы между low и предыдущим close.
 
         +DM и -DM — положительное и отрицательное направленное движение:
-            +DM = High - High_prev, если это больше, чем Low_prev - Low.
-            -DM = Low_prev - Low, если это больше, чем High - High_prev.
+            +DM = high - high_prev, если это больше, чем low_prev - low.
+            -DM = low_prev - low, если это больше, чем high - high_prev.
 
         +DI и -DI — индикаторы направления:
         +DI = (+DM_smooth / TR_smooth) * 100.
@@ -30,13 +30,13 @@ def calculate_adx(data, period=14):
         ADX — сглаженное значение DX за указанный период.
     """
     # Вычисляем True Range (TR), +DM и -DM
-    data['High-Low'] = data['High'] - data['Low']
-    data['High-PrevClose'] = abs(data['High'] - data['Close'].shift(1))
-    data['Low-PrevClose'] = abs(data['Low'] - data['Close'].shift(1))
-    data['TR'] = data[['High-Low', 'High-PrevClose', 'Low-PrevClose']].max(axis=1)
+    data['high-low'] = data['high'] - data['low']
+    data['high-Prevclose'] = abs(data['high'] - data['close'].shift(1))
+    data['low-Prevclose'] = abs(data['low'] - data['close'].shift(1))
+    data['TR'] = data[['high-low', 'high-Prevclose', 'low-Prevclose']].max(axis=1)
     
-    data['+DM'] = data['High'] - data['High'].shift(1)
-    data['-DM'] = data['Low'].shift(1) - data['Low']
+    data['+DM'] = data['high'] - data['high'].shift(1)
+    data['-DM'] = data['low'].shift(1) - data['low']
     data['+DM'] = data['+DM'].where(data['+DM'] > data['-DM'], 0)
     data['-DM'] = data['-DM'].where(data['-DM'] > data['+DM'], 0)
     
@@ -56,20 +56,20 @@ def calculate_adx(data, period=14):
     data['ADX'] = data['DX'].rolling(window=period, min_periods=1).mean()
     
     # Убираем временные колонки
-    data.drop(['High-Low', 'High-PrevClose', 'Low-PrevClose', 'TR', '+DM', '-DM', 
+    data.drop(['high-low', 'high-Prevclose', 'low-Prevclose', 'TR', '+DM', '-DM', 
                'TR_smooth', '+DM_smooth', '-DM_smooth', 'DX'], axis=1, inplace=True)
     
     return data
 
 # Пример использования
-if __name__ == "__main__":
-    # Загрузка данных (пример)
-    data = pd.DataFrame({
-        'High': [30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40],
-        'Low': [29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39],
-        'Close': [29.5, 30.5, 31.5, 32.5, 33.5, 34.5, 35.5, 36.5, 37.5, 38.5, 39.5]
-    })
+# if __name__ == "__main__":
+#     # Загрузка данных (пример)
+#     data = pd.DataFrame({
+#         'high': [30, 31, 32, 33, 34, 33, 32, 31, 30, 29, 28],
+#         'low': [29, 30, 31, 32, 33, 32, 31, 30, 29, 28, 27],
+#         'close': [29.5, 30.5, 31.5, 32.5, 33.5, 32.5, 31.5, 30.5, 29, 28.5, 27.5]
+#     })
     
-    # Расчет ADX
-    data_with_adx = calculate_adx(data, period=14)
-    print(data_with_adx[['ADX', '+DI', '-DI']])
+#     # Расчет ADX
+#     data_with_adx = calculate_adx(data, period=14)
+#     print(data_with_adx)

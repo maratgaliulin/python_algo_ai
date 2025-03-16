@@ -1,53 +1,23 @@
 import pandas as pd
 from .return_single_large_dataframe import return_single_large_dataframe
+from .open_close_high_low_prices import return_open_price, return_close_price, return_high_price, return_low_price
+from .adx_calculation import calculate_adx
 
-def return_open_price(df:pd.DataFrame):
-    if((df['open_ask'] != 999) and (df['open_bid'] != 999)):
-        if((df['open_bid'] > df['close_bid']) or ((df['open_bid'] == df['close_bid']) and (df['open_ask'] > df['open_bid']))):        
-            return df['open_ask']
-        else:
-            return df['open_bid']
-            
-    elif((df['open_bid'] != 999) and (df['open_ask'] == 999)):
-        return df['open_bid']
-    else:
-        return df['open_ask']
 
-def return_close_price(df:pd.DataFrame):
-    if((df['close_bid'] != 999) and (df['close_ask'] != 999)):
-        if((df['open_bid'] > df['close_bid']) or ((df['open_bid'] == df['close_bid']) and (df['open_ask'] > df['open_bid']))):        
-            return df['close_bid']
-        else:
-            return df['close_ask']
+def define_the_trend(df:pd.DataFrame):
+    highs_less_than_zero = df['high_0min_60min_difference'] < 0
+    lows_less_than_zero = df['low_0min_60min_difference'] < 0
     
-    elif((df['close_ask'] != 999) and (df['close_bid'] == 999)):
-        return df['close_ask']
+    highs_more_than_zero = df['high_0min_60min_difference'] > 0
+    lows_more_than_zero = df['low_0min_60min_difference'] > 0
+    
+    if(highs_less_than_zero and lows_less_than_zero):
+        return 'uptrend'
+    elif(highs_more_than_zero and lows_more_than_zero):
+        return 'downtrend'
     else:
-        return df['close_bid']
-    
-def return_high_price(df:pd.DataFrame):
-    if ((df['high_bid'] != 999) and (df['high_ask'] != 999)):
-        if((df['high_bid'] > df['high_ask'])):
-            return df['high_bid']
-        else:
-            return df['high_ask']
-    
-    elif((df['high_ask'] != 999) and (df['high_bid'] == 999)):
-        return df['high_ask']
-    else:
-        return df['high_bid']
-    
-def return_low_price(df:pd.DataFrame):
-    if((df['low_bid'] != 999) and (df['low_ask'] != 999)):
-        if((df['low_bid'] < df['low_ask'])):
-            return df['low_bid']
-        else:
-            return df['low_ask']
-    
-    elif((df['low_ask'] != 999) and (df['low_bid'] == 999)):
-        return df['low_ask']
-    else:
-        return df['low_bid']
+        return 'trend undefined'
+
 
 def make_single_df_from_bid_ask(base_dir:str, time_series_folder:str, bid_or_ask_folder_bid:str, bid_or_ask_folder_ask:str) -> pd.DataFrame:
     values = {
@@ -70,6 +40,36 @@ def make_single_df_from_bid_ask(base_dir:str, time_series_folder:str, bid_or_ask
     'Close': 'close',
     'Volume': 'volume'
     }
+    
+    columns_for_y_60min_max = ['high', 
+     'high_plus_5min', 
+     'high_plus_10min', 
+     'high_plus_15min',
+     'high_plus_20min',
+     'high_plus_25min',
+     'high_plus_30min',
+     'high_plus_35min',
+     'high_plus_40min',
+     'high_plus_45min',
+     'high_plus_50min',
+     'high_plus_55min',
+     'high_plus_60min',
+     ]
+    
+    columns_for_y_60min_min = ['low', 
+     'low_plus_5min', 
+     'low_plus_10min', 
+     'low_plus_15min',
+     'low_plus_20min',
+     'low_plus_25min',
+     'low_plus_30min',
+     'low_plus_35min',
+     'low_plus_40min',
+     'low_plus_45min',
+     'low_plus_50min',
+     'low_plus_55min',
+     'low_plus_60min',
+     ]
 
     df_bid = return_single_large_dataframe(base_dir=base_dir, time_series_folder=time_series_folder, Bid_or_Ask_folder=bid_or_ask_folder_bid)
     df_ask = return_single_large_dataframe(base_dir=base_dir, time_series_folder=time_series_folder, Bid_or_Ask_folder=bid_or_ask_folder_ask)
@@ -80,12 +80,125 @@ def make_single_df_from_bid_ask(base_dir:str, time_series_folder:str, bid_or_ask
     df_joined = pd.merge(df_bid, df_ask, how='outer', left_index=True, right_index=True, suffixes=['_bid', '_ask'])
     df_joined.fillna(inplace=True, value=values)
     df_joined['open'] = df_joined.apply(return_open_price, axis=1)
+    df_joined['open_minus_5min'] = df_joined['open'].shift(1)
+    df_joined['open_minus_10min'] = df_joined['open_minus_5min'].shift(1)
+    df_joined['open_minus_15min'] = df_joined['open_minus_10min'].shift(1)
+    df_joined['open_minus_20min'] = df_joined['open_minus_15min'].shift(1)
+    df_joined['open_minus_25min'] = df_joined['open_minus_20min'].shift(1)
+    df_joined['open_minus_30min'] = df_joined['open_minus_25min'].shift(1)
+    df_joined['open_minus_35min'] = df_joined['open_minus_30min'].shift(1)
+    df_joined['open_minus_40min'] = df_joined['open_minus_35min'].shift(1)
+    df_joined['open_minus_45min'] = df_joined['open_minus_40min'].shift(1)
+    df_joined['open_minus_50min'] = df_joined['open_minus_45min'].shift(1)
+    df_joined['open_minus_55min'] = df_joined['open_minus_50min'].shift(1)
+    df_joined['open_minus_60min'] = df_joined['open_minus_55min'].shift(1)
+    
     df_joined['close'] = df_joined.apply(return_close_price, axis=1)
+    df_joined['close_minus_5min'] = df_joined['close'].shift(1)
+    df_joined['close_minus_10min'] = df_joined['close_minus_5min'].shift(1)
+    df_joined['close_minus_15min'] = df_joined['close_minus_10min'].shift(1)
+    df_joined['close_minus_20min'] = df_joined['close_minus_15min'].shift(1)
+    df_joined['close_minus_25min'] = df_joined['close_minus_20min'].shift(1)
+    df_joined['close_minus_30min'] = df_joined['close_minus_25min'].shift(1)
+    df_joined['close_minus_35min'] = df_joined['close_minus_30min'].shift(1)
+    df_joined['close_minus_40min'] = df_joined['close_minus_35min'].shift(1)
+    df_joined['close_minus_45min'] = df_joined['close_minus_40min'].shift(1)
+    df_joined['close_minus_50min'] = df_joined['close_minus_45min'].shift(1)
+    df_joined['close_minus_55min'] = df_joined['close_minus_50min'].shift(1)
+    df_joined['close_minus_60min'] = df_joined['close_minus_55min'].shift(1)
+    
     df_joined['high'] = df_joined.apply(return_high_price, axis=1)
+    df_joined['high_minus_5min'] = df_joined['high'].shift(1)
+    df_joined['high_minus_10min'] = df_joined['high_minus_5min'].shift(1)
+    df_joined['high_minus_15min'] = df_joined['high_minus_10min'].shift(1)
+    df_joined['high_minus_20min'] = df_joined['high_minus_15min'].shift(1)
+    df_joined['high_minus_25min'] = df_joined['high_minus_20min'].shift(1)
+    df_joined['high_minus_30min'] = df_joined['high_minus_25min'].shift(1)
+    df_joined['high_minus_35min'] = df_joined['high_minus_30min'].shift(1)
+    df_joined['high_minus_40min'] = df_joined['high_minus_35min'].shift(1)
+    df_joined['high_minus_45min'] = df_joined['high_minus_40min'].shift(1)
+    df_joined['high_minus_50min'] = df_joined['high_minus_45min'].shift(1)
+    df_joined['high_minus_55min'] = df_joined['high_minus_50min'].shift(1)
+    df_joined['high_minus_60min'] = df_joined['high_minus_55min'].shift(1)
+    
     df_joined['low'] = df_joined.apply(return_low_price, axis=1)
+    df_joined['low_minus_5min'] = df_joined['low'].shift(1)
+    df_joined['low_minus_10min'] = df_joined['low_minus_5min'].shift(1)
+    df_joined['low_minus_15min'] = df_joined['low_minus_10min'].shift(1)
+    df_joined['low_minus_20min'] = df_joined['low_minus_15min'].shift(1)
+    df_joined['low_minus_25min'] = df_joined['low_minus_20min'].shift(1)
+    df_joined['low_minus_30min'] = df_joined['low_minus_25min'].shift(1)
+    df_joined['low_minus_35min'] = df_joined['low_minus_30min'].shift(1)
+    df_joined['low_minus_40min'] = df_joined['low_minus_35min'].shift(1)
+    df_joined['low_minus_45min'] = df_joined['low_minus_40min'].shift(1)
+    df_joined['low_minus_50min'] = df_joined['low_minus_45min'].shift(1)
+    df_joined['low_minus_55min'] = df_joined['low_minus_50min'].shift(1)
+    df_joined['low_minus_60min'] = df_joined['low_minus_55min'].shift(1)
+    
     df_joined['volume'] = df_joined['volume_bid'] + df_joined['volume_ask']
+    df_joined['volume_minus_5min'] = df_joined['volume'].shift(1)
+    df_joined['volume_minus_10min'] = df_joined['volume_minus_5min'].shift(1)
+    df_joined['volume_minus_15min'] = df_joined['volume_minus_10min'].shift(1)
+    df_joined['volume_minus_20min'] = df_joined['volume_minus_15min'].shift(1)
+    df_joined['volume_minus_25min'] = df_joined['volume_minus_20min'].shift(1)
+    df_joined['volume_minus_30min'] = df_joined['volume_minus_25min'].shift(1)
+    df_joined['volume_minus_35min'] = df_joined['volume_minus_30min'].shift(1)
+    df_joined['volume_minus_40min'] = df_joined['volume_minus_35min'].shift(1)
+    df_joined['volume_minus_45min'] = df_joined['volume_minus_40min'].shift(1)
+    df_joined['volume_minus_50min'] = df_joined['volume_minus_45min'].shift(1)
+    df_joined['volume_minus_55min'] = df_joined['volume_minus_50min'].shift(1)
+    df_joined['volume_minus_60min'] = df_joined['volume_minus_55min'].shift(1)
+    
+    
+    df_joined['high_plus_5min'] = df_joined['high'].shift(-1)
+    df_joined['high_plus_10min'] = df_joined['high_plus_5min'].shift(-1)
+    df_joined['high_plus_15min'] = df_joined['high_plus_10min'].shift(-1)
+    df_joined['high_plus_20min'] = df_joined['high_plus_15min'].shift(-1)
+    df_joined['high_plus_25min'] = df_joined['high_plus_20min'].shift(-1)
+    df_joined['high_plus_30min'] = df_joined['high_plus_25min'].shift(-1)
+    df_joined['high_plus_35min'] = df_joined['high_plus_30min'].shift(-1)
+    df_joined['high_plus_40min'] = df_joined['high_plus_35min'].shift(-1)
+    df_joined['high_plus_45min'] = df_joined['high_plus_40min'].shift(-1)
+    df_joined['high_plus_50min'] = df_joined['high_plus_45min'].shift(-1)
+    df_joined['high_plus_55min'] = df_joined['high_plus_50min'].shift(-1)
+    df_joined['high_plus_60min'] = df_joined['high_plus_55min'].shift(-1)
+    
+    df_joined['low_plus_5min'] = df_joined['low'].shift(-1)
+    df_joined['low_plus_10min'] = df_joined['low_plus_5min'].shift(-1)
+    df_joined['low_plus_15min'] = df_joined['low_plus_10min'].shift(-1)
+    df_joined['low_plus_20min'] = df_joined['low_plus_15min'].shift(-1)
+    df_joined['low_plus_25min'] = df_joined['low_plus_20min'].shift(-1)
+    df_joined['low_plus_30min'] = df_joined['low_plus_25min'].shift(-1)
+    df_joined['low_plus_35min'] = df_joined['low_plus_30min'].shift(-1)
+    df_joined['low_plus_40min'] = df_joined['low_plus_35min'].shift(-1)
+    df_joined['low_plus_45min'] = df_joined['low_plus_40min'].shift(-1)
+    df_joined['low_plus_50min'] = df_joined['low_plus_45min'].shift(-1)
+    df_joined['low_plus_55min'] = df_joined['low_plus_50min'].shift(-1)
+    df_joined['low_plus_60min'] = df_joined['low_plus_55min'].shift(-1)
+    
+    df_joined['y_60min_max'] = df_joined[columns_for_y_60min_max].max(axis=1)
+    df_joined['y_60min_min'] = df_joined[columns_for_y_60min_min].min(axis=1)
+    
+    df_joined['high_0min_60min_difference'] = df_joined['high'] - df_joined['high_plus_60min']
+    df_joined['low_0min_60min_difference'] = df_joined['low'] - df_joined['low_plus_60min']
+    
+    df_joined['trend'] = df_joined.apply(define_the_trend, axis=1)
+    
+    one_hot_encoded = pd.get_dummies(df_joined['trend'], prefix='y_trend', dtype=int)
+    
+    df_joined = pd.concat([df_joined, one_hot_encoded], axis=1)
+    
+    
     df_joined.drop(['open_bid', 'high_bid', 'low_bid', 'close_bid', 'open_ask', 'high_ask', 'low_ask', 'close_ask', 'volume_bid', 'volume_ask', 'Gmt time_bid', 'Gmt time_ask'], inplace=True, axis=1)
     
+    df_joined.drop(columns_for_y_60min_max[1:], inplace=True, axis=1)
+    df_joined.drop(columns_for_y_60min_min[1:], inplace=True, axis=1)
+    
+    df_joined.drop(['high_0min_60min_difference'], inplace=True, axis=1)
+    df_joined.drop(['low_0min_60min_difference'], inplace=True, axis=1)
+    
     df_joined = df_joined.loc[~df_joined.isna().any(axis=1)]
+    
+    df_joined = calculate_adx(df_joined, period=12)
 
     return df_joined
