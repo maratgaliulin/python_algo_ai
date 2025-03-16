@@ -2,6 +2,7 @@ import pandas as pd
 from .return_single_large_dataframe import return_single_large_dataframe
 from .open_close_high_low_prices import return_open_price, return_close_price, return_high_price, return_low_price
 from .adx_calculation import calculate_adx
+import numpy as np
 
 
 def define_the_trend(df:pd.DataFrame):
@@ -149,6 +150,31 @@ def make_single_df_from_bid_ask(base_dir:str, time_series_folder:str, bid_or_ask
     df_joined['volume_minus_55min'] = df_joined['volume_minus_50min'].shift(1)
     df_joined['volume_minus_60min'] = df_joined['volume_minus_55min'].shift(1)
     
+    df_joined_open_mean = df_joined['open'].mean()
+    df_joined_close_mean = df_joined['close'].mean()
+    df_joined_high_mean = df_joined['high'].mean()
+    df_joined_low_mean = df_joined['low'].mean()
+    df_joined_volume_mean = df_joined['volume'].mean()
+    
+    df_joined_open_std = df_joined['open'].std()
+    df_joined_close_std = df_joined['close'].std()
+    df_joined_high_std = df_joined['high'].std()
+    df_joined_low_std = df_joined['low'].std()
+    df_joined_volume_std = df_joined['volume'].std()
+    
+    df_joined['open_normalized'] = (df_joined['open'] - df_joined_open_mean)/df_joined_open_std
+    df_joined['close_normalized'] = (df_joined['close'] - df_joined_close_mean)/df_joined_close_std
+    df_joined['high_normalized'] = (df_joined['high'] - df_joined_high_mean)/df_joined_high_std
+    df_joined['low_normalized'] = (df_joined['low'] - df_joined_low_mean)/df_joined_low_std
+    df_joined['volume_normalized'] = (df_joined['volume'] - df_joined_volume_mean)/df_joined_volume_std
+    
+    df_joined['open_log'] = np.log(df_joined['open'])
+    df_joined['close_log'] = np.log(df_joined['close'])
+    df_joined['high_log'] = np.log(df_joined['high'])
+    df_joined['low_log'] = np.log(df_joined['low'])
+    df_joined['volume_log'] = np.log(df_joined['volume'])
+    
+    df_joined = calculate_adx(df_joined, period=12)
     
     df_joined['high_plus_5min'] = df_joined['high'].shift(-1)
     df_joined['high_plus_10min'] = df_joined['high_plus_5min'].shift(-1)
@@ -199,6 +225,8 @@ def make_single_df_from_bid_ask(base_dir:str, time_series_folder:str, bid_or_ask
     
     df_joined = df_joined.loc[~df_joined.isna().any(axis=1)]
     
-    df_joined = calculate_adx(df_joined, period=12)
+    df_joined_train = df_joined.iloc[0:712981]
+    df_joined_test = df_joined.iloc[712981:950641]
+    df_joined_val = df_joined.iloc[950641:]
 
-    return df_joined
+    return df_joined_train, df_joined_test, df_joined_val

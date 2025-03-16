@@ -38,14 +38,23 @@ bid_or_ask_folder_ask = "Ask/"
 
 
 
-df_5min_joined = make_single_df_from_bid_ask(
+df_5min_joined_train, df_5min_joined_test, df_5min_joined_val = make_single_df_from_bid_ask(
     base_dir=bdir, 
     time_series_folder=time_series_folder, 
     bid_or_ask_folder_bid=bid_or_ask_folder_bid, 
     bid_or_ask_folder_ask=bid_or_ask_folder_ask
     )
 
-print(df_5min_joined.head(20))
-print(df_5min_joined.tail(20))
-print(len(df_5min_joined))
+print(df_5min_joined_train.tail(1))
+print('*************************')
+print(df_5min_joined_test.head(1))
+print('*************************')
+print(df_5min_joined_test.tail(1))
+print('*************************')
+print(df_5min_joined_val.head(1))
+
+
+print(len(df_5min_joined_train))
+print(len(df_5min_joined_test))
+print(len(df_5min_joined_val))
 # print()
