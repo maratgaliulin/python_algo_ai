@@ -172,7 +172,6 @@ def make_single_df_from_bid_ask(base_dir:str, time_series_folder:str, bid_or_ask
     df_joined['close_log'] = np.log(df_joined['close'])
     df_joined['high_log'] = np.log(df_joined['high'])
     df_joined['low_log'] = np.log(df_joined['low'])
-    df_joined['volume_log'] = np.log(df_joined['volume'])
     
     df_joined = calculate_adx(df_joined, period=12)
     

@@ -1,6 +1,8 @@
 import pandas as pd
 from methods.draw_graph import draw_static_graph
 from methods.make_single_df_from_bid_ask import make_single_df_from_bid_ask
+from machine_learning_models.eurusd.random_forest_regression_predict_max_value import search_optimal_parameters_for_random_forest_max_value_prediction, predict_max_value_with_random_forest_regressor
+from machine_learning_models.eurusd.random_forest_regression_predict_min_values import search_optimal_parameters_for_random_forest_min_value_prediction, predict_min_value_with_random_forest_regressor
 
 
 pd.set_option('display.max_columns', None)
@@ -45,16 +47,24 @@ df_5min_joined_train, df_5min_joined_test, df_5min_joined_val = make_single_df_f
     bid_or_ask_folder_ask=bid_or_ask_folder_ask
     )
 
-print(df_5min_joined_train.tail(1))
-print('*************************')
-print(df_5min_joined_test.head(1))
-print('*************************')
-print(df_5min_joined_test.tail(1))
-print('*************************')
-print(df_5min_joined_val.head(1))
+# print(df_5min_joined_train.tail(1))
+# print('*************************')
+# print(df_5min_joined_test.head(1))
+# print('*************************')
+# print(df_5min_joined_test.tail(1))
+# print('*************************')
+# print(df_5min_joined_val.head(1))
 
 
-print(len(df_5min_joined_train))
-print(len(df_5min_joined_test))
-print(len(df_5min_joined_val))
+# print(len(df_5min_joined_train))
+# print(len(df_5min_joined_test))
+# print(len(df_5min_joined_val))
 # print()
+
+# search_optimal_parameters_for_random_forest_max_value_prediction(df_5min_joined_train)
+
+predict_max_value_with_random_forest_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val)
+
+search_optimal_parameters_for_random_forest_min_value_prediction(df_5min_joined_train)
+
+predict_min_value_with_random_forest_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val)
