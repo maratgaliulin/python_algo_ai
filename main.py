@@ -65,6 +65,6 @@ df_5min_joined_train, df_5min_joined_test, df_5min_joined_val = make_single_df_f
 
 predict_max_value_with_random_forest_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val)
 
-search_optimal_parameters_for_random_forest_min_value_prediction(df_5min_joined_train)
+# search_optimal_parameters_for_random_forest_min_value_prediction(df_5min_joined_train)
 
-predict_min_value_with_random_forest_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val)
+# predict_min_value_with_random_forest_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val)
