@@ -1,3 +1,5 @@
 myenv/
 hist_data/
 Documents/
+__pycache__/
+.idea/
