@@ -38,7 +38,7 @@ def predict_trend_direction_with_random_forest_classifier(train_df:pd.DataFrame,
 
     logreg_model.fit(X_train, y_train)
 
-    with open(base_dir + '/random_forest_regressor_predict_max_values_before_test_training.pkl', 'wb') as file:
+    with open(base_dir + '/random_forest_regressor_predict_trend_direction_before_test_training.pkl', 'wb') as file:
         pickle.dump(logreg_model, file)
 
     print('*******************************')
@@ -59,7 +59,7 @@ def predict_trend_direction_with_random_forest_classifier(train_df:pd.DataFrame,
 
     logreg_model.fit(X_test, y_test)
 
-    with open(base_dir + '/random_forest_regressor_predict_max_values__after_test_training.pkl', 'wb') as file:
+    with open(base_dir + '/random_forest_regressor_predict_trend_direction_after_test_training.pkl', 'wb') as file:
         pickle.dump(logreg_model, file)
 
     print('*******************************')
