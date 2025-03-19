@@ -4,7 +4,7 @@ from sklearn.model_selection import GridSearchCV
 import pandas as pd
 
 def search_optimal_parameters_for_random_forest_trend_prediction(train_df:pd.DataFrame) -> None:
-    param_grid = {'n_estimators': [700, 1000, 2000], 'max_depth': [None, 1, 2, 3], 'min_samples_split': [1, 2, 3]}
+    param_grid = {'n_estimators': [200, 300, 700], 'max_depth': [None, 1, 2, 3], 'min_samples_split': [1, 2, 3]}
 
     X_train = train_df.drop(columns=['y_60min_max', 'y_60min_min', 'trend', 'y_trend_downtrend', 'y_trend_uptrend', 'y_trend_trend undefined'])
 
