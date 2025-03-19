@@ -61,13 +61,15 @@ df_5min_joined_train, df_5min_joined_test, df_5min_joined_val = make_single_df_f
 # print(len(df_5min_joined_val))
 # print()
 
+base_dir = 'machine_learning_models/random_forest/eurusd/pickle_files'
+
 # search_optimal_parameters_for_random_forest_max_value_prediction(df_5min_joined_train)
 
-predict_max_value_with_random_forest_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val)
+predict_max_value_with_random_forest_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, base_dir)
 
 # search_optimal_parameters_for_random_forest_min_value_prediction(df_5min_joined_train)
 
-predict_min_value_with_random_forest_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val)
+predict_min_value_with_random_forest_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, base_dir)
 
-predict_trend_direction_with_random_forest_classifier(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val)
+predict_trend_direction_with_random_forest_classifier(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, base_dir)
 

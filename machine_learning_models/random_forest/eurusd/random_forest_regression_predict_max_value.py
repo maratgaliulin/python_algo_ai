@@ -24,7 +24,7 @@ def search_optimal_parameters_for_random_forest_max_value_prediction(train_df:pd
 
     return
 
-def predict_max_value_with_random_forest_regressor(train_df:pd.DataFrame, test_df:pd.DataFrame, validation_df:pd.DataFrame):
+def predict_max_value_with_random_forest_regressor(train_df:pd.DataFrame, test_df:pd.DataFrame, validation_df:pd.DataFrame, base_dir:str):
     X_train = train_df.drop(columns=['y_60min_max', 'y_60min_min', 'trend', 'y_trend_downtrend', 'y_trend_uptrend', 'y_trend_trend undefined'])
     X_test = test_df.drop(columns=['y_60min_max', 'y_60min_min', 'trend', 'y_trend_downtrend', 'y_trend_uptrend', 'y_trend_trend undefined'])
     X_validation = validation_df.drop(columns=['y_60min_max', 'y_60min_min', 'trend', 'y_trend_downtrend', 'y_trend_uptrend', 'y_trend_trend undefined'])
@@ -34,11 +34,11 @@ def predict_max_value_with_random_forest_regressor(train_df:pd.DataFrame, test_d
     y_validation = validation_df['y_60min_max']
     
     
-    logreg_model = RandomForestRegressor(random_state=1, n_estimators=300, max_depth=2, min_samples_split=3, verbose=1)
+    logreg_model = RandomForestRegressor(random_state=1, n_estimators=300, max_depth=2, min_samples_split=3, verbose=2)
 
     logreg_model.fit(X_train, y_train)
 
-    with open('machine_learning_models/eurusd/pickle_files/random_forest_regressor_predict_max_values_before_test_training.pkl', 'wb') as file:
+    with open(base_dir + '/random_forest_regressor_predict_max_values_before_test_training.pkl', 'wb') as file:
         pickle.dump(logreg_model, file)
 
     print('*******************************')
@@ -59,7 +59,7 @@ def predict_max_value_with_random_forest_regressor(train_df:pd.DataFrame, test_d
 
     logreg_model.fit(X_test, y_test)
 
-    with open('machine_learning_models/eurusd/pickle_files/random_forest_regressor_predict_max_values__after_test_training.pkl', 'wb') as file:
+    with open(base_dir + '/random_forest_regressor_predict_max_values__after_test_training.pkl', 'wb') as file:
         pickle.dump(logreg_model, file)
 
     print('*******************************')
