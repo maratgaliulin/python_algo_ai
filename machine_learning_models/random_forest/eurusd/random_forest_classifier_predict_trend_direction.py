@@ -34,7 +34,7 @@ def predict_trend_direction_with_random_forest_classifier(train_df:pd.DataFrame,
     y_validation = validation_df[['y_trend_downtrend', 'y_trend_uptrend', 'y_trend_trend undefined']]
     
     
-    logreg_model = RandomForestClassifier(random_state=1, n_estimators=2000, max_depth=2, min_samples_split=3, verbose=1)
+    logreg_model = RandomForestClassifier(random_state=1, n_estimators=300, max_depth=2, min_samples_split=3, verbose=1)
 
     logreg_model.fit(X_train, y_train)
 
