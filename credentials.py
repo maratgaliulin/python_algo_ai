@@ -4,8 +4,8 @@ if not mt.initialize():
     print("initialize() failed, error code =", mt.last_error())
     quit()
 
-account=52159692
-pw = 'D!1a8p2ON$mwQR'
+account=52234337
+pw = 'b&89zG&!PruWtP'
 authorized = mt.login(account, pw)
 
 
