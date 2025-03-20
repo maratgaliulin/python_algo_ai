@@ -227,5 +227,7 @@ def make_single_df_from_bid_ask(base_dir:str, time_series_folder:str, bid_or_ask
     df_joined_train = df_joined.iloc[0:712981]
     df_joined_test = df_joined.iloc[712981:950641]
     df_joined_val = df_joined.iloc[950641:]
+    
+    print(df_joined_train.head())
 
     return df_joined_train, df_joined_test, df_joined_val

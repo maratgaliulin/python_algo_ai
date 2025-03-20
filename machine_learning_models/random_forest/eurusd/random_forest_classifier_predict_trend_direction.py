@@ -1,6 +1,7 @@
 import pickle
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
+# from sklearn.metrics import accuracy_score
 import pandas as pd
 
 def search_optimal_parameters_for_random_forest_trend_prediction(train_df:pd.DataFrame) -> None:
@@ -32,8 +33,7 @@ def predict_trend_direction_with_random_forest_classifier(train_df:pd.DataFrame,
     y_train = train_df[['y_trend_downtrend', 'y_trend_uptrend', 'y_trend_trend undefined']]
     y_test = test_df[['y_trend_downtrend', 'y_trend_uptrend', 'y_trend_trend undefined']]
     y_validation = validation_df[['y_trend_downtrend', 'y_trend_uptrend', 'y_trend_trend undefined']]
-    
-    
+     
     logreg_model = RandomForestClassifier(random_state=1, n_estimators=300, max_depth=2, min_samples_split=3, verbose=2)
 
     logreg_model.fit(X_train, y_train)
@@ -45,17 +45,17 @@ def predict_trend_direction_with_random_forest_classifier(train_df:pd.DataFrame,
     print('Before training on test sample:')
     print('*******************************')
 
-    print('Feature Importances:')
-    print(logreg_model.feature_importances_)
+    # print('Feature Importances:')
+    # print(logreg_model.feature_importances_)
 
     print('Score on train sample:')
-    logreg_model.score(X_train, y_train)
+    print(logreg_model.score(X_train, y_train))
 
     print('Score on test sample:')
-    logreg_model.score(X_test, y_test)
+    print(logreg_model.score(X_test, y_test))
 
     print('Score on validation sample:')
-    logreg_model.score(X_validation, y_validation)
+    print(logreg_model.score(X_validation, y_validation))
 
     logreg_model.fit(X_test, y_test)
 
@@ -66,14 +66,14 @@ def predict_trend_direction_with_random_forest_classifier(train_df:pd.DataFrame,
     print('After training on test sample:')
     print('*******************************')
 
-    print('Feature Importances:')
-    print(logreg_model.feature_importances_)
+    # print('Feature Importances:')
+    # print(logreg_model.feature_importances_)
 
     print('Score on train sample:')
-    logreg_model.score(X_train, y_train)
+    print(logreg_model.score(X_train, y_train))
 
     print('Score on test sample:')
-    logreg_model.score(X_test, y_test)
+    print(logreg_model.score(X_test, y_test))
 
     print('Score on validation sample:')
-    logreg_model.score(X_validation, y_validation)
+    print(logreg_model.score(X_validation, y_validation))

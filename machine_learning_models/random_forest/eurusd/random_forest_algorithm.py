@@ -15,7 +15,7 @@ def random_forest_algorithm(dataframe_line:pd.DataFrame, pickle_rfc_predict_max_
     high_value = model_random_forest_predict_high.predict(dataframe_line)
     low_value = model_random_forest_predict_low.predict(dataframe_line)
     trend_direction = model_random_forest_predict_trend_direction.predict(dataframe_line)
-    trend_direction = trend_direction.idxmax(axis=1)
+    # trend_direction = trend_direction.idxmax(axis=1)
 
     return high_value, low_value, trend_direction
     

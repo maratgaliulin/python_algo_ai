@@ -38,24 +38,24 @@ def predict_min_value_with_random_forest_regressor(train_df:pd.DataFrame, test_d
 
     logreg_model.fit(X_train, y_train)
 
-    with open(base_dir + '/random_forest_regressor_predict_min_values__before_test_training.pkl', 'wb') as file:
+    with open(base_dir + '/random_forest_regressor_predict_min_values_before_test_training.pkl', 'wb') as file:
         pickle.dump(logreg_model, file)
 
     print('*******************************')
     print('Before training on test sample:')
     print('*******************************')
 
-    print('Feature Importances:')
-    print(logreg_model.feature_importances_)
+    # print('Feature Importances:')
+    # print(logreg_model.feature_importances_)
 
     print('Score on train sample:')
-    logreg_model.score(X_train, y_train)
+    print(logreg_model.score(X_train, y_train))
 
     print('Score on test sample:')
-    logreg_model.score(X_test, y_test)
+    print(logreg_model.score(X_test, y_test))
 
     print('Score on validation sample:')
-    logreg_model.score(X_validation, y_validation)
+    print(logreg_model.score(X_validation, y_validation))
 
     logreg_model.fit(X_test, y_test)
 
@@ -66,14 +66,14 @@ def predict_min_value_with_random_forest_regressor(train_df:pd.DataFrame, test_d
     print('After training on test sample:')
     print('*******************************')
 
-    print('Feature Importances:')
-    print(logreg_model.feature_importances_)
+    # print('Feature Importances:')
+    # print(logreg_model.feature_importances_)
 
     print('Score on train sample:')
-    logreg_model.score(X_train, y_train)
+    print(logreg_model.score(X_train, y_train))
 
     print('Score on test sample:')
-    logreg_model.score(X_test, y_test)
+    print(logreg_model.score(X_test, y_test))
 
     print('Score on validation sample:')
-    logreg_model.score(X_validation, y_validation)
+    print(logreg_model.score(X_validation, y_validation))

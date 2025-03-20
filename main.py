@@ -4,6 +4,8 @@ from methods.make_single_df_from_bid_ask import make_single_df_from_bid_ask
 from machine_learning_models.random_forest.eurusd.random_forest_regression_predict_max_value import search_optimal_parameters_for_random_forest_max_value_prediction, predict_max_value_with_random_forest_regressor
 from machine_learning_models.random_forest.eurusd.random_forest_regression_predict_min_values import search_optimal_parameters_for_random_forest_min_value_prediction, predict_min_value_with_random_forest_regressor
 from machine_learning_models.random_forest.eurusd.random_forest_classifier_predict_trend_direction import predict_trend_direction_with_random_forest_classifier
+import pickle
+
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -61,15 +63,27 @@ df_5min_joined_train, df_5min_joined_test, df_5min_joined_val = make_single_df_f
 # print(len(df_5min_joined_val))
 # print()
 
-base_dir = 'machine_learning_models/random_forest/eurusd/pickle_files'
+base_dir_algo = 'machine_learning_models/random_forest/eurusd/pickle_files'
 
 # search_optimal_parameters_for_random_forest_max_value_prediction(df_5min_joined_train)
 
-# predict_max_value_with_random_forest_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, base_dir)
+predict_max_value_with_random_forest_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, base_dir_algo)
 
 # search_optimal_parameters_for_random_forest_min_value_prediction(df_5min_joined_train)
 
-# predict_min_value_with_random_forest_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, base_dir)
+predict_min_value_with_random_forest_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, base_dir_algo)
 
-predict_trend_direction_with_random_forest_classifier(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, base_dir)
+predict_trend_direction_with_random_forest_classifier(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, base_dir_algo)
 
+# print(df_5min_joined_train.head(1))
+
+# print(df_5min_joined_train.columns)
+
+# with open(base_dir_algo, 'rb') as file:
+#     model_random_forest_predict_trend = pickle.load(file)
+    
+# df_5min_joined_val = df_5min_joined_val.drop(columns=['y_60min_max', 'y_60min_min', 'trend', 'y_trend_downtrend', 'y_trend_uptrend', 'y_trend_trend undefined'])
+    
+# y_predict = model_random_forest_predict_trend.predict(df_5min_joined_val)
+
+# print(y_predict[0])

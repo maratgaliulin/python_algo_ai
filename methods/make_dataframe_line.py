@@ -1,8 +1,17 @@
 import pandas as pd
+import MetaTrader5 as mt
 from methods.adx_calculation import calculate_adx
 import numpy as np
 
-def make_dataframe_line(df:pd.DataFrame) -> pd.DataFrame:
+def make_dataframe_line(symbol:str, timeframe, start_pos:int, end_pos:int) -> pd.DataFrame:
+    
+    mt_dataframe_raw = mt.copy_rates_from_pos(symbol, timeframe, start_pos, end_pos)
+    # create DataFrame out of the obtained data
+    df = pd.DataFrame(mt_dataframe_raw)
+    # convert time in seconds into the datetime format
+    df['time']=pd.to_datetime(df['time'], unit='s')
+    df.set_index(['time'], inplace=True)
+    df.sort_index(ascending=True, inplace=True)
 
     df.rename(columns={'tick_volume': 'volume'}, inplace=True)
     df.drop(['spread', 'real_volume'], axis=1, inplace=True)
@@ -98,5 +107,31 @@ def make_dataframe_line(df:pd.DataFrame) -> pd.DataFrame:
     df = calculate_adx(df, period=12)
 
     df = df.loc[~df.isna().any(axis=1)]
+    
+    new_order = ['open', 'open_minus_5min', 'open_minus_10min', 'open_minus_15min',
+       'open_minus_20min', 'open_minus_25min', 'open_minus_30min',
+       'open_minus_35min', 'open_minus_40min', 'open_minus_45min',
+       'open_minus_50min', 'open_minus_55min', 'open_minus_60min', 'close',
+       'close_minus_5min', 'close_minus_10min', 'close_minus_15min',
+       'close_minus_20min', 'close_minus_25min', 'close_minus_30min',
+       'close_minus_35min', 'close_minus_40min', 'close_minus_45min',
+       'close_minus_50min', 'close_minus_55min', 'close_minus_60min', 'high',
+       'high_minus_5min', 'high_minus_10min', 'high_minus_15min',
+       'high_minus_20min', 'high_minus_25min', 'high_minus_30min',
+       'high_minus_35min', 'high_minus_40min', 'high_minus_45min',
+       'high_minus_50min', 'high_minus_55min', 'high_minus_60min', 'low',
+       'low_minus_5min', 'low_minus_10min', 'low_minus_15min',
+       'low_minus_20min', 'low_minus_25min', 'low_minus_30min',
+       'low_minus_35min', 'low_minus_40min', 'low_minus_45min',
+       'low_minus_50min', 'low_minus_55min', 'low_minus_60min', 'volume',
+       'volume_minus_5min', 'volume_minus_10min', 'volume_minus_15min',
+       'volume_minus_20min', 'volume_minus_25min', 'volume_minus_30min',
+       'volume_minus_35min', 'volume_minus_40min', 'volume_minus_45min',
+       'volume_minus_50min', 'volume_minus_55min', 'volume_minus_60min',
+       'open_normalized', 'close_normalized', 'high_normalized',
+       'low_normalized', 'volume_normalized', 'open_log', 'close_log',
+       'high_log', 'low_log', '+DI', '-DI', 'ADX']
+    
+    df = df[new_order]
 
     return df

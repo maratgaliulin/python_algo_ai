@@ -12,13 +12,20 @@ authorized = mt.login(account, pw)
 
 # COMMON VARIABLES 
 
-sleep_time = 5
+sleep_time = 30
 
-CSV_ADDRESS = "order_block_csv_files/"
+BASE_DIR = 'machine_learning_models/random_forest/eurusd/pickle_files'
 
-PATH_TO_VARIABLES = "order_block/variables/"
+# EURUSD PICKLE FILES DIRECTORIES
 
-PATH_TO_ANALYSIS_DATAFRAMES = "dataframes_for_analysis/"
+EURUSD_RFR_MAX_VAL_AFTER_TEST_TR = '/random_forest_regressor_predict_max_values_after_test_training.pkl'
+EURUSD_RFR_MAX_VAL_BEFORE_TEST_TR = '/random_forest_regressor_predict_max_values_before_test_training.pkl'
+
+EURUSD_RFR_MIN_VAL_AFTER_TEST_TR = '/random_forest_regressor_predict_min_values_after_test_training.pkl'
+EURUSD_RFR_MIN_VAL_BEFORE_TEST_TR = '/random_forest_regressor_predict_min_values_before_test_training.pkl'
+
+EURUSD_RFR_TREND_DIR_AFTER_TEST_TR = '/random_forest_regressor_predict_trend_direction_after_test_training.pkl'
+EURUSD_RFR_TREND_DIR_BEFORE_TEST_TR = '/random_forest_regressor_predict_trend_direction_before_test_training.pkl'
 
 # BUY / SELL_ORDER_BLOCK
 
@@ -36,8 +43,5 @@ CANCEL_THE_ORDER_ACTION = mt.TRADE_ACTION_REMOVE
 
 # TIMEFRAMES
 
-TIMEFRAME_SMALL = ['1min', '5min']
-TIMEFRAME_SMALL_MT = [
-    mt.TIMEFRAME_M1,
-    mt.TIMEFRAME_M5
-]
+TIMEFRAME_SMALL = '5min'
+TIMEFRAME_SMALL_MT = mt.TIMEFRAME_M5
