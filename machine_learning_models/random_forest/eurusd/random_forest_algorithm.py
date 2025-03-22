@@ -1,6 +1,12 @@
 import pickle
 import pandas as pd
 
+
+# Примечания:
+
+# 1. Как действовать в переходной зоной (переход от тренда к флэту) в скользящем окне
+
+
 def random_forest_algorithm(dataframe_line:pd.DataFrame, pickle_rfc_predict_max_dir:str, pickle_rfc_predict_min_dir:str, pickle_rfc_predict_trend_dir:str):
     with open(pickle_rfc_predict_max_dir, 'rb') as file:
         model_random_forest_predict_high = pickle.load(file)
