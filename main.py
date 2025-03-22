@@ -67,15 +67,19 @@ base_dir_algo = 'machine_learning_models/random_forest/eurusd/pickle_files'
 
 # search_optimal_parameters_for_random_forest_max_value_prediction(df_5min_joined_train)
 
-predict_max_value_with_random_forest_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, base_dir_algo)
-
 # search_optimal_parameters_for_random_forest_min_value_prediction(df_5min_joined_train)
+
+# predict_trend_direction_with_random_forest_classifier(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, base_dir_algo)
+
+predict_max_value_with_random_forest_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, base_dir_algo)
 
 predict_min_value_with_random_forest_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, base_dir_algo)
 
-predict_trend_direction_with_random_forest_classifier(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, base_dir_algo)
+# print(df_5min_joined_train.head(10))
 
-# print(df_5min_joined_train.head(1))
+print('uptrend', 'downtrend', 'undefined')
+
+print(df_5min_joined_train['y_trend_uptrend'].sum(), df_5min_joined_train['y_trend_downtrend'].sum(), df_5min_joined_train['y_trend_trend undefined'].sum())
 
 # print(df_5min_joined_train.columns)
 
