@@ -34,7 +34,7 @@ def predict_max_value_with_random_forest_regressor(train_df:pd.DataFrame, test_d
     y_validation = validation_df['y_60min_max']
     
     
-    logreg_model = RandomForestRegressor(random_state=1, n_estimators=300, max_depth=2, min_samples_split=3, verbose=2)
+    logreg_model = RandomForestRegressor(random_state=1, n_estimators=50, max_depth=5, min_samples_split=10, min_samples_leaf=3, max_features='sqrt', max_samples=0.8, verbose=2)
 
     logreg_model.fit(X_train, y_train)
 
