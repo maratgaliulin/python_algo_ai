@@ -56,7 +56,7 @@ while True:
     high_value, low_value, trend_direction = random_forest_algorithm(dataframe_line=dataframe_line,
                                                                      pickle_rfc_predict_max_dir=eurusd_dict['BASE_DIR'] + eurusd_dict['EURUSD_RFR_MAX_VAL_AFTER_TEST_TR'],
                                                                      pickle_rfc_predict_min_dir=eurusd_dict['BASE_DIR'] + eurusd_dict['EURUSD_RFR_MIN_VAL_AFTER_TEST_TR'],
-                                                                     pickle_rfc_predict_trend_dir=eurusd_dict['BASE_DIR'] + eurusd_dict['EURUSD_RFR_TREND_DIR_BEFORE_TEST_TR']
+                                                                     pickle_rfc_predict_trend_dir=eurusd_dict['BASE_DIR'] + eurusd_dict['EURUSD_RFR_TREND_DIR_AFTER_TEST_TR']
                                                                      )
     
     buy_or_sell(

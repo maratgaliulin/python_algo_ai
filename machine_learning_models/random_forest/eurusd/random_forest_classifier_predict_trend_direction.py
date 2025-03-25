@@ -25,20 +25,20 @@ def search_optimal_parameters_for_random_forest_trend_prediction(train_df:pd.Dat
 
     return
 
-def predict_trend_direction_with_random_forest_classifier(train_df:pd.DataFrame, test_df:pd.DataFrame, validation_df:pd.DataFrame, base_dir: str):
-    X_train = train_df.drop(columns=['y_60min_max', 'y_60min_min', 'trend', 'y_trend_downtrend', 'y_trend_uptrend', 'y_trend_trend undefined'])
-    X_test = test_df.drop(columns=['y_60min_max', 'y_60min_min', 'trend', 'y_trend_downtrend', 'y_trend_uptrend', 'y_trend_trend undefined'])
-    X_validation = validation_df.drop(columns=['y_60min_max', 'y_60min_min', 'trend', 'y_trend_downtrend', 'y_trend_uptrend', 'y_trend_trend undefined'])
+def predict_trend_direction_with_random_forest_classifier(df:pd.DataFrame, base_dir: str):
+    X_train = df.drop(columns=['y_60min_max', 'y_60min_min', 'trend', 'y_trend_downtrend', 'y_trend_uptrend', 'y_trend_trend undefined'])
+    # X_test = test_df.drop(columns=['y_60min_max', 'y_60min_min', 'trend', 'y_trend_downtrend', 'y_trend_uptrend', 'y_trend_trend undefined'])
+    # X_validation = validation_df.drop(columns=['y_60min_max', 'y_60min_min', 'trend', 'y_trend_downtrend', 'y_trend_uptrend', 'y_trend_trend undefined'])
 
-    y_train = train_df[['y_trend_downtrend', 'y_trend_uptrend', 'y_trend_trend undefined']]
-    y_test = test_df[['y_trend_downtrend', 'y_trend_uptrend', 'y_trend_trend undefined']]
-    y_validation = validation_df[['y_trend_downtrend', 'y_trend_uptrend', 'y_trend_trend undefined']]
+    y_train = df[['y_trend_downtrend', 'y_trend_uptrend', 'y_trend_trend undefined']]
+    # y_test = test_df[['y_trend_downtrend', 'y_trend_uptrend', 'y_trend_trend undefined']]
+    # y_validation = validation_df[['y_trend_downtrend', 'y_trend_uptrend', 'y_trend_trend undefined']]
      
-    logreg_model = RandomForestClassifier(random_state=1, n_estimators=1000, max_depth=5, min_samples_split=10, min_samples_leaf=3, verbose=2)
+    logreg_model = RandomForestClassifier(random_state=1, n_estimators=1000, max_depth=5, min_samples_split=10, min_samples_leaf=3, n_jobs=10, verbose=2)
 
     logreg_model.fit(X_train, y_train)
 
-    with open(base_dir + '/random_forest_regressor_predict_trend_direction_before_test_training.pkl', 'wb') as file:
+    with open(base_dir + '/random_forest_regressor_predict_trend_direction-2025-03-25.pkl', 'wb') as file:
         pickle.dump(logreg_model, file)
 
     print('*******************************')
@@ -51,29 +51,29 @@ def predict_trend_direction_with_random_forest_classifier(train_df:pd.DataFrame,
     print('Score on train sample:')
     print(logreg_model.score(X_train, y_train))
 
-    print('Score on test sample:')
-    print(logreg_model.score(X_test, y_test))
+    # print('Score on test sample:')
+    # print(logreg_model.score(X_test, y_test))
 
-    print('Score on validation sample:')
-    print(logreg_model.score(X_validation, y_validation))
+    # print('Score on validation sample:')
+    # print(logreg_model.score(X_validation, y_validation))
 
-    logreg_model.fit(X_test, y_test)
+    # logreg_model.fit(X_test, y_test)
 
-    with open(base_dir + '/random_forest_regressor_predict_trend_direction_after_test_training.pkl', 'wb') as file:
-        pickle.dump(logreg_model, file)
+    # with open(base_dir + '/random_forest_regressor_predict_trend_direction_after_test_training-2025-03-25.pkl', 'wb') as file:
+    #     pickle.dump(logreg_model, file)
 
-    print('*******************************')
-    print('After training on test sample:')
-    print('*******************************')
+    # print('*******************************')
+    # print('After training on test sample:')
+    # print('*******************************')
 
-    # print('Feature Importances:')
-    # print(logreg_model.feature_importances_)
+    # # print('Feature Importances:')
+    # # print(logreg_model.feature_importances_)
 
-    print('Score on train sample:')
-    print(logreg_model.score(X_train, y_train))
+    # print('Score on train sample:')
+    # print(logreg_model.score(X_train, y_train))
 
-    print('Score on test sample:')
-    print(logreg_model.score(X_test, y_test))
+    # print('Score on test sample:')
+    # print(logreg_model.score(X_test, y_test))
 
-    print('Score on validation sample:')
-    print(logreg_model.score(X_validation, y_validation))
+    # print('Score on validation sample:')
+    # print(logreg_model.score(X_validation, y_validation))
