@@ -2,33 +2,8 @@ import pandas as pd
 from .return_single_large_dataframe import return_single_large_dataframe
 from .open_close_high_low_prices import return_open_price, return_close_price, return_high_price, return_low_price
 from .adx_calculation import calculate_adx
+from .define_the_trend import define_the_trend
 import numpy as np
-
-
-def define_the_trend(df:pd.DataFrame):
-
-    high_low_0 = (df['high'] + df['low'])/2
-    high_low_15 = (df['high_plus_15min'] + df['low_plus_15min'])/2
-    high_low_30 = (df['high_plus_30min'] + df['low_plus_30min'])/2
-    high_low_45 = (df['high_plus_45min'] + df['low_plus_45min'])/2
-    high_low_60 = (df['high_plus_60min'] + df['low_plus_60min'])/2
-
-    average_price_is_increasing = ((high_low_0 < high_low_15) and
-                                   (high_low_15 < high_low_30) and
-                                   (high_low_30 < high_low_45) and
-                                   (high_low_45 < high_low_60))
-    
-    average_price_is_decreasing = ((high_low_0 > high_low_15) and
-                                   (high_low_15 > high_low_30) and
-                                   (high_low_30 > high_low_45) and
-                                   (high_low_45 > high_low_60))
-    
-    if(average_price_is_increasing):
-        return 'uptrend'
-    elif(average_price_is_decreasing):
-        return 'downtrend'
-    else:
-        return 'trend undefined'
 
 
 def make_single_df_from_bid_ask(base_dir:str, time_series_folder:str, bid_or_ask_folder_bid:str, bid_or_ask_folder_ask:str) -> pd.DataFrame:

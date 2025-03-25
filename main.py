@@ -83,9 +83,9 @@ predict_trend_direction_with_random_forest_classifier(df_5min_joined_train, df_5
 
 # print(df_5min_joined_train.head(10))
 
-# print('uptrend', 'downtrend', 'undefined')
+print('uptrend', 'downtrend', 'undefined')
 
-# print(df_5min_joined_train['y_trend_uptrend'].sum(), df_5min_joined_train['y_trend_downtrend'].sum(), df_5min_joined_train['y_trend_trend undefined'].sum())
+print(df_5min_joined_train['y_trend_uptrend'].sum(), df_5min_joined_train['y_trend_downtrend'].sum(), df_5min_joined_train['y_trend_trend undefined'].sum())
 
 # print(df_5min_joined_train.columns)
 
