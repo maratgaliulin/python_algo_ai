@@ -40,8 +40,10 @@ def buy_or_sell(
     positions_of_the_symbol_is_null = positions_of_the_symbol == ()
     trend_is_predicted = trend_direction_string == 'uptrend' or trend_direction_string == 'downtrend'
     
-    print(f'Impulse satisfies minimal_size: {impulse_satisfies_minimal_size[0]}.')
-    print(f'Impulse minimal size: {min_impulse_size}, predicted impulse size: {actual_impulse_size[0]}.')
+    print(f'Predicted high value: {high_value}.')
+    print(f'Predicted low value: {low_value}.')    
+    print(f'Impulse satisfies minimal_size: {impulse_satisfies_minimal_size}.')
+    print(f'Impulse minimal size: {min_impulse_size}, predicted impulse size: {actual_impulse_size}.')
     print(f'There are no open orders: {orders_of_the_symbol_is_null}.')
     print(f'There are no open positions: {positions_of_the_symbol_is_null}.')
     print(f'Trend is predicted: {trend_is_predicted}. Actual trend direction: {trend_direction_string}, {trend_direction}.')

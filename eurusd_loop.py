@@ -70,8 +70,8 @@ while True:
         order_type_buy=eurusd_dict['ORDER_TYPE_BUY'],
         order_type_sell=eurusd_dict['ORDER_TYPE_SELL'],
         order_action=eurusd_dict['ORDER_ACTION'],
-        high_value=high_value,
-        low_value=low_value,
+        high_value=high_value[0],
+        low_value=low_value[0],
         trend_direction=trend_direction,
         magic=eurusd_dict['MAGIC']
     )
