@@ -19,13 +19,13 @@ BASE_DIR = 'machine_learning_models/random_forest/eurusd/pickle_files'
 # EURUSD PICKLE FILES DIRECTORIES
 
 EURUSD_RFR_MAX_VAL_AFTER_TEST_TR = '/random_forest_regressor_predict_max_values_after_test_training.pkl'
-EURUSD_RFR_MAX_VAL_BEFORE_TEST_TR = '/random_forest_regressor_predict_max_values_before_test_training.pkl'
+EURUSD_RFR_MAX_VAL_BEFORE_TEST_TR = '/random_forest_regressor_predict_max_values-2025-03-25.pkl'
 
 EURUSD_RFR_MIN_VAL_AFTER_TEST_TR = '/random_forest_regressor_predict_min_values_after_test_training.pkl'
-EURUSD_RFR_MIN_VAL_BEFORE_TEST_TR = '/random_forest_regressor_predict_min_values_before_test_training.pkl'
+EURUSD_RFR_MIN_VAL_BEFORE_TEST_TR = '/random_forest_regressor_predict_min_values-2025-03-25.pkl'
 
 EURUSD_RFR_TREND_DIR_AFTER_TEST_TR = '/random_forest_regressor_predict_trend_direction_after_test_training.pkl'
-EURUSD_RFR_TREND_DIR_BEFORE_TEST_TR = '/random_forest_regressor_predict_trend_direction_before_test_training.pkl'
+EURUSD_RFR_TREND_DIR_BEFORE_TEST_TR = '/random_forest_regressor_predict_trend_direction-2025-03-25.pkl'
 
 # BUY / SELL_ORDER_BLOCK
 
