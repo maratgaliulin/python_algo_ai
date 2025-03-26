@@ -1,10 +1,14 @@
 import pandas as pd
 # from methods.draw_graph import draw_static_graph
 from methods.make_single_df_from_bid_ask import make_single_df_from_bid_ask
-from machine_learning_models.random_forest.eurusd.random_forest_regression_predict_max_value import search_optimal_parameters_for_random_forest_max_value_prediction, predict_max_value_with_random_forest_regressor
-from machine_learning_models.random_forest.eurusd.random_forest_regression_predict_min_values import search_optimal_parameters_for_random_forest_min_value_prediction, predict_min_value_with_random_forest_regressor
-from machine_learning_models.random_forest.eurusd.random_forest_classifier_predict_trend_direction import predict_trend_direction_with_random_forest_classifier
-# import pickle
+
+# from machine_learning_models.random_forest.eurusd.random_forest_regression_predict_max_value import search_optimal_parameters_for_random_forest_max_value_prediction, predict_max_value_with_random_forest_regressor
+# from machine_learning_models.random_forest.eurusd.random_forest_regression_predict_min_values import search_optimal_parameters_for_random_forest_min_value_prediction, predict_min_value_with_random_forest_regressor
+# from machine_learning_models.random_forest.eurusd.random_forest_classifier_predict_trend_direction import predict_trend_direction_with_random_forest_classifier
+
+from machine_learning_models.xgboost.eurusd.xgboost_classifier_predict_trend_direction import predict_trend_direction_with_gradient_boost_classifier
+from machine_learning_models.xgboost.eurusd.xgboost_regression_predict_max_value import predict_max_value_with_gradient_boost_regressor
+from machine_learning_models.xgboost.eurusd.xgboost_regression_predict_min_values import predict_min_value_with_gradient_boost_regressor
 
 from methods.make_single_df_test import make_single_df_from_bid_test
 
@@ -48,7 +52,7 @@ bid_or_ask_folder_ask = "Ask/"
 
 
 
-df_5min_joined = make_single_df_from_bid_ask(
+df_5min_joined_train, df_5min_joined_test, df_5min_joined_val = make_single_df_from_bid_ask(
     base_dir=bdir, 
     time_series_folder=time_series_folder, 
     bid_or_ask_folder_bid=bid_or_ask_folder_bid, 
@@ -69,23 +73,36 @@ df_5min_joined = make_single_df_from_bid_ask(
 # print(len(df_5min_joined_val))
 # print()
 
-base_dir_algo = 'machine_learning_models/random_forest/eurusd/pickle_files'
+random_forest_base_dir_algo = 'machine_learning_models/random_forest/eurusd/pickle_files'
+
+gradient_boost_base_dir_algo = 'machine_learning_models/xgboost/eurusd/pickle_files'
 
 # search_optimal_parameters_for_random_forest_max_value_prediction(df_5min_joined_train)
 
 # search_optimal_parameters_for_random_forest_min_value_prediction(df_5min_joined_train)
 
-predict_trend_direction_with_random_forest_classifier(df_5min_joined, base_dir_algo)
+# predict_trend_direction_with_random_forest_classifier(df_5min_joined, base_dir_algo)
 
-predict_max_value_with_random_forest_regressor(df_5min_joined, base_dir_algo)
+# predict_max_value_with_random_forest_regressor(df_5min_joined, base_dir_algo)
 
-predict_min_value_with_random_forest_regressor(df_5min_joined, base_dir_algo)
+# predict_min_value_with_random_forest_regressor(df_5min_joined, base_dir_algo)
 
 # print(df_5min_joined_train.head(10))
 
-print('uptrend', 'downtrend', 'undefined')
 
-print(df_5min_joined['y_trend_uptrend'].sum(), df_5min_joined['y_trend_downtrend'].sum(), df_5min_joined['y_trend_trend undefined'].sum())
+
+
+predict_trend_direction_with_gradient_boost_classifier(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, gradient_boost_base_dir_algo)
+
+predict_min_value_with_gradient_boost_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, gradient_boost_base_dir_algo)
+
+predict_max_value_with_gradient_boost_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, gradient_boost_base_dir_algo)
+
+
+
+# print('uptrend', 'downtrend', 'undefined')
+
+# print(df_5min_joined['y_trend_uptrend'].sum(), df_5min_joined['y_trend_downtrend'].sum(), df_5min_joined['y_trend_trend undefined'].sum())
 
 # print(df_5min_joined_train.columns)
 
