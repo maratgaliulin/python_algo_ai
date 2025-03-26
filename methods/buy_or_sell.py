@@ -68,45 +68,49 @@ def buy_or_sell(
             
             entry, sl, tp = order_placement_buy(price_impulse_start=low_value, price_impulse_end=high_value, point=point)
             
-            print('Present price is closer to predicted low value. Checking if it is greater than or equal to entry price.')
+            # print('Present price is closer to predicted low value. Checking if it is greater than or equal to entry price.')
+            print(f'Entry price: {entry}')
+            print(f'Present price ask: {present_price_ask}')
 
-            if(present_price_ask >= entry):
-                print('Present price is greater than or equal to entry price. Placing the order.')
+            # if(present_price_ask >= entry):
+            #     print('Present price is greater than or equal to entry price. Placing the order.')
 
-                determine_the_deal(
-                    symbol="EURUSD", 
-                    entry_price=entry,
-                    stoploss=sl,
-                    takeprofit=tp,
-                    order_type=order_type_buy,
-                    action=order_action,
-                    magic=magic,
-                    lot=lot,
-                    point=point,
-                    comment='buy'
-                )
+            determine_the_deal(
+                symb="EURUSD", 
+                entry_price=entry,
+                stoploss=sl,
+                takeprofit=tp,
+                order_type=order_type_buy,
+                action=order_action,
+                magic=magic,
+                lot=lot,
+                point=point,
+                comment='buy'
+            )
                 
         elif(present_price_is_closer_to_top):
             
             entry, sl, tp = order_placement_sell(price_impulse_start=high_value, price_impulse_end=low_value, point=point)
 
-            print('Present price is closer to predicted high value. Checking if it is less than or equal to entry price.')
+            # print('Present price is closer to predicted high value. Checking if it is less than or equal to entry price.')
+            print(f'Entry price: {entry}')
+            print(f'Present price bid: {present_price_bid}')
             
-            if(present_price_bid <= entry):
+            # if(present_price_bid <= entry):
 
-                print('Present price is less than or equal to entry price. Placing the order.')
+                # print('Present price is less than or equal to entry price. Placing the order.')
             
-                determine_the_deal(
-                    symbol="EURUSD", 
-                    entry_price=entry,
-                    stoploss=sl,
-                    takeprofit=tp,
-                    order_type=order_type_sell,
-                    action=order_action,
-                    magic=magic,
-                    lot=lot,
-                    point=point,
-                    comment='sell'
-                )
+            determine_the_deal(
+                symb="EURUSD", 
+                entry_price=entry,
+                stoploss=sl,
+                takeprofit=tp,
+                order_type=order_type_sell,
+                action=order_action,
+                magic=magic,
+                lot=lot,
+                point=point,
+                comment='sell'
+            )
     
     
