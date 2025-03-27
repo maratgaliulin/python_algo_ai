@@ -3,14 +3,15 @@ import time
 import pandas as pd
 from methods.make_dataframe_line import make_dataframe_line
 from methods.buy_or_sell import buy_or_sell
-from machine_learning_models.random_forest.eurusd.random_forest_algorithm import random_forest_algorithm
+# from machine_learning_models.random_forest.eurusd.random_forest_algorithm import random_forest_algorithm
+from machine_learning_models.xgboost.eurusd.xgboost_algorithm import xgboost_algorithm
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 
 
 while True:
-    
+     
     eurusd_dict = {
             'SYMBOL': "EURUSD",  # тикер валютной пары
             'BASE_DIR': BASE_DIR, # глубина зигзага
@@ -20,6 +21,13 @@ while True:
             'EURUSD_RFR_MIN_VAL_BEFORE_TEST_TR': EURUSD_RFR_MIN_VAL_BEFORE_TEST_TR,
             'EURUSD_RFR_TREND_DIR_AFTER_TEST_TR': EURUSD_RFR_TREND_DIR_AFTER_TEST_TR,
             'EURUSD_RFR_TREND_DIR_BEFORE_TEST_TR': EURUSD_RFR_TREND_DIR_BEFORE_TEST_TR,
+            'BASE_DIR_GRAD_BOOST': BASE_DIR_GRAD_BOOST, # глубина зигзага
+            'EURUSD_GRAD_BOOST_MAX_VAL_AFTER_TEST_TR': EURUSD_GRAD_BOOST_MAX_VAL_AFTER_TEST_TR,
+            'EURUSD_GRAD_BOOST_MAX_VAL_BEFORE_TEST_TR': EURUSD_GRAD_BOOST_MAX_VAL_BEFORE_TEST_TR,
+            'EURUSD_GRAD_BOOST_MIN_VAL_AFTER_TEST_TR': EURUSD_GRAD_BOOST_MIN_VAL_AFTER_TEST_TR,
+            'EURUSD_GRAD_BOOST_MIN_VAL_BEFORE_TEST_TR': EURUSD_GRAD_BOOST_MIN_VAL_BEFORE_TEST_TR,
+            'EURUSD_GRAD_BOOST_TREND_DIR_AFTER_TEST_TR': EURUSD_GRAD_BOOST_TREND_DIR_AFTER_TEST_TR,
+            'EURUSD_GRAD_BOOST_TREND_DIR_BEFORE_TEST_TR': EURUSD_GRAD_BOOST_TREND_DIR_BEFORE_TEST_TR,
             'SLEEP_TIME': sleep_time, #глубина поиска ордерблока
             'POINT': mt.symbol_info("EURUSD").point, # 1 пункт валютной пары
             'CURRENT_TIME': mt.symbol_info("EURUSD").time, # текущее время
@@ -55,10 +63,16 @@ while True:
     
     # print(dataframe_line)
     
-    high_value, low_value, trend_direction = random_forest_algorithm(dataframe_line=dataframe_line,
-                                                                     pickle_rfc_predict_max_dir=eurusd_dict['BASE_DIR'] + eurusd_dict['EURUSD_RFR_MAX_VAL_BEFORE_TEST_TR'],
-                                                                     pickle_rfc_predict_min_dir=eurusd_dict['BASE_DIR'] + eurusd_dict['EURUSD_RFR_MIN_VAL_BEFORE_TEST_TR'],
-                                                                     pickle_rfc_predict_trend_dir=eurusd_dict['BASE_DIR'] + eurusd_dict['EURUSD_RFR_TREND_DIR_BEFORE_TEST_TR']
+    # high_value, low_value, trend_direction = random_forest_algorithm(dataframe_line=dataframe_line,
+    #                                                                  pickle_rfc_predict_max_dir=eurusd_dict['BASE_DIR'] + eurusd_dict['EURUSD_RFR_MAX_VAL_BEFORE_TEST_TR'],
+    #                                                                  pickle_rfc_predict_min_dir=eurusd_dict['BASE_DIR'] + eurusd_dict['EURUSD_RFR_MIN_VAL_BEFORE_TEST_TR'],
+    #                                                                  pickle_rfc_predict_trend_dir=eurusd_dict['BASE_DIR'] + eurusd_dict['EURUSD_RFR_TREND_DIR_BEFORE_TEST_TR']
+    #                                                                  )
+    
+    high_value, low_value, trend_direction = xgboost_algorithm(dataframe_line=dataframe_line,
+                                                                     pickle_rfc_predict_max_dir=eurusd_dict['BASE_DIR_GRAD_BOOST'] + eurusd_dict['EURUSD_GRAD_BOOST_MAX_VAL_AFTER_TEST_TR'],
+                                                                     pickle_rfc_predict_min_dir=eurusd_dict['BASE_DIR_GRAD_BOOST'] + eurusd_dict['EURUSD_GRAD_BOOST_MIN_VAL_AFTER_TEST_TR'],
+                                                                     pickle_rfc_predict_trend_dir=eurusd_dict['BASE_DIR_GRAD_BOOST'] + eurusd_dict['EURUSD_GRAD_BOOST_TREND_DIR_AFTER_TEST_TR']
                                                                      )
     
     buy_or_sell(

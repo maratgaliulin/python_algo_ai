@@ -27,6 +27,18 @@ EURUSD_RFR_MIN_VAL_BEFORE_TEST_TR = '/random_forest/random_forest_regressor_pred
 EURUSD_RFR_TREND_DIR_AFTER_TEST_TR = '/random_forest/random_forest_regressor_predict_trend_direction_after_test_training.pkl'
 EURUSD_RFR_TREND_DIR_BEFORE_TEST_TR = '/random_forest/random_forest_regressor_predict_trend_direction-2025-03-25.pkl'
 
+
+BASE_DIR_GRAD_BOOST = 'machine_learning_models/xgboost/eurusd/pickle_files'
+
+EURUSD_GRAD_BOOST_MAX_VAL_AFTER_TEST_TR = '/xgboost_regressor_predict_max_values_after_test_training-2025-03-27.pkl'
+EURUSD_GRAD_BOOST_MAX_VAL_BEFORE_TEST_TR = '/xgboost_regressor_predict_max_values-2025-03-27.pkl'
+
+EURUSD_GRAD_BOOST_MIN_VAL_AFTER_TEST_TR = '/xgboost_regressor_predict_min_values_after_test_training-2025-03-27.pkl'
+EURUSD_GRAD_BOOST_MIN_VAL_BEFORE_TEST_TR = '/xgboost_regressor_predict_min_values-2025-03-27.pkl'
+
+EURUSD_GRAD_BOOST_TREND_DIR_AFTER_TEST_TR = '/xgboost_regressor_predict_trend_direction_after_test_training-2025-03-27.pkl'
+EURUSD_GRAD_BOOST_TREND_DIR_BEFORE_TEST_TR = '/xgboost_regressor_predict_trend_direction-2025-03-27.pkl'
+
 # BUY / SELL_ORDER_BLOCK
 
 ORDER_TYPE_BUY = mt.ORDER_TYPE_BUY_LIMIT
