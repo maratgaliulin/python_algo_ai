@@ -98,8 +98,8 @@ def predict_max_value_with_lstm_model(df:pd.DataFrame, test_df:pd.DataFrame, val
     plt.plot(y_train_actual, label='Actual Train Prices')
     plt.plot(train_predict, label='Predicted Train Prices')    
     
-    plt.plot(range(len(y_train_actual), len(y_train_actual)+len(y_test_actual)+len(y_validation_actual)), y_test_actual, label='Actual Test Prices')    
-    plt.plot(range(len(y_train_actual), len(y_train_actual)+len(y_test_actual)+len(y_validation_actual)), test_predict, label='Predicted Test Prices')
+    plt.plot(range(len(y_train_actual), len(y_train_actual)+len(y_test_actual)), y_test_actual, label='Actual Test Prices')    
+    plt.plot(range(len(y_train_actual), len(y_train_actual)+len(y_test_actual)), test_predict, label='Predicted Test Prices')
     
     plt.plot(range(len(y_train_actual), len(y_train_actual)+len(y_test_actual)+len(y_validation_actual)), y_validation_actual, label='Actual Validation Prices')    
     plt.plot(range(len(y_train_actual), len(y_train_actual)+len(y_test_actual)+len(y_validation_actual)), validation_predict, label='Predicted Validation Prices')
