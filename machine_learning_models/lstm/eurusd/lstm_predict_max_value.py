@@ -109,3 +109,55 @@ def predict_max_value_with_lstm_model(df:pd.DataFrame, test_df:pd.DataFrame, val
     plt.show()
     
     model.train(mode=True)
+
+    for epoch in range(epochs):
+        for i in range(0, len({X_test}), batch_size):
+            batch_X = {X_test}[i:i+batch_size].to(device)
+            batch_y = y_test[i:i+batch_size].to(device)
+            
+            # Forward pass
+            outputs = model(batch_X)
+            loss = criterion(outputs, batch_y)
+            
+            # Backward pass and optimize
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+        
+        if (epoch+1) % 10 == 0:
+            print(f'Epoch [{epoch+1}/{epochs}], Loss: {loss.item():.6f}')
+
+    
+    print('*******************************')
+    print('Before training on test sample:')
+    print('*******************************')
+    
+    model.eval()
+    
+    train_predict = model(X_train)
+    test_predict = model(X_test)
+    validation_predict = model(X_validation)
+    
+    train_predict = scaler.inverse_transform(train_predict.detach().numpy())
+    y_train_actual = scaler.inverse_transform(y_train.detach().numpy())
+    
+    test_predict = scaler.inverse_transform(test_predict.detach().numpy())
+    y_test_actual = scaler.inverse_transform(y_test.detach().numpy())
+    
+    validation_predict = scaler.inverse_transform(validation_predict.detach().numpy())
+    y_validation_actual = scaler.inverse_transform(y_validation.detach().numpy())
+
+    # Plot results
+    plt.figure(figsize=(12, 6))
+    plt.plot(y_train_actual, label='Actual Train Prices')
+    plt.plot(train_predict, label='Predicted Train Prices')    
+    
+    plt.plot(range(len(y_train_actual), len(y_train_actual)+len(y_test_actual)), y_test_actual, label='Actual Test Prices')    
+    plt.plot(range(len(y_train_actual), len(y_train_actual)+len(y_test_actual)), test_predict, label='Predicted Test Prices')
+    
+    plt.plot(range(len(y_train_actual), len(y_train_actual)+len(y_test_actual)+len(y_validation_actual)), y_validation_actual, label='Actual Validation Prices')    
+    plt.plot(range(len(y_train_actual), len(y_train_actual)+len(y_test_actual)+len(y_validation_actual)), validation_predict, label='Predicted Validation Prices')
+    
+    
+    plt.legend()
+    plt.show()
