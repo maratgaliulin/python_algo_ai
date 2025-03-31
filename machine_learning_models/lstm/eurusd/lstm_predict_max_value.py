@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 from sklearn.preprocessing import MinMaxScaler
@@ -35,8 +36,12 @@ def predict_max_value_with_lstm_model(df:pd.DataFrame, test_df:pd.DataFrame, val
     
     X_train, y_train = create_sequences(scaled_data_train, SEQ_LENGTH)
     y_train = y_train[:, :1]
+    
     X_test, y_test = create_sequences(scaled_data_test, SEQ_LENGTH)
+    y_test = y_test[:, :1]
+    
     X_validation, y_validation = create_sequences(scaled_data_validation, SEQ_LENGTH)
+    y_validation = y_validation[:, :1]
     
     # print('shape of x_train:', X_train.shape)
     
@@ -67,3 +72,40 @@ def predict_max_value_with_lstm_model(df:pd.DataFrame, test_df:pd.DataFrame, val
         
         if (epoch+1) % 10 == 0:
             print(f'Epoch [{epoch+1}/{epochs}], Loss: {loss.item():.6f}')
+            
+    
+    print('*******************************')
+    print('Before training on test sample:')
+    print('*******************************')
+    
+    model.eval()
+    
+    train_predict = model(X_train)
+    test_predict = model(X_test)
+    validation_predict = model(X_validation)
+    
+    train_predict = scaler.inverse_transform(train_predict.detach().numpy())
+    y_train_actual = scaler.inverse_transform(y_train.detach().numpy())
+    
+    test_predict = scaler.inverse_transform(test_predict.detach().numpy())
+    y_test_actual = scaler.inverse_transform(y_test.detach().numpy())
+    
+    validation_predict = scaler.inverse_transform(validation_predict.detach().numpy())
+    y_validation_actual = scaler.inverse_transform(y_validation.detach().numpy())
+
+    # Plot results
+    plt.figure(figsize=(12, 6))
+    plt.plot(y_train_actual, label='Actual Train Prices')
+    plt.plot(train_predict, label='Predicted Train Prices')    
+    
+    plt.plot(range(len(y_train_actual), len(y_train_actual)+len(y_test_actual)+len(y_validation_actual)), y_test_actual, label='Actual Test Prices')    
+    plt.plot(range(len(y_train_actual), len(y_train_actual)+len(y_test_actual)+len(y_validation_actual)), test_predict, label='Predicted Test Prices')
+    
+    plt.plot(range(len(y_train_actual), len(y_train_actual)+len(y_test_actual)+len(y_validation_actual)), y_validation_actual, label='Actual Validation Prices')    
+    plt.plot(range(len(y_train_actual), len(y_train_actual)+len(y_test_actual)+len(y_validation_actual)), validation_predict, label='Predicted Validation Prices')
+    
+    
+    plt.legend()
+    plt.show()
+    
+    model.train(mode=True)
