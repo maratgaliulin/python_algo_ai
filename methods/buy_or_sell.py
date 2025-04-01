@@ -40,13 +40,23 @@ def buy_or_sell(
     impulse_satisfies_minimal_size = actual_impulse_size >= min_impulse_size
     orders_of_the_symbol_is_null = orders_of_the_symbol == ()
     positions_of_the_symbol_is_null = positions_of_the_symbol == ()
+    middle_price = (high_value - low_value) / 2 + low_value
     # trend_is_predicted = trend_direction_string == 'uptrend' or trend_direction_string == 'downtrend'
     trend_is_predicted = trend_direction[0] == 'uptrend' or trend_direction[0] == 'downtrend'
     present_price_top_difference = high_value - present_price_ask
     present_price_bottom_difference = present_price_bid - low_value
+    present_price_bid_to_middle_value_difference = abs(middle_price - present_price_bid)
+    present_price_ask_to_middle_value_difference = abs(middle_price - present_price_ask)
+
+
     present_price_is_closer_to_top = present_price_top_difference < present_price_bottom_difference
     present_price_is_closer_to_bottom = present_price_top_difference > present_price_bottom_difference
-    
+    present_price_is_closer_to_middle_price = (
+        (present_price_bid_to_middle_value_difference < abs(present_price_top_difference)) and
+        (present_price_ask_to_middle_value_difference < abs(present_price_top_difference)) and 
+        (present_price_bid_to_middle_value_difference < abs(present_price_bottom_difference)) and
+        (present_price_ask_to_middle_value_difference < abs(present_price_bottom_difference)))
+
     print(f'Predicted high value: {high_value}.')
     print(f'Predicted low value: {low_value}.')   
     print('***********************************') 
@@ -61,9 +71,10 @@ def buy_or_sell(
     print('***********************************') 
     print(f'Present price is closer to predicted high value: {present_price_is_closer_to_top}')
     print(f'Present price is closer to predicted low value: {present_price_is_closer_to_bottom}')
+    print(f'Present price is closer to middle price: {present_price_is_closer_to_middle_price}')
     print('***********************************') 
 
-    conditions_for_order_placement = impulse_satisfies_minimal_size and orders_of_the_symbol_is_null and positions_of_the_symbol_is_null
+    conditions_for_order_placement = impulse_satisfies_minimal_size and orders_of_the_symbol_is_null and positions_of_the_symbol_is_null and (not present_price_is_closer_to_middle_price)
     
     print(f'conditions_for_order_placement: {conditions_for_order_placement}.')
     
