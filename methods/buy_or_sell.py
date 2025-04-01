@@ -74,7 +74,11 @@ def buy_or_sell(
     print(f'Present price is closer to middle price: {present_price_is_closer_to_middle_price}')
     print('***********************************') 
 
-    conditions_for_order_placement = impulse_satisfies_minimal_size and orders_of_the_symbol_is_null and positions_of_the_symbol_is_null and (not present_price_is_closer_to_middle_price)
+    conditions_for_order_placement = (
+                                        # impulse_satisfies_minimal_size and 
+                                      orders_of_the_symbol_is_null and 
+                                      positions_of_the_symbol_is_null and 
+                                      (not present_price_is_closer_to_middle_price))
     
     print(f'conditions_for_order_placement: {conditions_for_order_placement}.')
     
