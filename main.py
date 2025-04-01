@@ -1,3 +1,7 @@
+import os
+os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'expandable_segments:True'  # Must be before torch import!
+import torch
+
 import pandas as pd
 # from methods.draw_graph import draw_static_graph
 from methods.make_single_df_from_bid_ask import make_single_df_from_bid_ask
@@ -102,7 +106,6 @@ lstm_base_dir_algo = 'machine_learning_models/lstm/eurusd/pickle_files'
 
 
 predict_max_value_with_lstm_model(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, lstm_base_dir_algo)
-
 
 
 # print('uptrend', 'downtrend', 'undefined')
