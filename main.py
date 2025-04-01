@@ -51,12 +51,9 @@ pd.set_option('display.max_rows', None)
 
 
 bdir = "hist_data/"
-time_series_folder = "EURUSD/5_min/"
-bid_or_ask_folder_bid = "Bid/"
-bid_or_ask_folder_ask = "Ask/"
-
-
-
+time_series_folder = "EURUSD/"
+bid_or_ask_folder_bid = "5_min/Bid/"
+bid_or_ask_folder_ask = "5_min/Ask/"
 
 df_5min_joined_train, df_5min_joined_test, df_5min_joined_val = make_single_df_from_bid_ask(
     base_dir=bdir, 
@@ -105,7 +102,7 @@ lstm_base_dir_algo = 'machine_learning_models/lstm/eurusd/pickle_files'
 # predict_max_value_with_gradient_boost_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, gradient_boost_base_dir_algo)
 
 
-predict_max_value_with_lstm_model(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, lstm_base_dir_algo)
+# predict_max_value_with_lstm_model(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, lstm_base_dir_algo)
 
 
 # print('uptrend', 'downtrend', 'undefined')
