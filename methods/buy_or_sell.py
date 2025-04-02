@@ -20,9 +20,11 @@ def buy_or_sell(
     high_value:float,
     low_value:float,
     trend_direction:np.ndarray
-                ) -> None:
+                ) -> int:
     
     entry, sl, tp = 0, 0, 0    
+
+    time_sleep = 0
     
     trend_direction = trend_direction.tolist()
     actual_impulse_size = high_value - low_value
@@ -107,6 +109,8 @@ def buy_or_sell(
                     comment='buy'
                 )
 
+                time_sleep = 600
+
             else:
                 present_impulse_size = low_value - present_price_ask
                 if(present_impulse_size >= min_impulse_size):
@@ -124,6 +128,8 @@ def buy_or_sell(
                         point=point,
                         comment='buy'
                     )
+
+                    time_sleep = 600
                 
         elif(present_price_is_closer_to_top):
             
@@ -150,6 +156,8 @@ def buy_or_sell(
                     comment='sell'
                 )
 
+                time_sleep = 600
+
             else:
                 present_impulse_size = present_price_bid - high_value
                 if(present_impulse_size >= min_impulse_size):
@@ -168,6 +176,8 @@ def buy_or_sell(
                         point=point,
                         comment='sell'
                     )
+
+                    time_sleep = 600
 
     if(positions_of_the_symbol != ()):
         positions_of_the_symbol_dict = positions_of_the_symbol[0]._asdict()                       
@@ -287,5 +297,7 @@ def buy_or_sell(
                 fibo_level = round((stoploss - modified_stoploss)/sl_tp_diff, 3)
                 modify_stoploss(positions_of_the_symbol_dict, modified_stoploss, modified_takeprofit)
                 print(f'Сработало условие - стоплосс на продажу сдвинут на линию {fibo_level} по фибе, а тейк равен {takeprofit}')
+    
+    return time_sleep
     
     
