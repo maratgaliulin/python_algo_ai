@@ -13,6 +13,9 @@ def create_sequences(data, seq_length):
     for i in range(len(data) - seq_length):
         X.append(data[i:i+seq_length])  # Input sequence (e.g., past 60 days)
         y.append(data[i+seq_length])    # Target (next day's price)
+    print('////////////////////')
+    print(y)
+    print('////////////////////')
     return torch.FloatTensor(np.array(X)), torch.FloatTensor(np.array(y))
 
 def predict_max_value_with_lstm_model(df:pd.DataFrame, test_df:pd.DataFrame, validation_df:pd.DataFrame, base_dir:str):
