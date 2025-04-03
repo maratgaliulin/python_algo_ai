@@ -109,7 +109,7 @@ def buy_or_sell(
                     comment='buy'
                 )
 
-                time_sleep = 600
+                # time_sleep = 600
 
             else:
                 present_impulse_size = low_value - present_price_ask
@@ -129,7 +129,7 @@ def buy_or_sell(
                         comment='buy'
                     )
 
-                    time_sleep = 600
+                    # time_sleep = 600/
                 
         elif(present_price_is_closer_to_top):
             
@@ -156,7 +156,7 @@ def buy_or_sell(
                     comment='sell'
                 )
 
-                time_sleep = 600
+                # time_sleep = 600
 
             else:
                 present_impulse_size = present_price_bid - high_value
@@ -177,7 +177,7 @@ def buy_or_sell(
                         comment='sell'
                     )
 
-                    time_sleep = 600
+                    # time_sleep = 600
 
     if(positions_of_the_symbol != ()):
         positions_of_the_symbol_dict = positions_of_the_symbol[0]._asdict()                       
