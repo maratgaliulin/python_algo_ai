@@ -75,7 +75,7 @@ while True:
                                                                      pickle_rfc_predict_trend_dir=eurusd_dict['BASE_DIR_GRAD_BOOST'] + eurusd_dict['EURUSD_GRAD_BOOST_TREND_DIR_AFTER_TEST_TR']
                                                                      )
     
-    buy_or_sell(
+    time_sleep_modifier = buy_or_sell(
         min_impulse_size=0.0025,
         orders_of_the_symbol=eurusd_dict['ORDERS_OF_THE_SYMBOL'],
         positions_of_the_symbol=eurusd_dict['POSITIONS_OF_THE_SYMBOL'],
@@ -92,6 +92,8 @@ while True:
         magic=eurusd_dict['MAGIC']
     )
 
+    time_sleep_total = eurusd_dict['SLEEP_TIME'] + time_sleep_modifier
 
+    print(f'Total sleep time: {time_sleep_total}')
     
-    time.sleep(eurusd_dict['SLEEP_TIME'])
+    time.sleep(time_sleep_total)
