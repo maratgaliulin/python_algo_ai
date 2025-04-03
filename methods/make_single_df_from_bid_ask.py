@@ -76,9 +76,9 @@ def make_single_df_from_bid_ask(base_dir:str, time_series_folder:str, bid_or_ask
         df_joined_test.sort_index(axis=1, ascending=True, inplace=True)
         df_joined_val.sort_index(axis=1, ascending=True, inplace=True)
         
-        df_joined_train.index = pd.to_datetime(df_joined_train.index)
-        df_joined_test.index = pd.to_datetime(df_joined_test.index)
-        df_joined_val.index = pd.to_datetime(df_joined_val.index)
+        df_joined_train.index = pd.to_datetime(df_joined_train.index, format='mixed')
+        df_joined_test.index = pd.to_datetime(df_joined_test.index, format='mixed')
+        df_joined_val.index = pd.to_datetime(df_joined_val.index, format='mixed')
         
         return df_joined_train, df_joined_test, df_joined_val
     
