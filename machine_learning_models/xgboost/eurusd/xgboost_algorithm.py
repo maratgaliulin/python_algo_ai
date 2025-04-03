@@ -7,7 +7,11 @@ import pandas as pd
 # 1. Как действовать в переходной зоной (переход от тренда к флэту) в скользящем окне
 
 
-def xgboost_algorithm(dataframe_line:pd.DataFrame, pickle_rfc_predict_max_dir:str, pickle_rfc_predict_min_dir:str, pickle_rfc_predict_trend_dir:str):
+def xgboost_algorithm(dataframe_line:pd.DataFrame, 
+                      pickle_rfc_predict_max_dir:str, 
+                      pickle_rfc_predict_min_dir:str, 
+                      pickle_rfc_predict_trend_dir:str):
+    
     with open(pickle_rfc_predict_max_dir, 'rb') as file:
         model_random_forest_predict_high = pickle.load(file)
 
@@ -16,6 +20,10 @@ def xgboost_algorithm(dataframe_line:pd.DataFrame, pickle_rfc_predict_max_dir:st
 
     with open(pickle_rfc_predict_trend_dir, 'rb') as file2:
         model_random_forest_predict_trend_direction = pickle.load(file2)
+
+    # print('df line columns:', dataframe_line.columns)
+
+    # print('model columns:', model_random_forest_predict_high.feature_names_in_)
 
 
     high_value = model_random_forest_predict_high.predict(dataframe_line)

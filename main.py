@@ -86,19 +86,17 @@ lstm_base_dir_algo = 'machine_learning_models/lstm/eurusd/pickle_files'
 
 # search_optimal_parameters_for_random_forest_min_value_prediction(df_5min_joined_train)
 
-# predict_trend_direction_with_random_forest_classifier(df_5min_joined, base_dir_algo)
+# predict_trend_direction_with_random_forest_classifier(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, random_forest_base_dir_algo)
 
-predict_max_value_with_random_forest_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, random_forest_base_dir_algo)
+# predict_max_value_with_random_forest_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, random_forest_base_dir_algo)
 
-predict_min_value_with_random_forest_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, random_forest_base_dir_algo)
+# predict_min_value_with_random_forest_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, random_forest_base_dir_algo)
 
 # print(df_5min_joined_train.head(10))
 
-
-# predict_trend_direction_with_gradient_boost_classifier(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, gradient_boost_base_dir_algo)
-
-
 print('Gradient boosting model:')
+
+predict_trend_direction_with_gradient_boost_classifier(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, gradient_boost_base_dir_algo)
 
 predict_min_value_with_gradient_boost_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, gradient_boost_base_dir_algo)
 
