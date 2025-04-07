@@ -15,6 +15,7 @@ from machine_learning_models.xgboost.eurusd.xgboost_regression_predict_max_value
 from machine_learning_models.xgboost.eurusd.xgboost_regression_predict_min_values import predict_min_value_with_gradient_boost_regressor
 
 from machine_learning_models.lstm.eurusd.lstm_predict_max_value import predict_max_value_with_lstm_model
+from machine_learning_models.lstm.eurusd.lstm_predict_min_values import predict_min_value_with_lstm_model
 
 # from methods.make_single_df_test import make_single_df_from_bid_test
 
@@ -103,7 +104,9 @@ lstm_base_dir_algo = 'machine_learning_models/lstm/eurusd/pickle_files'
 # predict_max_value_with_gradient_boost_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, gradient_boost_base_dir_algo)
 
 
-predict_max_value_with_lstm_model(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, lstm_base_dir_algo)
+# predict_max_value_with_lstm_model(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, lstm_base_dir_algo)
+
+predict_min_value_with_lstm_model(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, lstm_base_dir_algo)
 
 
 # print('uptrend', 'downtrend', 'undefined')
