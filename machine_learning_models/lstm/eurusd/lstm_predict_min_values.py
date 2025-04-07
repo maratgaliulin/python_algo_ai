@@ -17,9 +17,36 @@ def create_sequences(data, seq_length):
 
 def predict_max_value_with_lstm_model(df:pd.DataFrame, test_df:pd.DataFrame, validation_df:pd.DataFrame, base_dir:str):
 
+    columns_order = ['open', 'open_minus_5min', 'open_minus_10min', 'open_minus_15min',
+       'open_minus_20min', 'open_minus_25min', 'open_minus_30min',
+       'open_minus_35min', 'open_minus_40min', 'open_minus_45min',
+       'open_minus_50min', 'open_minus_55min', 'open_minus_60min', 'close',
+       'close_minus_5min', 'close_minus_10min', 'close_minus_15min',
+       'close_minus_20min', 'close_minus_25min', 'close_minus_30min',
+       'close_minus_35min', 'close_minus_40min', 'close_minus_45min',
+       'close_minus_50min', 'close_minus_55min', 'close_minus_60min', 'high',
+       'high_minus_5min', 'high_minus_10min', 'high_minus_15min',
+       'high_minus_20min', 'high_minus_25min', 'high_minus_30min',
+       'high_minus_35min', 'high_minus_40min', 'high_minus_45min',
+       'high_minus_50min', 'high_minus_55min', 'high_minus_60min', 'low',
+       'low_minus_5min', 'low_minus_10min', 'low_minus_15min',
+       'low_minus_20min', 'low_minus_25min', 'low_minus_30min',
+       'low_minus_35min', 'low_minus_40min', 'low_minus_45min',
+       'low_minus_50min', 'low_minus_55min', 'low_minus_60min', 'volume',
+       'volume_minus_5min', 'volume_minus_10min', 'volume_minus_15min',
+       'volume_minus_20min', 'volume_minus_25min', 'volume_minus_30min',
+       'volume_minus_35min', 'volume_minus_40min', 'volume_minus_45min',
+       'volume_minus_50min', 'volume_minus_55min', 'volume_minus_60min',
+       'open_normalized', 'close_normalized', 'high_normalized',
+       'low_normalized', 'volume_normalized', 'open_log', 'close_log',
+       'high_log', 'low_log', '+DI', '-DI', 'ADX']
+    
     X_train_raw = df.drop(columns=['y_60min_max', 'y_60min_min', 'trend', 'y_trend_downtrend', 'y_trend_uptrend', 'y_trend_trend undefined'])
+    X_train_raw = X_train.reindex(columns=columns_order)
     X_test_raw = test_df.drop(columns=['y_60min_max', 'y_60min_min', 'trend', 'y_trend_downtrend', 'y_trend_uptrend', 'y_trend_trend undefined'])
+    X_test_raw = X_test_raw.reindex(columns=columns_order)
     X_validation_raw = validation_df.drop(columns=['y_60min_max', 'y_60min_min', 'trend', 'y_trend_downtrend', 'y_trend_uptrend', 'y_trend_trend undefined'])
+    X_validation_raw = X_validation_raw.reindex(columns=columns_order)
 
     y_train_raw = df['y_60min_min']
     y_test_raw = test_df['y_60min_min']
