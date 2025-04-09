@@ -4,7 +4,8 @@ import pandas as pd
 from methods.make_dataframe_line import make_dataframe_line
 from methods.buy_or_sell import buy_or_sell
 # from machine_learning_models.random_forest.eurusd.random_forest_algorithm import random_forest_algorithm
-from machine_learning_models.xgboost.eurusd.xgboost_algorithm import xgboost_algorithm
+# from machine_learning_models.xgboost.eurusd.xgboost_algorithm import xgboost_algorithm
+from machine_learning_models.lstm.eurusd.lstm_algorithm import lstm_algorithm
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -28,6 +29,9 @@ while True:
             'EURUSD_GRAD_BOOST_MIN_VAL_BEFORE_TEST_TR': EURUSD_GRAD_BOOST_MIN_VAL_BEFORE_TEST_TR,
             'EURUSD_GRAD_BOOST_TREND_DIR_AFTER_TEST_TR': EURUSD_GRAD_BOOST_TREND_DIR_AFTER_TEST_TR,
             'EURUSD_GRAD_BOOST_TREND_DIR_BEFORE_TEST_TR': EURUSD_GRAD_BOOST_TREND_DIR_BEFORE_TEST_TR,
+            'BASE_DIR_LSTM': BASE_DIR_LSTM,
+            'EURUSD_LSTM_MAX_VAL': EURUSD_LSTM_MAX_VAL,
+            'EURUSD_LSTM_MIN_VAL': EURUSD_LSTM_MIN_VAL,
             'SLEEP_TIME': sleep_time, #глубина поиска ордерблока
             'POINT': mt.symbol_info("EURUSD").point, # 1 пункт валютной пары
             'CURRENT_TIME': mt.symbol_info("EURUSD").time, # текущее время
@@ -44,7 +48,7 @@ while True:
             'DETERMINE_THE_DEAL_ACTION':DETERMINE_THE_DEAL_ACTION,
             'CANCEL_THE_ORDER_ACTION': CANCEL_THE_ORDER_ACTION,
             'START_POSITION':0,
-            'END_POSITION':13
+            'END_POSITION':24
             # 'CSV_ADDRESS': os.path.abspath(CSV_ADDRESS + "eurusd_order_blocks.csv"), # путь к папке с файлом, в котором записываются ордерблоки и их характеристики
             # 'FULL_CSV_PATH': os.path.abspath(PATH_TO_VARIABLES + "variables_eurusd.csv"), # путь к папке с файлом, в котором записываются переменные (главным образом для трейлинг СЛ)
             # 'ANALYSIS_LARGE_DATAFRAME': os.path.abspath(PATH_TO_ANALYSIS_DATAFRAMES + "/eurusd/ob_30_min_raw.csv"), # 
@@ -60,20 +64,25 @@ while True:
                                          start_pos=eurusd_dict['START_POSITION'],
                                          end_pos=eurusd_dict['END_POSITION']
                                          )
-    
-    # print(dataframe_line)
-    
+        
     # high_value, low_value, trend_direction = random_forest_algorithm(dataframe_line=dataframe_line,
     #                                                                  pickle_rfc_predict_max_dir=eurusd_dict['BASE_DIR'] + eurusd_dict['EURUSD_RFR_MAX_VAL_BEFORE_TEST_TR'],
     #                                                                  pickle_rfc_predict_min_dir=eurusd_dict['BASE_DIR'] + eurusd_dict['EURUSD_RFR_MIN_VAL_BEFORE_TEST_TR'],
     #                                                                  pickle_rfc_predict_trend_dir=eurusd_dict['BASE_DIR'] + eurusd_dict['EURUSD_RFR_TREND_DIR_BEFORE_TEST_TR']
     #                                                                  )
     
-    high_value, low_value, trend_direction = xgboost_algorithm(dataframe_line=dataframe_line,
-                                                                     pickle_rfc_predict_max_dir=eurusd_dict['BASE_DIR_GRAD_BOOST'] + eurusd_dict['EURUSD_GRAD_BOOST_MAX_VAL_AFTER_TEST_TR'],
-                                                                     pickle_rfc_predict_min_dir=eurusd_dict['BASE_DIR_GRAD_BOOST'] + eurusd_dict['EURUSD_GRAD_BOOST_MIN_VAL_AFTER_TEST_TR'],
-                                                                     pickle_rfc_predict_trend_dir=eurusd_dict['BASE_DIR_GRAD_BOOST'] + eurusd_dict['EURUSD_GRAD_BOOST_TREND_DIR_AFTER_TEST_TR']
-                                                                     )
+    # high_value, low_value, trend_direction = xgboost_algorithm(dataframe_line=dataframe_line,
+    #                                                                  pickle_rfc_predict_max_dir=eurusd_dict['BASE_DIR_GRAD_BOOST'] + eurusd_dict['EURUSD_GRAD_BOOST_MAX_VAL_AFTER_TEST_TR'],
+    #                                                                  pickle_rfc_predict_min_dir=eurusd_dict['BASE_DIR_GRAD_BOOST'] + eurusd_dict['EURUSD_GRAD_BOOST_MIN_VAL_AFTER_TEST_TR'],
+    #                                                                  pickle_rfc_predict_trend_dir=eurusd_dict['BASE_DIR_GRAD_BOOST'] + eurusd_dict['EURUSD_GRAD_BOOST_TREND_DIR_AFTER_TEST_TR']
+    #                                                                  )
+
+    high_value, low_value = lstm_algorithm(dataframe_line=dataframe_line,
+                                           pickle_rfc_predict_max_dir=eurusd_dict['BASE_DIR_LSTM'] + eurusd_dict['EURUSD_LSTM_MAX_VAL'],
+                                           pickle_rfc_predict_min_dir=eurusd_dict['BASE_DIR_LSTM'] + eurusd_dict['EURUSD_LSTM_MIN_VAL']
+                                           )
+    
+    print(high_value, low_value)
     
     time_sleep_modifier = buy_or_sell(
         min_impulse_size=0.0025,
@@ -86,13 +95,13 @@ while True:
         order_type_buy=eurusd_dict['ORDER_TYPE_BUY'],
         order_type_sell=eurusd_dict['ORDER_TYPE_SELL'],
         order_action=eurusd_dict['ORDER_ACTION'],
-        high_value=high_value[0],
-        low_value=low_value[0],
-        trend_direction=trend_direction,
+        high_value=high_value,
+        low_value=low_value,
+        trend_direction='undefined',
         magic=eurusd_dict['MAGIC']
     )
 
-    time_sleep_total = eurusd_dict['SLEEP_TIME'] + time_sleep_modifier
+    time_sleep_total = eurusd_dict['SLEEP_TIME']
 
     print(f'Total sleep time: {time_sleep_total}')
     

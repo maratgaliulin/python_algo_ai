@@ -19,14 +19,14 @@ def buy_or_sell(
     magic:int,
     high_value:float,
     low_value:float,
-    trend_direction:np.ndarray
+    trend_direction:str
                 ) -> int:
     
     entry, sl, tp = 0, 0, 0    
 
     time_sleep = 0
     
-    trend_direction = trend_direction.tolist()
+    # trend_direction = trend_direction.tolist()
     actual_impulse_size = high_value - low_value
     
     # if(trend_direction[0] == [1, 0, 0]):
@@ -44,7 +44,8 @@ def buy_or_sell(
     positions_of_the_symbol_is_null = positions_of_the_symbol == ()
     middle_price = (high_value - low_value) / 2 + low_value
     # trend_is_predicted = trend_direction_string == 'uptrend' or trend_direction_string == 'downtrend'
-    trend_is_predicted = trend_direction[0] == 'uptrend' or trend_direction[0] == 'downtrend'
+    # trend_is_predicted = trend_direction[0] == 'uptrend' or trend_direction[0] == 'downtrend'
+    trend_is_predicted = trend_direction == 'uptrend' or trend_direction == 'downtrend'
     present_price_top_difference = high_value - present_price_ask
     present_price_bottom_difference = present_price_bid - low_value
     present_price_bid_to_middle_value_difference = abs(middle_price - present_price_bid)
@@ -69,7 +70,7 @@ def buy_or_sell(
     print(f'There are no open positions: {positions_of_the_symbol_is_null}.')
     print('***********************************') 
     # print(f'Trend is predicted: {trend_is_predicted}. Actual trend direction: {trend_direction_string}, {trend_direction}.')
-    print(f'Trend is predicted: {trend_is_predicted}. Actual trend direction: {trend_direction[0]}.')
+    print(f'Trend is predicted: {trend_is_predicted}. Actual trend direction: {trend_direction}.')
     print('***********************************') 
     print(f'Present price is closer to predicted high value: {present_price_is_closer_to_top}')
     print(f'Present price is closer to predicted low value: {present_price_is_closer_to_bottom}')
@@ -100,7 +101,7 @@ def buy_or_sell(
                     symb="EURUSD", 
                     entry_price=entry,
                     stoploss=sl,
-                    takeprofit=tp,
+                    takeprofit=float(tp),
                     order_type=order_type_buy,
                     action=order_action,
                     magic=magic,
@@ -120,7 +121,7 @@ def buy_or_sell(
                         symb="EURUSD", 
                         entry_price=present_price_ask,
                         stoploss=present_price_ask - 50 * point,
-                        takeprofit=tp,
+                        takeprofit=float(tp),
                         order_type=order_type_buy,
                         action=order_action,
                         magic=magic,
@@ -147,7 +148,7 @@ def buy_or_sell(
                     symb="EURUSD", 
                     entry_price=entry,
                     stoploss=sl,
-                    takeprofit=tp,
+                    takeprofit=float(tp),
                     order_type=order_type_sell,
                     action=order_action,
                     magic=magic,
@@ -168,7 +169,7 @@ def buy_or_sell(
                         symb="EURUSD", 
                         entry_price=present_price_bid,
                         stoploss=present_price_bid + 50 * point,
-                        takeprofit=tp,
+                        takeprofit=float(tp),
                         order_type=order_type_sell,
                         action=order_action,
                         magic=magic,

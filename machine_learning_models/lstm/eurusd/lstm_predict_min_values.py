@@ -13,7 +13,6 @@ from machine_learning_models.lstm.lstm_model_class import LSTMModel
 # Create Sequences for LSTM ---
 
 def create_sequences(data_x, data_y, seq_length):
-
     X, y = [], []
     for i in range(len(data_x) - seq_length):
         X.append(data_x[i:i+seq_length])  # Input sequence (e.g., past 60 days)
@@ -61,6 +60,20 @@ def predict_min_value_with_lstm_model(df:pd.DataFrame, test_df:pd.DataFrame, val
     scaler_x = MinMaxScaler(feature_range=(0, 1))
     scaler_y = MinMaxScaler(feature_range=(0, 1))
 
+    # scaler_x.fit(X_train_raw)
+    # scaler_x.fit(X_test_raw)
+
+    # scaler_y.fit(y_train_raw)
+    # scaler_y.fit(y_test_raw)
+
+    # with open(base_dir + '/lstm_regressor_scaler_x_min.pkl', 'wb') as file:
+    #         pickle.dump(scaler_x, file)
+
+    # with open(base_dir + '/lstm_regressor_scaler_y_min.pkl', 'wb') as file:
+    #         pickle.dump(scaler_y, file)
+
+    # return
+
     scaled_data_train_x = scaler_x.fit_transform(X_train_raw)
     scaled_data_train_y = scaler_y.fit_transform(y_train_raw)
 
@@ -70,7 +83,7 @@ def predict_min_value_with_lstm_model(df:pd.DataFrame, test_df:pd.DataFrame, val
     scaled_data_validation_x = scaler_x.fit_transform(X_validation_raw)
     scaled_data_validation_y = scaler_y.fit_transform(y_validation_raw)
     
-    SEQ_LENGTH = 30  # Time window (adjust based on your data)
+    SEQ_LENGTH = 12  # Time window (adjust based on your data)
     
     X_train, y_train = create_sequences(scaled_data_train_x, scaled_data_train_y, SEQ_LENGTH)    
     

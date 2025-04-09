@@ -104,7 +104,7 @@ lstm_base_dir_algo = 'machine_learning_models/lstm/eurusd/pickle_files'
 # predict_max_value_with_gradient_boost_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, gradient_boost_base_dir_algo)
 
 
-# predict_max_value_with_lstm_model(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, lstm_base_dir_algo)
+predict_max_value_with_lstm_model(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, lstm_base_dir_algo)
 
 predict_min_value_with_lstm_model(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, lstm_base_dir_algo)
 
