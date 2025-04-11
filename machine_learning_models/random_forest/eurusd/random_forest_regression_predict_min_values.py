@@ -65,7 +65,7 @@ def predict_min_value_with_random_forest_regressor(df:pd.DataFrame,
     y_validation = validation_df['y_60min_min']
     
     
-    logreg_model = RandomForestRegressor(random_state=1, n_estimators=50, max_depth=5, min_samples_split=10, min_samples_leaf=3, max_features='sqrt', max_samples=0.8, n_jobs=10, verbose=2)
+    logreg_model = RandomForestRegressor(random_state=1, criterion='absolute_error', n_estimators=50, max_depth=5, min_samples_split=10, min_samples_leaf=3, max_features='sqrt', max_samples=0.8, n_jobs=10, verbose=2)
 
     logreg_model.fit(X_train, y_train)
 

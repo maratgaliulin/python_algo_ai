@@ -1,5 +1,5 @@
 import pickle
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.model_selection import GridSearchCV
 import pandas as pd
 
@@ -62,7 +62,7 @@ def predict_min_value_with_gradient_boost_regressor(df:pd.DataFrame, test_df:pd.
     y_validation = validation_df['y_60min_min']
     
     
-    logreg_model = RandomForestRegressor(random_state=1, n_estimators=50, max_depth=5, min_samples_split=10, min_samples_leaf=3, max_features='sqrt', max_samples=0.8, verbose=2)
+    logreg_model = GradientBoostingRegressor(random_state=1, loss='absolute_error', n_estimators=100, max_depth=5, min_samples_split=10, min_samples_leaf=3, max_features='sqrt', verbose=2)
 
     logreg_model.fit(X_train, y_train)
 

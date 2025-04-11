@@ -1,5 +1,7 @@
 import torch
 import torch.nn as nn
+from .swish_class import Swish
+from .swish_class_alt import SwishAlt
 
 class LSTMModel(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, output_size):
@@ -16,6 +18,9 @@ class LSTMModel(nn.Module):
         self.dropout = nn.Dropout(0.3)
         self.fc1 = nn.Linear(hidden_size, 16)
         self.fc2 = nn.Linear(16, output_size)
+        self.tanh = nn.Tanh()
+        self.swish = Swish()
+        self.swish_alt = SwishAlt()
         
     def forward(self, x):
         h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).requires_grad_()
@@ -24,5 +29,8 @@ class LSTMModel(nn.Module):
         out, (hn, cn) = self.lstm(x, (h0.detach(), c0.detach()))
         out = self.dropout(out[:, -1, :])  # Take last time step
         out = torch.relu(self.fc1(out))
+        # out = self.tanh(self.fc1(out))
+        # out = self.swish(self.fc1(out))
+        # out = self.swish_alt(self.fc1(out))
         out = self.fc2(out)
         return out

@@ -236,6 +236,10 @@ def make_single_df_from_bid_ask(base_dir:str, time_series_folder:str, bid_or_ask
         
         # print(len(df_joined))
         
+        df_joined_train.sort_index(inplace=True)
+        df_joined_test.sort_index(inplace=True)
+        df_joined_val.sort_index(inplace=True)
+
         df_joined_train.to_csv(df_csv_file_train, index_label='time')
         df_joined_test.to_csv(df_csv_file_test, index_label='time')
         df_joined_val.to_csv(df_csv_file_validation, index_label='time')

@@ -60,17 +60,17 @@ def predict_min_value_with_lstm_model(df:pd.DataFrame, test_df:pd.DataFrame, val
     scaler_x = MinMaxScaler(feature_range=(0, 1))
     scaler_y = MinMaxScaler(feature_range=(0, 1))
 
-    # scaler_x.fit(X_train_raw)
-    # scaler_x.fit(X_test_raw)
+    scaler_x.fit(X_train_raw)
+    scaler_x.fit(X_test_raw)
 
-    # scaler_y.fit(y_train_raw)
-    # scaler_y.fit(y_test_raw)
+    scaler_y.fit(y_train_raw)
+    scaler_y.fit(y_test_raw)
 
-    # with open(base_dir + '/lstm_regressor_scaler_x_min.pkl', 'wb') as file:
-    #         pickle.dump(scaler_x, file)
+    with open(base_dir + '/lstm_regressor_scaler_x_min.pkl', 'wb') as file:
+            pickle.dump(scaler_x, file)
 
-    # with open(base_dir + '/lstm_regressor_scaler_y_min.pkl', 'wb') as file:
-    #         pickle.dump(scaler_y, file)
+    with open(base_dir + '/lstm_regressor_scaler_y_min.pkl', 'wb') as file:
+            pickle.dump(scaler_y, file)
 
     # return
 
@@ -264,7 +264,7 @@ def predict_min_value_with_lstm_model(df:pd.DataFrame, test_df:pd.DataFrame, val
     train_rmse = np.sqrt(np.mean((y_train_actual - y_train_pred)**2))
     test_rmse = np.sqrt(np.mean((y_test_actual - y_test_pred)**2))
     validation_rmse = np.sqrt(np.mean((y_validation_actual - y_validation_predict)**2))
-    print(f'\nFinal Train RMSE: {train_rmse:.2f} | Test RMSE: {test_rmse:.2f} | Validation RMSE: {validation_rmse:.2f}')
+    print(f'\nFinal Train RMSE: {train_rmse:.6f} | Test RMSE: {test_rmse:.6f} | Validation RMSE: {validation_rmse:.6f}')
 
     
     # # --- Step 6: Plot Results ---
