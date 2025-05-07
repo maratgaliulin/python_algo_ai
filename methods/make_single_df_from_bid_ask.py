@@ -218,9 +218,7 @@ def make_single_df_from_bid_ask(base_dir:str, time_series_folder:str, bid_or_ask
         
         df_joined.drop(['open_bid', 'high_bid', 'low_bid', 'close_bid', 'open_ask', 'high_ask', 'low_ask', 'close_ask', 'volume_bid', 'volume_ask', 'Gmt time_bid', 'Gmt time_ask'], inplace=True, axis=1)
         
-        df_joined.drop(columns_for_y_60min_max[1:], inplace=True, axis=1)
-        df_joined.drop(columns_for_y_60min_min[1:], inplace=True, axis=1)
-        
+         
         df_joined = df_joined.loc[~df_joined.isna().any(axis=1)]
         
         df_joined_train = df_joined.iloc[0:99715]
