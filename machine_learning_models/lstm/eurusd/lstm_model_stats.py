@@ -9,6 +9,7 @@ from torch.utils.data import DataLoader, TensorDataset
 from sklearn.preprocessing import MinMaxScaler
 from machine_learning_models.classes.stock_predictor import StockPredictor
 from machine_learning_models.lstm.lstm_model_class import LSTMModel
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 
 # Create Sequences for LSTM ---
 
@@ -347,6 +348,12 @@ def predict_max_stats(df:pd.DataFrame, test_df:pd.DataFrame, validation_df:pd.Da
     train_rmse = np.sqrt(np.mean((y_train_actual - y_train_pred)**2))
     test_rmse = np.sqrt(np.mean((y_test_actual - y_test_pred)**2))
     validation_rmse = np.sqrt(np.mean((y_validation_actual - y_validation_predict)**2))
-    print(f'\nFinal Train RMSE: {train_rmse:.2f} | Test RMSE: {test_rmse:.2f} | Validation RMSE: {validation_rmse:.2f}')
+    
+    # threshold = 0.05  # Allow 5% error
+    # correct = torch.abs(y_train_pred - y_train_actual) < (threshold * y_train_actual)
+    # accuracy = correct.float().mean()
+    # print(f"Threshold Accuracy: {accuracy * 100:.6f}%")
+
+    print(f'\nFinal Train RMSE: {train_rmse:.6f} | Test RMSE: {test_rmse:.6f} | Validation RMSE: {validation_rmse:.6f}')
 
     return

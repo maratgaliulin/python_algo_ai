@@ -4,3 +4,4 @@ Documents/
 __pycache__/
 methods/__pycache__/
 .idea/
+account_info.py

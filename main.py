@@ -89,7 +89,7 @@ lstm_base_dir_algo = 'machine_learning_models/lstm/eurusd/pickle_files'
 
 # predict_trend_direction_with_random_forest_classifier(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, random_forest_base_dir_algo)
 
-print('RANDOM FOREST ///////////////////////////')
+# print('RANDOM FOREST ///////////////////////////')
 
 # predict_max_value_with_random_forest_regressor(df_5min_joined_train, df_5min_joined_test, df_5min_joined_val, random_forest_base_dir_algo)
 

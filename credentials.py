@@ -1,11 +1,11 @@
 import MetaTrader5 as mt
+from .account_info import *
 
 if not mt.initialize():
     print("initialize() failed, error code =", mt.last_error())
     quit()
 
-account=52234337
-pw = 'b&89zG&!PruWtP'
+
 authorized = mt.login(account, pw)
 
 
