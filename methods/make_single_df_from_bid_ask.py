@@ -6,8 +6,66 @@ from .define_the_trend import define_the_trend
 import numpy as np
 import os
 
+def return_clean_dataframe(base_dir:str, time_series_folder:str, bid_or_ask_folder_bid:str, bid_or_ask_folder_ask:str):
 
-def make_single_df_from_bid_ask(base_dir:str, time_series_folder:str, bid_or_ask_folder_bid:str, bid_or_ask_folder_ask:str) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    values = {
+        'open_bid': 999, 
+        'high_bid': 999, 
+        'low_bid': 999, 
+        'close_bid': 999, 
+        'open_ask': 999, 
+        'high_ask': 999, 
+        'low_ask': 999, 
+        'close_ask': 999,
+        'volume_bid':0,
+        'volume_ask':0
+    }
+
+    rename_columns_dict = {
+    'Open': 'open',
+    'High': 'high',
+    'Low': 'low',
+    'Close': 'close',
+    'Volume': 'volume'
+    }
+
+    df_bid = return_single_large_dataframe(base_dir=base_dir, time_series_folder=time_series_folder, Bid_or_Ask_folder=bid_or_ask_folder_bid)
+    df_ask = return_single_large_dataframe(base_dir=base_dir, time_series_folder=time_series_folder, Bid_or_Ask_folder=bid_or_ask_folder_ask)
+
+    df_bid.rename(columns=rename_columns_dict, inplace=True)
+    df_ask.rename(columns=rename_columns_dict, inplace=True)
+
+    df_joined = pd.merge(df_bid, df_ask, how='outer', left_index=True, right_index=True, suffixes=['_bid', '_ask'])
+
+    df_joined.fillna(inplace=True, value=values)
+
+    df_joined['open'] = df_joined.apply(
+        lambda row: return_open_price(row, open_bid='open_bid', open_ask='open_ask', close_bid='close_bid'), 
+        axis=1
+        )
+    df_joined['close'] = df_joined.apply(
+        lambda row: return_close_price(row, close_bid='close_bid', close_ask='close_ask', open_bid='open_bid', open_ask='open_ask'), 
+        axis=1
+        )
+    df_joined['high'] = df_joined.apply(
+        lambda row: return_high_price(row, high_bid='high_bid', high_ask='high_ask'), 
+        axis=1
+        )
+    df_joined['low'] = df_joined.apply(
+        lambda row: return_low_price(row, low_bid='low_bid', low_ask='low_ask'), 
+        axis=1
+        )
+    df_joined['volume'] = df_joined['volume_bid'] + df_joined['volume_ask']
+
+    df_joined.drop(['open_bid', 'high_bid', 'low_bid', 'close_bid', 'open_ask', 'high_ask', 'low_ask', 'close_ask', 'volume_bid', 'volume_ask', 'Gmt time_bid', 'Gmt time_ask'], inplace=True, axis=1)
+
+    df_joined = calculate_adx(df_joined, period=12)
+
+    # df_joined.sort_index(inplace=True)
+
+    return df_joined
+
+def make_single_df_from_bid_ask(base_dir:str, time_series_folder:str) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     values = {
         'open_bid': 999, 
         'high_bid': 999, 
@@ -69,108 +127,33 @@ def make_single_df_from_bid_ask(base_dir:str, time_series_folder:str, bid_or_ask
     
     else:
 
-        df_bid = return_single_large_dataframe(base_dir=base_dir, time_series_folder=time_series_folder, Bid_or_Ask_folder=bid_or_ask_folder_bid)
-        df_ask = return_single_large_dataframe(base_dir=base_dir, time_series_folder=time_series_folder, Bid_or_Ask_folder=bid_or_ask_folder_ask)
-        
-        df_bid.rename(columns=rename_columns_dict, inplace=True)
-        df_ask.rename(columns=rename_columns_dict, inplace=True)
+        BASE_DIR = 'hist_data/'
 
-        df_joined = pd.merge(df_bid, df_ask, how='outer', left_index=True, right_index=True, suffixes=['_bid', '_ask'])
-        df_joined.fillna(inplace=True, value=values)
-        df_joined['open'] = df_joined.apply(return_open_price, axis=1)
-        df_joined['open_minus_5min'] = df_joined['open'].shift(1)
-        df_joined['open_minus_10min'] = df_joined['open'].shift(2)
-        df_joined['open_minus_15min'] = df_joined['open'].shift(3)
-        df_joined['open_minus_20min'] = df_joined['open'].shift(4)
-        df_joined['open_minus_25min'] = df_joined['open'].shift(5)
-        df_joined['open_minus_30min'] = df_joined['open'].shift(6)
-        df_joined['open_minus_35min'] = df_joined['open'].shift(7)
-        df_joined['open_minus_40min'] = df_joined['open'].shift(8)
-        df_joined['open_minus_45min'] = df_joined['open'].shift(9)
-        df_joined['open_minus_50min'] = df_joined['open'].shift(10)
-        df_joined['open_minus_55min'] = df_joined['open'].shift(11)
-        df_joined['open_minus_60min'] = df_joined['open'].shift(12)
+        time_series_eurusd = 'EURUSD/'
+        time_series_audusd = 'AUDUSD/'
+        time_series_brentusd = 'BrentUSD/'
+        time_series_cadusd = 'CADUSD/'
+        time_series_jpyusd = 'JPYUSD/'
+        time_series_xauusd = 'XAUUSD/'
         
-        df_joined['close'] = df_joined.apply(return_close_price, axis=1)
-        df_joined['close_minus_5min'] = df_joined['close'].shift(1)
-        df_joined['close_minus_10min'] = df_joined['close'].shift(2)
-        df_joined['close_minus_15min'] = df_joined['close'].shift(3)
-        df_joined['close_minus_20min'] = df_joined['close'].shift(4)
-        df_joined['close_minus_25min'] = df_joined['close'].shift(5)
-        df_joined['close_minus_30min'] = df_joined['close'].shift(6)
-        df_joined['close_minus_35min'] = df_joined['close'].shift(7)
-        df_joined['close_minus_40min'] = df_joined['close'].shift(8)
-        df_joined['close_minus_45min'] = df_joined['close'].shift(9)
-        df_joined['close_minus_50min'] = df_joined['close'].shift(10)
-        df_joined['close_minus_55min'] = df_joined['close'].shift(11)
-        df_joined['close_minus_60min'] = df_joined['close'].shift(12)
+        BID_FOLDER = '5_min/Bid/'
+        ASK_FOLDER = '5_min/Ask/'
+
+        df_joined_eurusd = return_clean_dataframe(base_dir=BASE_DIR, time_series_folder=time_series_eurusd, bid_or_ask_folder_bid=BID_FOLDER, bid_or_ask_folder_ask=ASK_FOLDER)
+        df_joined_audusd = return_clean_dataframe(base_dir=BASE_DIR, time_series_folder=time_series_audusd, bid_or_ask_folder_bid=BID_FOLDER, bid_or_ask_folder_ask=ASK_FOLDER)
+        df_joined_brentusd = return_clean_dataframe(base_dir=BASE_DIR, time_series_folder=time_series_brentusd, bid_or_ask_folder_bid=BID_FOLDER, bid_or_ask_folder_ask=ASK_FOLDER)
+        df_joined_cadusd = return_clean_dataframe(base_dir=BASE_DIR, time_series_folder=time_series_cadusd, bid_or_ask_folder_bid=BID_FOLDER, bid_or_ask_folder_ask=ASK_FOLDER)
+        df_joined_jpyusd = return_clean_dataframe(base_dir=BASE_DIR, time_series_folder=time_series_jpyusd, bid_or_ask_folder_bid=BID_FOLDER, bid_or_ask_folder_ask=ASK_FOLDER)
+        df_joined_xauusd = return_clean_dataframe(base_dir=BASE_DIR, time_series_folder=time_series_xauusd, bid_or_ask_folder_bid=BID_FOLDER, bid_or_ask_folder_ask=ASK_FOLDER)
         
-        df_joined['high'] = df_joined.apply(return_high_price, axis=1)
-        df_joined['high_minus_5min'] = df_joined['high'].shift(1)
-        df_joined['high_minus_10min'] = df_joined['high'].shift(2)
-        df_joined['high_minus_15min'] = df_joined['high'].shift(3)
-        df_joined['high_minus_20min'] = df_joined['high'].shift(4)
-        df_joined['high_minus_25min'] = df_joined['high'].shift(5)
-        df_joined['high_minus_30min'] = df_joined['high'].shift(6)
-        df_joined['high_minus_35min'] = df_joined['high'].shift(7)
-        df_joined['high_minus_40min'] = df_joined['high'].shift(8)
-        df_joined['high_minus_45min'] = df_joined['high'].shift(9)
-        df_joined['high_minus_50min'] = df_joined['high'].shift(10)
-        df_joined['high_minus_55min'] = df_joined['high'].shift(11)
-        df_joined['high_minus_60min'] = df_joined['high'].shift(12)
         
-        df_joined['low'] = df_joined.apply(return_low_price, axis=1)
-        df_joined['low_minus_5min'] = df_joined['low'].shift(1)
-        df_joined['low_minus_10min'] = df_joined['low'].shift(2)
-        df_joined['low_minus_15min'] = df_joined['low'].shift(3)
-        df_joined['low_minus_20min'] = df_joined['low'].shift(4)
-        df_joined['low_minus_25min'] = df_joined['low'].shift(5)
-        df_joined['low_minus_30min'] = df_joined['low'].shift(6)
-        df_joined['low_minus_35min'] = df_joined['low'].shift(7)
-        df_joined['low_minus_40min'] = df_joined['low'].shift(8)
-        df_joined['low_minus_45min'] = df_joined['low'].shift(9)
-        df_joined['low_minus_50min'] = df_joined['low'].shift(10)
-        df_joined['low_minus_55min'] = df_joined['low'].shift(11)
-        df_joined['low_minus_60min'] = df_joined['low'].shift(12)
-        
-        df_joined['volume'] = df_joined['volume_bid'] + df_joined['volume_ask']
-        df_joined['volume_minus_5min'] = df_joined['volume'].shift(1)
-        df_joined['volume_minus_10min'] = df_joined['volume'].shift(2)
-        df_joined['volume_minus_15min'] = df_joined['volume'].shift(3)
-        df_joined['volume_minus_20min'] = df_joined['volume'].shift(4)
-        df_joined['volume_minus_25min'] = df_joined['volume'].shift(5)
-        df_joined['volume_minus_30min'] = df_joined['volume'].shift(6)
-        df_joined['volume_minus_35min'] = df_joined['volume'].shift(7)
-        df_joined['volume_minus_40min'] = df_joined['volume'].shift(8)
-        df_joined['volume_minus_45min'] = df_joined['volume'].shift(9)
-        df_joined['volume_minus_50min'] = df_joined['volume'].shift(10)
-        df_joined['volume_minus_55min'] = df_joined['volume'].shift(11)
-        df_joined['volume_minus_60min'] = df_joined['volume'].shift(12)
-        
-        df_joined_open_mean = df_joined['open'].mean()
-        df_joined_close_mean = df_joined['close'].mean()
-        df_joined_high_mean = df_joined['high'].mean()
-        df_joined_low_mean = df_joined['low'].mean()
-        df_joined_volume_mean = df_joined['volume'].mean()
-        
-        df_joined_open_std = df_joined['open'].std()
-        df_joined_close_std = df_joined['close'].std()
-        df_joined_high_std = df_joined['high'].std()
-        df_joined_low_std = df_joined['low'].std()
-        df_joined_volume_std = df_joined['volume'].std()
-        
-        df_joined['open_normalized'] = (df_joined['open'] - df_joined_open_mean)/df_joined_open_std
-        df_joined['close_normalized'] = (df_joined['close'] - df_joined_close_mean)/df_joined_close_std
-        df_joined['high_normalized'] = (df_joined['high'] - df_joined_high_mean)/df_joined_high_std
-        df_joined['low_normalized'] = (df_joined['low'] - df_joined_low_mean)/df_joined_low_std
-        df_joined['volume_normalized'] = (df_joined['volume'] - df_joined_volume_mean)/df_joined_volume_std
-        
-        df_joined['open_log'] = np.log(df_joined['open'])
-        df_joined['close_log'] = np.log(df_joined['close'])
-        df_joined['high_log'] = np.log(df_joined['high'])
-        df_joined['low_log'] = np.log(df_joined['low'])
-        
-        df_joined = calculate_adx(df_joined, period=12)
+
+        df_joined = pd.merge(df_joined_eurusd, df_joined_audusd, how='outer', left_index=True, right_index=True, suffixes=(None, '_audusd'))
+        df_joined = pd.merge(df_joined, df_joined_brentusd, how='outer', left_index=True, right_index=True, suffixes=(None, '_brentusd'))
+        df_joined = pd.merge(df_joined, df_joined_cadusd, how='outer', left_index=True, right_index=True, suffixes=(None, '_cadusd'))
+        df_joined = pd.merge(df_joined, df_joined_jpyusd, how='outer', left_index=True, right_index=True, suffixes=(None, '_jpyusd'))
+        df_joined = pd.merge(df_joined, df_joined_xauusd, how='outer', left_index=True, right_index=True, suffixes=(None, '_xauusd'))
+
         
         df_joined['open_plus_5min'] = df_joined['open'].shift(-1)
         df_joined['high_plus_5min'] = df_joined['high'].shift(-1)
@@ -212,28 +195,31 @@ def make_single_df_from_bid_ask(base_dir:str, time_series_folder:str, bid_or_ask
         df_joined['low_plus_40min'] = df_joined['low'].shift(-8)
         df_joined['close_plus_40min'] = df_joined['close'].shift(-8)
 
+
         
         
-        
-        
-        df_joined.drop(['open_bid', 'high_bid', 'low_bid', 'close_bid', 'open_ask', 'high_ask', 'low_ask', 'close_ask', 'volume_bid', 'volume_ask', 'Gmt time_bid', 'Gmt time_ask'], inplace=True, axis=1)
         
          
-        df_joined = df_joined.loc[~df_joined.isna().any(axis=1)]
+        # df_joined = df_joined.loc[~df_joined.isna().any(axis=1)]
+
+        df_len_60_percent = int(len(df_joined) * 0.6)
+        df_len_80_percent = int(len(df_joined) * 0.8)
         
-        df_joined_train = df_joined.iloc[0:99715]
-        df_joined_test = df_joined.iloc[99715:149573]
-        df_joined_val = df_joined.iloc[149573:]
+        df_joined_train = df_joined.iloc[0:df_len_60_percent]
+        df_joined_test = df_joined.iloc[df_len_60_percent:df_len_80_percent]
+        df_joined_val = df_joined.iloc[df_len_80_percent:]
+
+        # print(df_joined_train.head())
         
         # print(len(df_joined))
         
-        df_joined_train.sort_index(inplace=True)
-        df_joined_test.sort_index(inplace=True)
-        df_joined_val.sort_index(inplace=True)
+        # df_joined_train.sort_index(inplace=True)
+        # df_joined_test.sort_index(inplace=True)
+        # df_joined_val.sort_index(inplace=True)
 
-        df_joined_train.to_csv(df_csv_file_train, index_label='time')
-        df_joined_test.to_csv(df_csv_file_test, index_label='time')
-        df_joined_val.to_csv(df_csv_file_validation, index_label='time')
+        # df_joined_train.to_csv(df_csv_file_train, index_label='time')
+        # df_joined_test.to_csv(df_csv_file_test, index_label='time')
+        # df_joined_val.to_csv(df_csv_file_validation, index_label='time')
 
         return df_joined_train, df_joined_test, df_joined_val
-        # return df_joined
+        # return df_join
