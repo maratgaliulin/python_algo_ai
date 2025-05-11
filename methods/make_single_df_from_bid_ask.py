@@ -59,9 +59,8 @@ def return_clean_dataframe(base_dir:str, time_series_folder:str, bid_or_ask_fold
 
     df_joined.drop(['open_bid', 'high_bid', 'low_bid', 'close_bid', 'open_ask', 'high_ask', 'low_ask', 'close_ask', 'volume_bid', 'volume_ask', 'Gmt time_bid', 'Gmt time_ask'], inplace=True, axis=1)
 
-    df_joined = calculate_adx(df_joined, period=12)
-
-    # df_joined.sort_index(inplace=True)
+    
+    df_joined.sort_index(axis=1, ascending=True, inplace=True)
 
     return df_joined
 
@@ -153,6 +152,8 @@ def make_single_df_from_bid_ask(base_dir:str, time_series_folder:str) -> tuple[p
         df_joined = pd.merge(df_joined, df_joined_cadusd, how='outer', left_index=True, right_index=True, suffixes=(None, '_cadusd'))
         df_joined = pd.merge(df_joined, df_joined_jpyusd, how='outer', left_index=True, right_index=True, suffixes=(None, '_jpyusd'))
         df_joined = pd.merge(df_joined, df_joined_xauusd, how='outer', left_index=True, right_index=True, suffixes=(None, '_xauusd'))
+        
+        df_joined = calculate_adx(df_joined, period=12)
 
         
         df_joined['open_plus_5min'] = df_joined['open'].shift(-1)
@@ -197,7 +198,7 @@ def make_single_df_from_bid_ask(base_dir:str, time_series_folder:str) -> tuple[p
 
 
         
-        
+        df_joined.sort_index(axis=1, ascending=True, inplace=True)
         
          
         # df_joined = df_joined.loc[~df_joined.isna().any(axis=1)]
