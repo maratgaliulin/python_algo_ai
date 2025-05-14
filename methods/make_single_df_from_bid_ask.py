@@ -59,8 +59,8 @@ def return_clean_dataframe(base_dir:str, time_series_folder:str, bid_or_ask_fold
     
     df_joined.sort_index(axis=1, ascending=True, inplace=True)
 
-    print(df_joined.head(20))
-    print(df_joined.tail(20))
+    # print(df_joined.head(20))
+    # print(df_joined.tail(20))
 
     return df_joined
 
@@ -96,11 +96,11 @@ def make_single_df_from_bid_ask(base_dir:str, time_series_folder:str) -> tuple[p
         "low_cadusd",
         "close_cadusd",
         "volume_cadusd",
-        "open_xauusd",
-        "high_xauusd",
-        "low_xauusd",
-        "close_xauusd",
-        "volume_xauusd",
+        # "open_xauusd",
+        # "high_xauusd",
+        # "low_xauusd",
+        # "close_xauusd",
+        # "volume_xauusd",
         "open_jpyusd",
         "high_jpyusd",
         "low_jpyusd",
@@ -153,14 +153,13 @@ def make_single_df_from_bid_ask(base_dir:str, time_series_folder:str) -> tuple[p
         df_joined_test = pd.read_csv(df_csv_file_test, index_col=['time'])
         df_joined_val = pd.read_csv(df_csv_file_validation, index_col=['time'])
         
-        df_joined_train.sort_index(axis=1, ascending=True, inplace=True)
-        df_joined_test.sort_index(axis=1, ascending=True, inplace=True)
-        df_joined_val.sort_index(axis=1, ascending=True, inplace=True)
-        
         df_joined_train.index = pd.to_datetime(df_joined_train.index, format='mixed')
         df_joined_test.index = pd.to_datetime(df_joined_test.index, format='mixed')
         df_joined_val.index = pd.to_datetime(df_joined_val.index, format='mixed')
-        
+
+        df_joined_train.sort_index(axis=1, ascending=True, inplace=True)
+        df_joined_test.sort_index(axis=1, ascending=True, inplace=True)
+        df_joined_val.sort_index(axis=1, ascending=True, inplace=True)
         return df_joined_train, df_joined_test, df_joined_val
     
     else:
@@ -182,28 +181,28 @@ def make_single_df_from_bid_ask(base_dir:str, time_series_folder:str) -> tuple[p
         df_joined_brentusd = return_clean_dataframe(base_dir=BASE_DIR, time_series_folder=time_series_brentusd, bid_or_ask_folder_bid=BID_FOLDER, bid_or_ask_folder_ask=ASK_FOLDER)
         df_joined_cadusd = return_clean_dataframe(base_dir=BASE_DIR, time_series_folder=time_series_cadusd, bid_or_ask_folder_bid=BID_FOLDER, bid_or_ask_folder_ask=ASK_FOLDER)
         df_joined_jpyusd = return_clean_dataframe(base_dir=BASE_DIR, time_series_folder=time_series_jpyusd, bid_or_ask_folder_bid=BID_FOLDER, bid_or_ask_folder_ask=ASK_FOLDER)
-        df_joined_xauusd = return_clean_dataframe(base_dir=BASE_DIR, time_series_folder=time_series_xauusd, bid_or_ask_folder_bid=BID_FOLDER, bid_or_ask_folder_ask=ASK_FOLDER)
+        # df_joined_xauusd = return_clean_dataframe(base_dir=BASE_DIR, time_series_folder=time_series_xauusd, bid_or_ask_folder_bid=BID_FOLDER, bid_or_ask_folder_ask=ASK_FOLDER)
 
-        df_test_index = df_joined_eurusd.columns.to_list()
-        print('list of indices:')
-        print(df_test_index)
-        print('\n\n\n\n')
-        print('*****************************************')
+        # df_test_index = df_joined_eurusd.columns.to_list()
+        # print('list of indices:')
+        # print(df_test_index)
+        # print('\n\n\n\n')
+        # print('*****************************************')
 
-        print('length of eurusd:', len(df_joined_eurusd))
-        print('length of audusd:', len(df_joined_audusd))
-        print('length of brentusd:', len(df_joined_brentusd))
-        print('length of cadusd:', len(df_joined_cadusd))
-        print('length of jpyusd:', len(df_joined_jpyusd))
-        print('length of xauusd:', len(df_joined_xauusd))
+        # print('length of eurusd:', len(df_joined_eurusd))
+        # print('length of audusd:', len(df_joined_audusd))
+        # print('length of brentusd:', len(df_joined_brentusd))
+        # print('length of cadusd:', len(df_joined_cadusd))
+        # print('length of jpyusd:', len(df_joined_jpyusd))
+        # print('length of xauusd:', len(df_joined_xauusd))
         
         
-
-        df_joined = pd.merge(df_joined_eurusd, df_joined_audusd, how='outer', left_index=True, right_index=True, suffixes=(None, '_audusd'))
-        df_joined = pd.merge(df_joined, df_joined_brentusd, how='outer', left_index=True, right_index=True, suffixes=(None, '_brentusd'))
-        df_joined = pd.merge(df_joined, df_joined_cadusd, how='outer', left_index=True, right_index=True, suffixes=(None, '_cadusd'))
-        df_joined = pd.merge(df_joined, df_joined_jpyusd, how='outer', left_index=True, right_index=True, suffixes=(None, '_jpyusd'))
-        df_joined = pd.merge(df_joined, df_joined_xauusd, how='outer', left_index=True, right_index=True, suffixes=(None, '_xauusd'))
+        # df_joined = df_joined_eurusd.copy()
+        df_joined = pd.merge(df_joined_eurusd, df_joined_audusd, how='inner', left_index=True, right_index=True, validate="one_to_one", suffixes=(None, '_audusd'))
+        df_joined = pd.merge(df_joined, df_joined_brentusd, how='inner', left_index=True, right_index=True, validate="one_to_one", suffixes=(None, '_brentusd'))
+        df_joined = pd.merge(df_joined, df_joined_cadusd, how='inner', left_index=True, right_index=True, validate="one_to_one", suffixes=(None, '_cadusd'))
+        df_joined = pd.merge(df_joined, df_joined_jpyusd, how='inner', left_index=True, right_index=True, validate="one_to_one", suffixes=(None, '_jpyusd'))
+        # df_joined = pd.merge(df_joined, df_joined_xauusd, how='inner', left_index=True, right_index=True, validate="one_to_one", suffixes=(None, '_xauusd'))
         
         
         df_joined.sort_index(axis=1, ascending=True, inplace=True)
@@ -310,9 +309,9 @@ def make_single_df_from_bid_ask(base_dir:str, time_series_folder:str) -> tuple[p
         df_joined_test = df_joined_test.loc[:, columns_for_reindex]
         df_joined_val = df_joined_val.loc[:, columns_for_reindex]
 
-        # df_joined_train.to_csv(df_csv_file_train, index_label='time')
-        # df_joined_test.to_csv(df_csv_file_test, index_label='time')
-        # df_joined_val.to_csv(df_csv_file_validation, index_label='time')
+        df_joined_train.to_csv(df_csv_file_train, index_label='time')
+        df_joined_test.to_csv(df_csv_file_test, index_label='time')
+        df_joined_val.to_csv(df_csv_file_validation, index_label='time')
 
         return df_joined_train, df_joined_test, df_joined_val
         # return df_join
