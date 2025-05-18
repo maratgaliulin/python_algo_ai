@@ -184,7 +184,7 @@ def predict_candle(df:pd.DataFrame, test_df:pd.DataFrame, validation_df:pd.DataF
         criterion = nn.MSELoss()
         optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
         
-        epochs = 150
+        epochs = 100
         batch_size = 120
 
         train_losses = []
@@ -243,14 +243,14 @@ def predict_candle(df:pd.DataFrame, test_df:pd.DataFrame, validation_df:pd.DataF
                 
         
         print('*******************************')
-        print('After training on test sample:')
+        print('After training on validation sample:')
         print('*******************************')
 
         for epoch in range(epochs):
             # Training
             model.train()
             batch_losses = []
-            for X_batch, y_batch in test_loader:
+            for X_batch, y_batch in validation_loader:
                 optimizer.zero_grad()
                 y_pred = model(X_batch)
                 loss = criterion(y_pred, y_batch)
