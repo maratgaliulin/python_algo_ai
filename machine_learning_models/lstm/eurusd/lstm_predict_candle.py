@@ -184,7 +184,7 @@ def predict_candle(df:pd.DataFrame, test_df:pd.DataFrame, validation_df:pd.DataF
         criterion = nn.MSELoss()
         optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
         
-        epochs = 1
+        epochs = 150
         batch_size = 120
 
         train_losses = []
