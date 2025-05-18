@@ -189,11 +189,11 @@ def make_single_df_from_bid_ask(base_dir:str, time_series_folder:str) -> tuple[p
         # print('\n\n\n\n')
         # print('*****************************************')
 
-        # print('length of eurusd:', len(df_joined_eurusd))
-        # print('length of audusd:', len(df_joined_audusd))
-        # print('length of brentusd:', len(df_joined_brentusd))
-        # print('length of cadusd:', len(df_joined_cadusd))
-        # print('length of jpyusd:', len(df_joined_jpyusd))
+        print('length of eurusd:', len(df_joined_eurusd))
+        print('length of audusd:', len(df_joined_audusd))
+        print('length of brentusd:', len(df_joined_brentusd))
+        print('length of cadusd:', len(df_joined_cadusd))
+        print('length of jpyusd:', len(df_joined_jpyusd))
         # print('length of xauusd:', len(df_joined_xauusd))
         
         
