@@ -44,10 +44,10 @@ def collect_predictions_into_dataframe(dataframe_line:pd.DataFrame, base_dir_lst
         "low_plus_40min",
         "close_plus_40min"
     ]
-    open_values = pd.Series()
-    high_values = pd.Series()
-    low_values = pd.Series()
-    close_values = pd.Series()
+    open_values = []
+    high_values = []
+    low_values = []
+    close_values = []
 
     last_candle_time = dataframe_line.iloc[-1].name
 
@@ -68,13 +68,13 @@ def collect_predictions_into_dataframe(dataframe_line:pd.DataFrame, base_dir_lst
                     y_predictor=complete_df_dir)
         # print(predicted_value)
         if(idx % 4 == 0):
-            open_values = pd.concat([open_values, pd.Series([predicted_value])], ignore_index=True)
+            open_values.append(predicted_value)
         elif(idx % 4 == 1):
-            high_values = pd.concat([high_values, pd.Series([predicted_value])], ignore_index=True)
+            high_values.append(predicted_value)
         elif(idx % 4 == 2):
-            low_values = pd.concat([low_values, pd.Series([predicted_value])], ignore_index=True)
+            low_values.append(predicted_value)
         elif(idx % 4 == 3):
-            close_values = pd.concat([close_values, pd.Series([predicted_value])], ignore_index=True)
+            close_values.append(predicted_value)
 
     vals_dict = {
         'open': open_values,
@@ -84,7 +84,7 @@ def collect_predictions_into_dataframe(dataframe_line:pd.DataFrame, base_dir_lst
     }
 
     predicted_values_dataframe = pd.DataFrame(vals_dict)
-
+    
     predicted_values_dataframe.index = future_times
     
     high_value = predicted_values_dataframe['high'].max()

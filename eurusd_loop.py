@@ -51,7 +51,7 @@ columns_for_y = [
 
 amount_of_30_second_intervals_in_a_day = 2880
 
-interval_ordinal_number = 0
+interval_ordinal_number = 1
 
 
 while True:
@@ -96,7 +96,7 @@ while True:
             'CANCEL_THE_ORDER_ACTION': CANCEL_THE_ORDER_ACTION,
             'START_POSITION':0,
             'END_POSITION':92,
-            'CORRECTION_INDEX':0.041
+            'CORRECTION_INDEX':0.0
         }
     
     if(interval_ordinal_number % amount_of_30_second_intervals_in_a_day == 0):
@@ -150,9 +150,9 @@ while True:
 
     print(f'Total sleep time: {time_sleep_total}')
     
-    time.sleep(time_sleep_total)
-    
     interval_ordinal_number += 1
     
     if(interval_ordinal_number > 2799):
         interval_ordinal_number = 0
+        
+    time.sleep(time_sleep_total)

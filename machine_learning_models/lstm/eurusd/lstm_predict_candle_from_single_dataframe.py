@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import RobustScaler
 from machine_learning_models.classes.stock_predictor import StockPredictor
 from machine_learning_models.lstm.lstm_model_class import LSTMModel
 
@@ -104,8 +104,8 @@ def predict_candle(df:pd.DataFrame, base_dir:str, column_for_y:str):
     
 
     # Normalize data (LSTMs are sensitive to scale)
-    scaler_x = MinMaxScaler(feature_range=(0, 1))
-    scaler_y = MinMaxScaler(feature_range=(0, 1))
+    scaler_x = RobustScaler()
+    scaler_y = RobustScaler()
 
     scaler_x.fit(X_train_raw)
 
@@ -196,8 +196,8 @@ def predict_candle(df:pd.DataFrame, base_dir:str, column_for_y:str):
             print(f'Epoch {epoch+1}/{epochs} | Train Loss: {train_loss:.6f}')
         
         
-        with open(complete_df_dir, 'wb') as file:
-            pickle.dump(model, file)
+    with open(complete_df_dir, 'wb') as file:
+        pickle.dump(model, file)
     
     # return
     model.eval()
