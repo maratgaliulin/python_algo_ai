@@ -1,5 +1,5 @@
 import MetaTrader5 as mt
-from .account_info import *
+from account_info import *
 
 if not mt.initialize():
     print("initialize() failed, error code =", mt.last_error())
@@ -44,6 +44,9 @@ BASE_DIR_LSTM = 'machine_learning_models/lstm/eurusd/pickle_files'
 EURUSD_LSTM_MAX_VAL = '/lstm_regressor_predict_max_values-2025-04-07.pkl'
 
 EURUSD_LSTM_MIN_VAL = '/lstm_regressor_predict_min_values-2025-04-07.pkl'
+
+SAVED_DATAFRAME = 'machine_learning_models/lstm/eurusd/saved_dataframe.csv'
+SAVED_PREDICTIONS = 'machine_learning_models/lstm/eurusd/saved_predictions.csv'
 
 
 # BUY / SELL_ORDER_BLOCK

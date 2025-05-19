@@ -8,7 +8,7 @@ import pandas as pd
 
 from .eurusd.lstm_use_prediction import use_prediction
 
-def collect_predictions_into_dataframe(dataframe_line:pd.DataFrame, base_dir_lstm:str, correction_index:float) -> pd.DataFrame:
+def collect_predictions_into_dataframe(dataframe_line:pd.DataFrame, base_dir_lstm:str, correction_index:float) -> tuple[pd.DataFrame, float, float]:
 
     columns_for_y = [
         "open_plus_5min",
@@ -65,7 +65,7 @@ def collect_predictions_into_dataframe(dataframe_line:pd.DataFrame, base_dir_lst
         predicted_value = use_prediction(dataframe_line=dataframe_line, 
                     predict_scaler_x=base_dir_lstm + '/lstm_regressor_scaler_x.pkl', 
                     predict_scaler_y=base_dir_lstm + f'/lstm_regressor_scaler_y_{columns_for_y[idx]}.pkl', 
-                    y_predictor=base_dir_lstm + f'/lstm_regressor_predict_candle_{columns_for_y[idx]}.pkl')
+                    y_predictor=complete_df_dir)
         # print(predicted_value)
         if(idx % 4 == 0):
             open_values = pd.concat([open_values, pd.Series([predicted_value])], ignore_index=True)

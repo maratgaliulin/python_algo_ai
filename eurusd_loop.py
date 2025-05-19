@@ -3,6 +3,7 @@ import time
 import pandas as pd
 from methods.make_dataframe_line import make_dataframe_line
 from methods.buy_or_sell import buy_or_sell
+from methods.save_to_csv import save_to_csv
 # from machine_learning_models.random_forest.eurusd.random_forest_algorithm import random_forest_algorithm
 # from machine_learning_models.xgboost.eurusd.xgboost_algorithm import xgboost_algorithm
 # from machine_learning_models.lstm.eurusd.lstm_algorithm import lstm_algorithm
@@ -31,6 +32,8 @@ while True:
             'EURUSD_GRAD_BOOST_TREND_DIR_AFTER_TEST_TR': EURUSD_GRAD_BOOST_TREND_DIR_AFTER_TEST_TR,
             'EURUSD_GRAD_BOOST_TREND_DIR_BEFORE_TEST_TR': EURUSD_GRAD_BOOST_TREND_DIR_BEFORE_TEST_TR,
             'BASE_DIR_LSTM': BASE_DIR_LSTM,
+            'SAVED_DATAFRAME': SAVED_DATAFRAME,
+            'SAVED_PREDICTIONS': SAVED_PREDICTIONS,
             'EURUSD_LSTM_MAX_VAL': EURUSD_LSTM_MAX_VAL,
             'EURUSD_LSTM_MIN_VAL': EURUSD_LSTM_MIN_VAL,
             'SLEEP_TIME': sleep_time, #глубина поиска ордерблока
@@ -65,6 +68,9 @@ while True:
                                          start_pos=eurusd_dict['START_POSITION'],
                                          end_pos=eurusd_dict['END_POSITION']
                                          )
+    
+    # print(dataframe_line)
+    # break
         
     # high_value, low_value, trend_direction = random_forest_algorithm(dataframe_line=dataframe_line,
     #                                                                  pickle_rfc_predict_max_dir=eurusd_dict['BASE_DIR'] + eurusd_dict['EURUSD_RFR_MAX_VAL_BEFORE_TEST_TR'],
@@ -85,7 +91,13 @@ while True:
     
     predicted_dataframe, high_value, low_value = collect_predictions_into_dataframe(dataframe_line=dataframe_line, base_dir_lstm=eurusd_dict['BASE_DIR_LSTM'], correction_index=eurusd_dict['CORRECTION_INDEX'])
     
-    print(high_value, low_value)
+    save_to_csv(df_to_csv=dataframe_line[['open', 'high', 'low', 'close']], csv_address=eurusd_dict['SAVED_DATAFRAME'])
+    save_to_csv(df_to_csv=predicted_dataframe, csv_address=eurusd_dict['SAVED_PREDICTIONS'])
+    
+    # print(high_value, low_value)
+    
+    # print('PREDICTED DATAFRAME:')
+    # print(predicted_dataframe)
     
     time_sleep_modifier = buy_or_sell(
         min_impulse_size=0.0025,

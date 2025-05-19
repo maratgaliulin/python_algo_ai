@@ -196,108 +196,25 @@ def buy_or_sell(
         
         if(position_comment == 'buy'):  
             sl_tp_diff = takeprofit - entry
-            modified_stoploss = stoploss
-            modified_takeprofit = takeprofit
-            line_above_stoploss = entry - 10 * point
-            line_0_5 = entry + point   # line_entry
-            line_0_618 = entry + sl_tp_diff * 0.146
-            line_0_764 = entry + sl_tp_diff * 0.236 
-            line_0_854 = entry + sl_tp_diff * 0.382
-            line_0_932 = entry + sl_tp_diff * 0.5
-            line_1_0 = entry + sl_tp_diff * 0.618
-            line_1_146 = entry + sl_tp_diff * 0.764
-            line_1_236 = entry + sl_tp_diff * 0.854
-            line_1_382 = entry + sl_tp_diff * 0.932
-            line_1_50 = entry + sl_tp_diff
-            line_1_6 = entry + sl_tp_diff * 1.146
-            line_1_618 = takeprofit + sl_tp_diff * 1.236
-            line_1_764 = takeprofit + sl_tp_diff * 1.382
-
-            print('line_1_0' , line_1_0)
-
-            if((present_price_ask >= line_0_854) and (present_price_ask < line_0_932)):
-                if(modified_stoploss < line_above_stoploss):
-                    modified_stoploss = line_0_5                  
-
-            elif((present_price_ask >= line_0_932) and (present_price_ask < line_1_0)):
-                if((modified_stoploss <= line_0_5 + 5*point) and (modified_stoploss > line_above_stoploss)): 
-                    modified_stoploss = line_0_618                  
-
-            elif((present_price_ask >= line_1_0) and (present_price_ask < line_1_146)): 
-                if((modified_stoploss <= line_0_618 + 5*point) and (modified_stoploss > line_0_5)): 
-                    modified_stoploss = line_0_764
-                    
-            elif((present_price_ask >= line_1_146) and (present_price_ask < line_1_236)):
-                if((modified_stoploss <= line_0_764 + 5*point) and (modified_stoploss > line_0_618)): 
-                    modified_stoploss = line_0_854
-
-            elif((present_price_ask >= line_1_236) and (present_price_ask < line_1_382)):
-                if((modified_stoploss <= line_0_854 + 5*point) and (modified_stoploss > line_0_764)):
-                    modified_stoploss = line_1_0    
-
-            elif((present_price_ask >= line_1_382) and (present_price_ask < line_1_50)):
-                if((modified_stoploss <= line_1_0 + 5*point) and (modified_stoploss > line_0_854)):
-                    modified_stoploss = line_1_146
-                
-            print(stoploss)
-            print(modified_stoploss)
-            if(modified_stoploss != stoploss):
-                fibo_level = round((modified_stoploss - stoploss)/sl_tp_diff, 3)
+            
+            sl_pres_price_ask_diff = present_price_ask - stoploss
+            
+            if(sl_pres_price_ask_diff > 150 * point):
+                modified_stoploss = stoploss + 50 * point
+                modified_takeprofit = takeprofit
+            
                 modify_stoploss(positions_of_the_symbol_dict, modified_stoploss, modified_takeprofit)   
-                print(f'Сработало условие - стоплосс на покупку сдвинут на линию {fibo_level} по фибе, а тейк равен {takeprofit}')
+                print(f'Сработало условие - стоплосс на покупку сдвинут на линию 50 пунктов вверх, а тейк равен {takeprofit}')
                 
         elif(position_comment == 'sell'):     
-            sl_tp_diff = entry - takeprofit
-            modified_stoploss = stoploss
-            modified_takeprofit = takeprofit
-            line_below_stoploss = entry + 10 * point
-            line_0_5 = entry - point   # line_entry
-            line_0_618 = entry - sl_tp_diff * 0.146  # line_0
-            line_0_764 = entry - sl_tp_diff * 0.236   # line_0_618
-            line_0_854 = entry - sl_tp_diff * 0.382
-            line_0_932 = entry - sl_tp_diff * 0.5
-            line_1_0 = entry - sl_tp_diff * 0.618
-            line_1_146 = entry - sl_tp_diff * 0.764
-            line_1_236 = entry - sl_tp_diff * 0.854
-            line_1_382 = entry - sl_tp_diff * 0.932
-            line_1_50 = entry - sl_tp_diff
-            line_1_6 = entry - sl_tp_diff * 1.146
-            line_1_618 = takeprofit - sl_tp_diff * 1.236
-            line_1_764 = takeprofit - sl_tp_diff * 1.382
-
             
-
-            if ((present_price_bid <= line_0_854) and (present_price_bid > line_0_932)): 
-                if(modified_stoploss > line_below_stoploss):  
-                    modified_stoploss = line_0_5                    
-                
-            elif((present_price_bid <= line_0_932) and (present_price_bid > line_1_0)): 
-                if((modified_stoploss >= line_0_5 - 5*point) and (modified_stoploss < line_below_stoploss)):
-                    modified_stoploss = line_0_618       
-
-            elif((present_price_bid <= line_1_0) and (present_price_bid > line_1_146)):
-                if((modified_stoploss >= line_0_618 - 5*point) and (modified_stoploss < line_0_5)):
-                    modified_stoploss = line_0_764                
+            sl_pres_price_bid_diff = stoploss - present_price_bid
+            if(sl_pres_price_bid_diff > 150 * point):
+                modified_stoploss = stoploss - 50 * point
+                modified_takeprofit = takeprofit
             
-            elif((present_price_bid <= line_1_146) and (present_price_bid > line_1_236)):
-                if((modified_stoploss >= line_0_764 - 5*point) and (modified_stoploss < line_0_618)):
-                    modified_stoploss = line_0_854
-
-            elif((present_price_bid <= line_1_236) and (present_price_bid > line_1_382)):
-                if((modified_stoploss >= line_0_854 - 5*point) and (modified_stoploss < line_0_764)):
-                    modified_stoploss = line_1_0    
-
-            elif((present_price_bid <= line_1_382) and (present_price_bid > line_1_50)):
-                if((modified_stoploss >= line_1_0 - 5*point) and (modified_stoploss < line_0_854)):
-                    modified_stoploss = line_1_146
-
-            fibo_level = (stoploss - modified_stoploss)/sl_tp_diff
-            print('fibo level:', fibo_level)
-
-            if(modified_stoploss != stoploss):
-                fibo_level = round((stoploss - modified_stoploss)/sl_tp_diff, 3)
-                modify_stoploss(positions_of_the_symbol_dict, modified_stoploss, modified_takeprofit)
-                print(f'Сработало условие - стоплосс на продажу сдвинут на линию {fibo_level} по фибе, а тейк равен {takeprofit}')
+                modify_stoploss(positions_of_the_symbol_dict, modified_stoploss, modified_takeprofit)   
+                print(f'Сработало условие - стоплосс на продажу сдвинут на 50 пунктов вниз, а тейк равен {takeprofit}')
     
     return time_sleep
     
