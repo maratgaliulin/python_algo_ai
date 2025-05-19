@@ -7,13 +7,56 @@ from methods.save_to_csv import save_to_csv
 # from machine_learning_models.random_forest.eurusd.random_forest_algorithm import random_forest_algorithm
 # from machine_learning_models.xgboost.eurusd.xgboost_algorithm import xgboost_algorithm
 # from machine_learning_models.lstm.eurusd.lstm_algorithm import lstm_algorithm
+from machine_learning_models.lstm.eurusd.lstm_predict_candle_from_single_dataframe import predict_candle
 from machine_learning_models.lstm.lstm_collect_predictions_into_dataframe import collect_predictions_into_dataframe
+from methods.make_dataframe_from_server_for_training import make_dataframe_from_server_for_training
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 
+columns_for_y = [
+        "open_plus_5min",
+        "high_plus_5min",
+        "low_plus_5min",
+        "close_plus_5min",
+        "open_plus_10min",    
+        "high_plus_10min",
+        "low_plus_10min",
+        "close_plus_10min",
+        "open_plus_15min",
+        "high_plus_15min",
+        "low_plus_15min",
+        "close_plus_15min",
+        "open_plus_20min",
+        "high_plus_20min",
+        "low_plus_20min",
+        "close_plus_20min",
+        "open_plus_25min",
+        "high_plus_25min",
+        "low_plus_25min",
+        "close_plus_25min",
+        "open_plus_30min",
+        "high_plus_30min",
+        "low_plus_30min",
+        "close_plus_30min",
+        "open_plus_35min",
+        "high_plus_35min",
+        "low_plus_35min",
+        "close_plus_35min",
+        "open_plus_40min",
+        "high_plus_40min",
+        "low_plus_40min",
+        "close_plus_40min"
+    ]
+
+amount_of_30_second_intervals_in_a_day = 2880
+
+interval_ordinal_number = 0
+
 
 while True:
+    
+    print('The number of 30-second interval is:', interval_ordinal_number)
      
     eurusd_dict = {
             'SYMBOL': "EURUSD",  # тикер валютной пары
@@ -54,14 +97,19 @@ while True:
             'START_POSITION':0,
             'END_POSITION':92,
             'CORRECTION_INDEX':0.041
-            # 'CSV_ADDRESS': os.path.abspath(CSV_ADDRESS + "eurusd_order_blocks.csv"), # путь к папке с файлом, в котором записываются ордерблоки и их характеристики
-            # 'FULL_CSV_PATH': os.path.abspath(PATH_TO_VARIABLES + "variables_eurusd.csv"), # путь к папке с файлом, в котором записываются переменные (главным образом для трейлинг СЛ)
-            # 'ANALYSIS_LARGE_DATAFRAME': os.path.abspath(PATH_TO_ANALYSIS_DATAFRAMES + "/eurusd/ob_30_min_raw.csv"), # 
-            # 'ANALYSIS_SMALL_DATAFRAME': os.path.abspath(PATH_TO_ANALYSIS_DATAFRAMES + "/eurusd/ob_1_min_raw.csv"), # 
-            # 'ORDERS': os.path.abspath(PATH_TO_ANALYSIS_DATAFRAMES + "/eurusd/orders.csv"),
-            # 'POSITIONS': os.path.abspath(PATH_TO_ANALYSIS_DATAFRAMES + "/eurusd/positions.csv"),
-            # 'DEALS':os.path.abspath(PATH_TO_ANALYSIS_DATAFRAMES + "/eurusd/deals.csv"),
         }
+    
+    if(interval_ordinal_number % amount_of_30_second_intervals_in_a_day == 0):
+        dataframe_for_training = make_dataframe_from_server_for_training(timeframe=eurusd_dict['TIMEFRAME_SMALL_MT'],
+                                         start_pos=eurusd_dict['START_POSITION'],
+                                         end_pos=300)
+        
+        print(f'Length of the resulting training dataframe: {len(dataframe_for_training)}')
+        
+        for col in columns_for_y:
+            print(f'Curreng y-column under training: {col}')
+            predict_candle(df=dataframe_for_training, base_dir=BASE_DIR_LSTM, column_for_y=col)
+    
     
     
     dataframe_line = make_dataframe_line(timeframe=eurusd_dict['TIMEFRAME_SMALL_MT'],
@@ -69,25 +117,7 @@ while True:
                                          end_pos=eurusd_dict['END_POSITION']
                                          )
     
-    # print(dataframe_line)
-    # break
-        
-    # high_value, low_value, trend_direction = random_forest_algorithm(dataframe_line=dataframe_line,
-    #                                                                  pickle_rfc_predict_max_dir=eurusd_dict['BASE_DIR'] + eurusd_dict['EURUSD_RFR_MAX_VAL_BEFORE_TEST_TR'],
-    #                                                                  pickle_rfc_predict_min_dir=eurusd_dict['BASE_DIR'] + eurusd_dict['EURUSD_RFR_MIN_VAL_BEFORE_TEST_TR'],
-    #                                                                  pickle_rfc_predict_trend_dir=eurusd_dict['BASE_DIR'] + eurusd_dict['EURUSD_RFR_TREND_DIR_BEFORE_TEST_TR']
-    #                                                                  )
     
-    # high_value, low_value, trend_direction = xgboost_algorithm(dataframe_line=dataframe_line,
-    #                                                                  pickle_rfc_predict_max_dir=eurusd_dict['BASE_DIR_GRAD_BOOST'] + eurusd_dict['EURUSD_GRAD_BOOST_MAX_VAL_AFTER_TEST_TR'],
-    #                                                                  pickle_rfc_predict_min_dir=eurusd_dict['BASE_DIR_GRAD_BOOST'] + eurusd_dict['EURUSD_GRAD_BOOST_MIN_VAL_AFTER_TEST_TR'],
-    #                                                                  pickle_rfc_predict_trend_dir=eurusd_dict['BASE_DIR_GRAD_BOOST'] + eurusd_dict['EURUSD_GRAD_BOOST_TREND_DIR_AFTER_TEST_TR']
-    #                                                                  )
-
-    # high_value, low_value = lstm_algorithm(dataframe_line=dataframe_line,
-    #                                        pickle_rfc_predict_max_dir=eurusd_dict['BASE_DIR_LSTM'] + eurusd_dict['EURUSD_LSTM_MAX_VAL'],
-    #                                        pickle_rfc_predict_min_dir=eurusd_dict['BASE_DIR_LSTM'] + eurusd_dict['EURUSD_LSTM_MIN_VAL']
-    #                                        )
     
     predicted_dataframe, high_value, low_value = collect_predictions_into_dataframe(dataframe_line=dataframe_line, base_dir_lstm=eurusd_dict['BASE_DIR_LSTM'], correction_index=eurusd_dict['CORRECTION_INDEX'])
     
@@ -121,3 +151,8 @@ while True:
     print(f'Total sleep time: {time_sleep_total}')
     
     time.sleep(time_sleep_total)
+    
+    interval_ordinal_number += 1
+    
+    if(interval_ordinal_number > 2799):
+        interval_ordinal_number = 0
