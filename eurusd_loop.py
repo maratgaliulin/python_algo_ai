@@ -6,6 +6,7 @@ from methods.buy_or_sell import buy_or_sell
 # from machine_learning_models.random_forest.eurusd.random_forest_algorithm import random_forest_algorithm
 # from machine_learning_models.xgboost.eurusd.xgboost_algorithm import xgboost_algorithm
 # from machine_learning_models.lstm.eurusd.lstm_algorithm import lstm_algorithm
+from machine_learning_models.lstm.lstm_collect_predictions_into_dataframe import collect_predictions_into_dataframe
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -48,7 +49,7 @@ while True:
             'DETERMINE_THE_DEAL_ACTION':DETERMINE_THE_DEAL_ACTION,
             'CANCEL_THE_ORDER_ACTION': CANCEL_THE_ORDER_ACTION,
             'START_POSITION':0,
-            'END_POSITION':73
+            'END_POSITION':92
             # 'CSV_ADDRESS': os.path.abspath(CSV_ADDRESS + "eurusd_order_blocks.csv"), # путь к папке с файлом, в котором записываются ордерблоки и их характеристики
             # 'FULL_CSV_PATH': os.path.abspath(PATH_TO_VARIABLES + "variables_eurusd.csv"), # путь к папке с файлом, в котором записываются переменные (главным образом для трейлинг СЛ)
             # 'ANALYSIS_LARGE_DATAFRAME': os.path.abspath(PATH_TO_ANALYSIS_DATAFRAMES + "/eurusd/ob_30_min_raw.csv"), # 
@@ -59,8 +60,7 @@ while True:
         }
     
     
-    dataframe_line = make_dataframe_line(symbol=eurusd_dict['SYMBOL'],
-                                         timeframe=eurusd_dict['TIMEFRAME_SMALL_MT'],
+    dataframe_line = make_dataframe_line(timeframe=eurusd_dict['TIMEFRAME_SMALL_MT'],
                                          start_pos=eurusd_dict['START_POSITION'],
                                          end_pos=eurusd_dict['END_POSITION']
                                          )
@@ -77,10 +77,12 @@ while True:
     #                                                                  pickle_rfc_predict_trend_dir=eurusd_dict['BASE_DIR_GRAD_BOOST'] + eurusd_dict['EURUSD_GRAD_BOOST_TREND_DIR_AFTER_TEST_TR']
     #                                                                  )
 
-    high_value, low_value = lstm_algorithm(dataframe_line=dataframe_line,
-                                           pickle_rfc_predict_max_dir=eurusd_dict['BASE_DIR_LSTM'] + eurusd_dict['EURUSD_LSTM_MAX_VAL'],
-                                           pickle_rfc_predict_min_dir=eurusd_dict['BASE_DIR_LSTM'] + eurusd_dict['EURUSD_LSTM_MIN_VAL']
-                                           )
+    # high_value, low_value = lstm_algorithm(dataframe_line=dataframe_line,
+    #                                        pickle_rfc_predict_max_dir=eurusd_dict['BASE_DIR_LSTM'] + eurusd_dict['EURUSD_LSTM_MAX_VAL'],
+    #                                        pickle_rfc_predict_min_dir=eurusd_dict['BASE_DIR_LSTM'] + eurusd_dict['EURUSD_LSTM_MIN_VAL']
+    #                                        )
+    
+    predicted_dataframe, high_value, low_value = collect_predictions_into_dataframe(dataframe_line=dataframe_line, base_dir_lstm=eurusd_dict['BASE_DIR_LSTM'])
     
     print(high_value, low_value)
     

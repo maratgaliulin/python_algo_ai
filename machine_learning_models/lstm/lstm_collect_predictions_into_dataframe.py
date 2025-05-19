@@ -86,5 +86,8 @@ def collect_predictions_into_dataframe(dataframe_line:pd.DataFrame, base_dir_lst
     predicted_values_dataframe = pd.DataFrame(vals_dict)
 
     predicted_values_dataframe.index = future_times
+    
+    high_value = predicted_values_dataframe['high'].max()
+    low_value = predicted_values_dataframe['low'].min()
 
-    return predicted_values_dataframe
+    return predicted_values_dataframe, high_value, low_value
