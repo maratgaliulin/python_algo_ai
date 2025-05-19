@@ -5,7 +5,7 @@ from methods.make_dataframe_line import make_dataframe_line
 from methods.buy_or_sell import buy_or_sell
 # from machine_learning_models.random_forest.eurusd.random_forest_algorithm import random_forest_algorithm
 # from machine_learning_models.xgboost.eurusd.xgboost_algorithm import xgboost_algorithm
-from machine_learning_models.lstm.eurusd.lstm_algorithm import lstm_algorithm
+# from machine_learning_models.lstm.eurusd.lstm_algorithm import lstm_algorithm
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -48,7 +48,7 @@ while True:
             'DETERMINE_THE_DEAL_ACTION':DETERMINE_THE_DEAL_ACTION,
             'CANCEL_THE_ORDER_ACTION': CANCEL_THE_ORDER_ACTION,
             'START_POSITION':0,
-            'END_POSITION':24
+            'END_POSITION':61
             # 'CSV_ADDRESS': os.path.abspath(CSV_ADDRESS + "eurusd_order_blocks.csv"), # путь к папке с файлом, в котором записываются ордерблоки и их характеристики
             # 'FULL_CSV_PATH': os.path.abspath(PATH_TO_VARIABLES + "variables_eurusd.csv"), # путь к папке с файлом, в котором записываются переменные (главным образом для трейлинг СЛ)
             # 'ANALYSIS_LARGE_DATAFRAME': os.path.abspath(PATH_TO_ANALYSIS_DATAFRAMES + "/eurusd/ob_30_min_raw.csv"), # 
