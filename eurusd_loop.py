@@ -49,7 +49,8 @@ while True:
             'DETERMINE_THE_DEAL_ACTION':DETERMINE_THE_DEAL_ACTION,
             'CANCEL_THE_ORDER_ACTION': CANCEL_THE_ORDER_ACTION,
             'START_POSITION':0,
-            'END_POSITION':92
+            'END_POSITION':92,
+            'CORRECTION_INDEX':0.041
             # 'CSV_ADDRESS': os.path.abspath(CSV_ADDRESS + "eurusd_order_blocks.csv"), # путь к папке с файлом, в котором записываются ордерблоки и их характеристики
             # 'FULL_CSV_PATH': os.path.abspath(PATH_TO_VARIABLES + "variables_eurusd.csv"), # путь к папке с файлом, в котором записываются переменные (главным образом для трейлинг СЛ)
             # 'ANALYSIS_LARGE_DATAFRAME': os.path.abspath(PATH_TO_ANALYSIS_DATAFRAMES + "/eurusd/ob_30_min_raw.csv"), # 
@@ -82,7 +83,7 @@ while True:
     #                                        pickle_rfc_predict_min_dir=eurusd_dict['BASE_DIR_LSTM'] + eurusd_dict['EURUSD_LSTM_MIN_VAL']
     #                                        )
     
-    predicted_dataframe, high_value, low_value = collect_predictions_into_dataframe(dataframe_line=dataframe_line, base_dir_lstm=eurusd_dict['BASE_DIR_LSTM'])
+    predicted_dataframe, high_value, low_value = collect_predictions_into_dataframe(dataframe_line=dataframe_line, base_dir_lstm=eurusd_dict['BASE_DIR_LSTM'], correction_index=eurusd_dict['CORRECTION_INDEX'])
     
     print(high_value, low_value)
     

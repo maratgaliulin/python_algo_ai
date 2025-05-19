@@ -8,7 +8,7 @@ import pandas as pd
 
 from .eurusd.lstm_use_prediction import use_prediction
 
-def collect_predictions_into_dataframe(dataframe_line:pd.DataFrame, base_dir_lstm:str, ) -> pd.DataFrame:
+def collect_predictions_into_dataframe(dataframe_line:pd.DataFrame, base_dir_lstm:str, correction_index:float) -> pd.DataFrame:
 
     columns_for_y = [
         "open_plus_5min",
