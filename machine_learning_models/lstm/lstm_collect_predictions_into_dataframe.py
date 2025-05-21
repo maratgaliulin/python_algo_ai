@@ -58,7 +58,10 @@ def collect_predictions_into_dataframe(dataframe_line:pd.DataFrame, base_dir_lst
         freq='5min'
     ).tolist()
     
+    
+    
     for idx in range(len(columns_for_y)):
+        
         complete_df_dir = base_dir_lstm + f'/lstm_regressor_predict_candle_{columns_for_y[idx]}.pkl'
         # print(idx % 4)
         
@@ -66,6 +69,7 @@ def collect_predictions_into_dataframe(dataframe_line:pd.DataFrame, base_dir_lst
                     predict_scaler_x=base_dir_lstm + '/lstm_regressor_scaler_x.pkl', 
                     predict_scaler_y=base_dir_lstm + f'/lstm_regressor_scaler_y_{columns_for_y[idx]}.pkl', 
                     y_predictor=complete_df_dir)
+        
         # print(predicted_value)
         if(idx % 4 == 0):
             open_values.append(predicted_value)

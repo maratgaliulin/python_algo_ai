@@ -68,10 +68,10 @@ def use_prediction(dataframe_line:pd.DataFrame, predict_scaler_x:str, predict_sc
 
     scaled_data_x = scaler_x.fit_transform(dataframe_line)
 
-    SEQ_LENGTH = 60
+    SEQ_LENGTH = 30
 
     X_data = create_sequences(scaled_data_x, SEQ_LENGTH)
-
+    
     model.eval()
 
     with torch.no_grad():

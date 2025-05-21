@@ -50,7 +50,7 @@ def determine_the_deal(
             "volume": lot,  # Размер лота
             "type": order_type,  # Тип ордера (например, на продажу)
             "price": round(entry_price, 5),  # Цена входа, округленная до 5 знаков
-            "price_stoplimit": round(entry_price, 5) - point,  # Цена для стоп-лимита (цена входа минус пункт)
+            "price_stoplimit": round(entry_price, 5) - 50 * point,  # Цена для стоп-лимита (цена входа минус пункт)
             "sl": round(stoploss, 5),  # Цена стоп-лосса, округленная до 5 знаков
             "tp": round(takeprofit, 5),  # Цена тейк-профита, округленная до 5 знаков
             "deviation": deviation,  # Отклонение для ордера
@@ -66,7 +66,7 @@ def determine_the_deal(
             "volume": lot,  # Размер лота
             "type": order_type,  # Тип ордера (например, на покупку)
             "price": round(entry_price, 5),  # Цена входа, округленная до 5 знаков
-            "price_stoplimit": round(entry_price, 5) + point,  # Цена для стоп-лимита (цена входа плюс пункт)
+            "price_stoplimit": round(entry_price, 5) + 50 * point,  # Цена для стоп-лимита (цена входа плюс пункт)
             "sl": round(stoploss, 5),  # Цена стоп-лосса, округленная до 5 знаков
             "tp": round(takeprofit, 5),  # Цена тейк-профита, округленная до 5 знаков
             "deviation": deviation,  # Отклонение для ордера
