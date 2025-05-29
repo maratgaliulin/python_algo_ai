@@ -49,10 +49,15 @@ columns_for_y = [
         "close_plus_40min"
     ]
 
+ohlc_columns = ['open', 'high', 'low', 'close']
+
 amount_of_30_second_intervals_in_a_day = 2880
 
-interval_ordinal_number = 1
+interval_ordinal_number = 0
 
+present_price_bid = mt.symbol_info_tick("EURUSD").bid
+
+price_correction = present_price_bid * 0.9
 
 while True:
     try:
@@ -99,10 +104,18 @@ while True:
                 'CORRECTION_INDEX':0.0
             }
         
+        
+        
         if(interval_ordinal_number % amount_of_30_second_intervals_in_a_day == 0):
+
+            price_correction = eurusd_dict['PRESENT_PRICE_BID'] * 0.9
+
             dataframe_for_training = make_dataframe_from_server_for_training(timeframe=eurusd_dict['TIMEFRAME_SMALL_MT'],
                                             start_pos=eurusd_dict['START_POSITION'],
                                             end_pos=300)
+            
+            for col in ohlc_columns:
+                dataframe_for_training[col] = dataframe_for_training[col] - price_correction
             
             print(f'Length of the resulting training dataframe: {len(dataframe_for_training)}')
             
@@ -116,10 +129,16 @@ while True:
                                             start_pos=eurusd_dict['START_POSITION'],
                                             end_pos=eurusd_dict['END_POSITION']
                                             )
+        for col in ohlc_columns:
+            dataframe_line[col] = dataframe_line[col] - price_correction
         
         
         predicted_dataframe, high_value, low_value = collect_predictions_into_dataframe(dataframe_line=dataframe_line, base_dir_lstm=eurusd_dict['BASE_DIR_LSTM'], correction_index=eurusd_dict['CORRECTION_INDEX'])
         
+        predicted_dataframe = predicted_dataframe + price_correction
+        high_value += price_correction
+        low_value += price_correction
+
         save_to_csv(df_to_csv=dataframe_line[['open', 'high', 'low', 'close']], csv_address=eurusd_dict['SAVED_DATAFRAME'])
         save_to_csv(df_to_csv=predicted_dataframe, csv_address=eurusd_dict['SAVED_PREDICTIONS'])
         
