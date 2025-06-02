@@ -53,7 +53,7 @@ ohlc_columns = ['open', 'high', 'low', 'close']
 
 amount_of_30_second_intervals_in_a_day = 2880
 
-interval_ordinal_number = 0
+interval_ordinal_number = 1
 
 present_price_bid = mt.symbol_info_tick("EURUSD").bid
 
@@ -116,6 +116,9 @@ while True:
             
             for col in ohlc_columns:
                 dataframe_for_training[col] = dataframe_for_training[col] - price_correction
+
+            for col in columns_for_y:
+                dataframe_for_training[col] = dataframe_for_training[col] - price_correction
             
             print(f'Length of the resulting training dataframe: {len(dataframe_for_training)}')
             
@@ -131,11 +134,11 @@ while True:
                                             )
         for col in ohlc_columns:
             dataframe_line[col] = dataframe_line[col] - price_correction
-        
-        
+                
         predicted_dataframe, high_value, low_value = collect_predictions_into_dataframe(dataframe_line=dataframe_line, base_dir_lstm=eurusd_dict['BASE_DIR_LSTM'], correction_index=eurusd_dict['CORRECTION_INDEX'])
         
         predicted_dataframe = predicted_dataframe + price_correction
+
         high_value += price_correction
         low_value += price_correction
 
