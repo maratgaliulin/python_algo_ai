@@ -1,57 +1,42 @@
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from dash import Dash, html, dcc
+from dash import Dash, html, dcc, Input, Output, callback
+# import MetaTrader5 as mt
+import pytz
+from datetime import datetime
+
+def get_first_item_of_list_index(lst:list, li:str):
+    new_list = [x for x in lst if x > li]
+    if(new_list != []):
+        return new_list[0]
+    else:
+        return lst[-1]
 
 def draw_static_graph(
-        t_fr_bid:pd.DataFrame,
-        t_fr_ask:pd.DataFrame,
-        t_fr_joined:pd.DataFrame
+        _t_fr_actual_dir:str,
+        _t_fr_predicted_dir:str, 
+        amount_of_candles=10
         ):
     dot_size = 8
 
-    candlestick_bid = go.Candlestick(
-        x=t_fr_bid.index,
-        open=t_fr_bid['open'],
-        high=t_fr_bid['high'],
-        low=t_fr_bid['low'],
-        close=t_fr_bid['close'],
-        name='Бидовые свечи',
-        increasing_line_color='purple',
-        decreasing_line_color='darkviolet'
-        )
-    
-    candlestick_ask = go.Candlestick(
-        x=t_fr_ask.index,
-        open=t_fr_ask['open'],
-        high=t_fr_ask['high'],
-        low=t_fr_ask['low'],
-        close=t_fr_ask['close'],
-        name='Асковые свечи',
-        increasing_line_color='red',
-        decreasing_line_color='pink'
-        )
-    
-    candlestick_joined = go.Candlestick(
-        x=t_fr_joined.index,
-        open=t_fr_joined['open'],
-        high=t_fr_joined['high'],
-        low=t_fr_joined['low'],
-        close=t_fr_joined['close'],
-        name='Объединенные свечи',
-        increasing_line_color='green',
-        decreasing_line_color='red'
-        )
-    
+    timezone = pytz.timezone('UTC')
 
-    
-    fig = make_subplots(rows=1, cols=2, shared_xaxes=False, vertical_spacing=0.02, horizontal_spacing=0.05, row_heights=[1])
+    # t_fr_large_test_raw = mt.copy_
 
-    fig.append_trace(candlestick_bid, row=1, col=1)
-    fig.append_trace(candlestick_ask, row=1, col=1)
-    fig.append_trace(candlestick_joined, row=1, col=2)
 
-    fig.update_xaxes(rangeslider_visible=True)
+# Создание графика объема под свечным графиком
+    # fig_vol = go.Bar(
+    #     x=_t_fr_small.index, 
+    #     y=_t_fr_small['tick_volume'], 
+    #     name='График объема',
+    #     marker=dict(
+    #         color=_t_fr_small['buy_sell_sign'],
+    #         colorscale=['red', 'green']
+    #     )
+    # )
+
+    # Добавление свечей, точек и объема на канвас 
 
     app = Dash(__name__)
 
@@ -59,15 +44,73 @@ def draw_static_graph(
         [ 
             html.Div(
             [ 
-                dcc.Graph(id='live-update-graph', figure=fig, animate=False, animation_options={'redraw': False, 'duration':50000}, style={"height": "100vh"}), 
-                dcc.Interval( id='interval_component', interval=2000), 
+                dcc.Graph(id='live-update-graph', animate=False, animation_options={'redraw': False, 'duration':250000}, style={"height": "100vh"}), 
+                dcc.Interval( id='interval_component', interval=250000), 
             ]), 
         ], 
 
             style = {"height": "100vh"} ) 
     
+    @app.callback(
+        Output('live-update-graph', 'figure'), 
+        [Input('interval_component', 'n_intervals')
+    ])
+
+    def update_graph_live(n):
+
+        str_format="%Y-%m-%d %H:%M:%S"
+
+        _t_fr_actual = pd.read_csv(_t_fr_actual_dir, index_col=['time']).sort_index(ascending=True)
+        _t_fr_predicted = pd.read_csv(_t_fr_predicted_dir, index_col=['time']).sort_index(ascending=True)
+        
+        _t_fr_actual = _t_fr_actual.tail(amount_of_candles)
+        _t_fr_predicted = _t_fr_predicted.tail(amount_of_candles)
+        
+        
+        
+        _t_fr_actual.index = pd.to_datetime(_t_fr_actual.index, format='mixed', errors='raise')
+        _t_fr_predicted.index = pd.to_datetime(_t_fr_predicted.index, format='mixed', errors='raise')
+
+        
+        candlesticks_actual = go.Candlestick(
+            x=_t_fr_actual.index,
+            open=_t_fr_actual['open'],
+            high=_t_fr_actual['high'],
+            low=_t_fr_actual['low'],
+            close=_t_fr_actual['close'],
+            name='Свечи с сервера',
+            increasing_line_color='green',
+            decreasing_line_color='red'
+            )
+        
+        candlesticks_predicted = go.Candlestick(
+            x=_t_fr_predicted.index,
+            open=_t_fr_predicted['open'],
+            high=_t_fr_predicted['high'],
+            low=_t_fr_predicted['low'],
+            close=_t_fr_predicted['close'],
+            name='Предсказанные свечи',
+            increasing_line_color='orange',
+            decreasing_line_color='yellow'
+            )
+        
+
+        fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.02, horizontal_spacing=0.05, column_widths=[1])
+
+        fig.append_trace(candlesticks_actual, row=1, col=1)
+        # fig.append_trace(candlesticks_predicted, row=1, col=1)
+        fig.append_trace(candlesticks_predicted, row=2, col=1)
+        
+        # fig.add_trace(fig_vol, row=1, col=1)
+
+        # fig.update_layout(template='none')
+
+        fig.update_xaxes(rangeslider_visible=True)
+        fig.update_yaxes(rangemode='tozero')
+
+        return fig
     
-    app.run(debug=True, use_reloader=False) # Turn off reloader if inside Jupyter
+    app.run(debug=True, use_reloader=False)
 
             
             

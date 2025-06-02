@@ -104,7 +104,7 @@ while True:
                                             start_pos=eurusd_dict['START_POSITION'],
                                             end_pos=300)
             
-            print(f'Length of the resulting training dataframe: {len(dataframe_for_training)}')
+            print(f'Length of the resulting training dataframe: {len(dataframe_for_training)}') 
             
             for col in columns_for_y:
                 print(f'Curreng y-column under training: {col}')
