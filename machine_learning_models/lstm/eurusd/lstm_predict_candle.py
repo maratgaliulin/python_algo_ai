@@ -8,7 +8,8 @@ import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset
 from sklearn.preprocessing import MinMaxScaler
 from machine_learning_models.classes.stock_predictor import StockPredictor
-from machine_learning_models.lstm.lstm_model_class import LSTMModel
+# from machine_learning_models.lstm.lstm_model_class import LSTMModel
+from machine_learning_models.lstm.transformer_class import OHLCTransformer
 
 # Create Sequences for LSTM ---
 
@@ -175,12 +176,16 @@ def predict_candle(df:pd.DataFrame, test_df:pd.DataFrame, validation_df:pd.DataF
             model = pickle.load(file)
     
     else:
-        model = LSTMModel(
-            input_size=len(columns_order),
+        # model = LSTMModel(
+        #     input_size=len(columns_order),
+        #     hidden_size=64,
+        #     num_layers=2,
+        #     output_size=1
+        # )
+        model = OHLCTransformer(input_size=len(columns_order),
             hidden_size=64,
             num_layers=2,
-            output_size=1
-        )
+            output_size=1)
         criterion = nn.MSELoss()
         optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
         

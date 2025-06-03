@@ -106,7 +106,8 @@ def draw_static_graph(
         # fig.update_layout(template='none')
 
         fig.update_xaxes(rangeslider_visible=True)
-        fig.update_yaxes(rangemode='tozero')
+        # fig.update_yaxes(rangemode='tozero')
+        fig.update_yaxes()
 
         return fig
     
