@@ -8,7 +8,7 @@ import pandas as pd
 
 from .eurusd.lstm_use_prediction import use_prediction
 
-def collect_predictions_into_dataframe(dataframe_line:pd.DataFrame, base_dir_lstm:str, correction_index:float) -> tuple[pd.DataFrame, float, float]:
+def collect_predictions_into_dataframe(dataframe_line:pd.DataFrame, base_dir_lstm:str, correction_index:float) -> tuple[pd.DataFrame, str, float, float]:
 
     columns_for_y = [
         "open_plus_5min",
@@ -94,4 +94,16 @@ def collect_predictions_into_dataframe(dataframe_line:pd.DataFrame, base_dir_lst
     high_value = predicted_values_dataframe['high'].max()
     low_value = predicted_values_dataframe['low'].min()
 
-    return predicted_values_dataframe, high_value, low_value
+    high_value_idx = predicted_values_dataframe['high'].idxmax()
+    low_value_idx = predicted_values_dataframe['low'].idxmin()
+
+    trend_direction = ''
+
+    if(low_value_idx < high_value_idx):
+        trend_direction = 'uptrend'
+    elif(low_value_idx > high_value_idx):
+        trend_direction = 'downtrend'
+    else:
+        trend_direction = 'undefined'
+
+    return predicted_values_dataframe, trend_direction, high_value, low_value

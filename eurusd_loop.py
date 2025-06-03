@@ -135,7 +135,7 @@ while True:
         for col in ohlc_columns:
             dataframe_line[col] = dataframe_line[col] - price_correction
                 
-        predicted_dataframe, high_value, low_value = collect_predictions_into_dataframe(dataframe_line=dataframe_line, base_dir_lstm=eurusd_dict['BASE_DIR_LSTM'], correction_index=eurusd_dict['CORRECTION_INDEX'])
+        predicted_dataframe, trend_direction, high_value, low_value = collect_predictions_into_dataframe(dataframe_line=dataframe_line, base_dir_lstm=eurusd_dict['BASE_DIR_LSTM'], correction_index=eurusd_dict['CORRECTION_INDEX'])
         
         predicted_dataframe = predicted_dataframe + price_correction
 
@@ -163,7 +163,7 @@ while True:
             order_action=eurusd_dict['ORDER_ACTION'],
             high_value=high_value,
             low_value=low_value,
-            trend_direction='undefined',
+            trend_direction=trend_direction,
             magic=eurusd_dict['MAGIC']
         )
 

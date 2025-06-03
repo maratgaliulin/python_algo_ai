@@ -86,100 +86,51 @@ def buy_or_sell(
     print(f'conditions_for_order_placement: {conditions_for_order_placement}.')
     
     if(conditions_for_order_placement):
-        if(present_price_is_closer_to_bottom):
-            
+        if(trend_direction == 'uptrend'):
+
             entry, sl, tp = order_placement_buy(price_impulse_start=low_value, price_impulse_end=high_value, point=point)
-            
-            # print('Present price is closer to predicted low value. Checking if it is greater than or equal to entry price.')
-            print(f'Entry price: {entry}')
-            print(f'Present price ask: {present_price_ask}')
 
-            if(present_price_ask >= entry):
-                print('Present price is greater than or equal to entry price. Placing the order.')
+            print(f'Trend direction: {trend_direction}. Entry price: {entry}. Stoploss: {sl}. Takeprofit: {tp}. Impulse size: {abs(entry - tp)}.')
 
-                determine_the_deal(
-                    symb="EURUSD", 
-                    entry_price=entry,
-                    stoploss=sl,
-                    takeprofit=float(tp),
-                    order_type=order_type_buy,
-                    action=order_action,
-                    magic=magic,
-                    lot=lot,
-                    point=point,
-                    comment='buy'
-                )
+            determine_the_deal(
+                symb="EURUSD", 
+                entry_price=entry,
+                stoploss=sl,
+                takeprofit=float(tp),
+                order_type=order_type_buy,
+                action=order_action,
+                magic=magic,
+                lot=lot,
+                point=point,
+                comment='buy'
+            )
 
-                # time_sleep = 600
-
-            else:
-                present_impulse_size = low_value - present_price_ask
-                if(present_impulse_size >= min_impulse_size):
-                    print('Present price is less than entry price, and satisfies minimal impulse size. Placing the order.')
-
-                    determine_the_deal(
-                        symb="EURUSD", 
-                        entry_price=present_price_ask,
-                        stoploss=present_price_ask - 50 * point,
-                        takeprofit=float(tp),
-                        order_type=order_type_buy,
-                        action=order_action,
-                        magic=magic,
-                        lot=lot,
-                        point=point,
-                        comment='buy'
-                    )
-
-                    # time_sleep = 600/
+               
                 
-        elif(present_price_is_closer_to_top):
+        elif(trend_direction == 'downtrend'):
             
             entry, sl, tp = order_placement_sell(price_impulse_start=high_value, price_impulse_end=low_value, point=point)
+
+            print(f'Trend direction: {trend_direction}. Entry price: {entry}. Stoploss: {sl}. Takeprofit: {tp}. Impulse size: {abs(entry - tp)}.')
 
             # print('Present price is closer to predicted high value. Checking if it is less than or equal to entry price.')
             print(f'Entry price: {entry}')
             print(f'Present price bid: {present_price_bid}')
             
-            if(present_price_bid <= entry):
+            determine_the_deal(
+                symb="EURUSD", 
+                entry_price=entry,
+                stoploss=sl,
+                takeprofit=float(tp),
+                order_type=order_type_sell,
+                action=order_action,
+                magic=magic,
+                lot=lot,
+                point=point,
+                comment='sell'
+            )
 
-                print('Present price is less than or equal to entry price. Placing the order.')
-            
-                determine_the_deal(
-                    symb="EURUSD", 
-                    entry_price=entry,
-                    stoploss=sl,
-                    takeprofit=float(tp),
-                    order_type=order_type_sell,
-                    action=order_action,
-                    magic=magic,
-                    lot=lot,
-                    point=point,
-                    comment='sell'
-                )
-
-                # time_sleep = 600
-
-            else:
-                present_impulse_size = present_price_bid - high_value
-                if(present_impulse_size >= min_impulse_size):
-
-                    print('Present price is greater than entry price, and satisfies minimal impulse size. Placing the order.')
-                
-                    determine_the_deal(
-                        symb="EURUSD", 
-                        entry_price=present_price_bid,
-                        stoploss=present_price_bid + 50 * point,
-                        takeprofit=float(tp),
-                        order_type=order_type_sell,
-                        action=order_action,
-                        magic=magic,
-                        lot=lot,
-                        point=point,
-                        comment='sell'
-                    )
-
-                    # time_sleep = 600
-
+               
     if(positions_of_the_symbol != ()):
         positions_of_the_symbol_dict = positions_of_the_symbol[0]._asdict()                       
         entry = positions_of_the_symbol_dict['price_open']            
