@@ -51,7 +51,7 @@ def return_entry_point_and_takeprofit(predicted_high_price:float, predicted_low_
                 minimal_price_difference_index = idx
 
         # вычисляем зону ликвидности, ближайшую к предсказанной цене high:
-        # for idx in range(len(n_bins)):
+        for idx in range(len(n_bins)):
             current_predicted_price_difference = abs(predicted_high_price - n_bins[idx])
             if (current_predicted_price_difference < abs_predicted_high_price_difference):
                 abs_predicted_high_price_difference = current_predicted_price_difference
@@ -77,7 +77,7 @@ def return_entry_point_and_takeprofit(predicted_high_price:float, predicted_low_
             # print('minimal_price_difference_index:', minimal_price_difference_index)
 
         # вычисляем зону ликвидности, ближайшую к предсказанной цене low:
-        # for idx in range(len(n_bins)):
+        for idx in range(len(n_bins)):
             current_predicted_price_difference = abs(predicted_low_price - n_bins[idx])
             if (current_predicted_price_difference < abs_predicted_low_price_difference):
                 abs_predicted_low_price_difference = current_predicted_price_difference

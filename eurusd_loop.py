@@ -151,6 +151,8 @@ while True:
         high_value += price_correction
         low_value += price_correction
 
+        print(f"high and low values: {high_value}, {low_value}")
+
         save_to_csv(df_to_csv=dataframe_line[['open', 'high', 'low', 'close']], csv_address=eurusd_dict['SAVED_DATAFRAME'])
         save_to_csv(df_to_csv=predicted_dataframe, csv_address=eurusd_dict['SAVED_PREDICTIONS'])
 
