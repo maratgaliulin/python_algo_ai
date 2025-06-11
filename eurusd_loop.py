@@ -145,11 +145,6 @@ while True:
         save_to_csv(df_to_csv=dataframe_line[['open', 'high', 'low', 'close']], csv_address=eurusd_dict['SAVED_DATAFRAME'])
         save_to_csv(df_to_csv=predicted_dataframe, csv_address=eurusd_dict['SAVED_PREDICTIONS'])
         
-        # print(high_value, low_value)
-        
-        # print('PREDICTED DATAFRAME:')
-        # print(predicted_dataframe)
-        
         time_sleep_modifier = buy_or_sell(
             min_impulse_size=0.0025,
             orders_of_the_symbol=eurusd_dict['ORDERS_OF_THE_SYMBOL'],
