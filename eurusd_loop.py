@@ -10,6 +10,7 @@ from methods.save_to_csv import save_to_csv
 from machine_learning_models.lstm.eurusd.lstm_predict_candle_from_single_dataframe import predict_candle
 from machine_learning_models.lstm.lstm_collect_predictions_into_dataframe import collect_predictions_into_dataframe
 from methods.make_dataframe_from_server_for_training import make_dataframe_from_server_for_training
+from methods.return_entry_point_and_takeprofit import return_entry_point_and_takeprofit
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -53,7 +54,7 @@ ohlc_columns = ['open', 'high', 'low', 'close']
 
 amount_of_30_second_intervals_in_a_day = 2880
 
-interval_ordinal_number = 0
+interval_ordinal_number = 1
 
 present_price_bid = mt.symbol_info_tick("EURUSD").bid
 
@@ -101,7 +102,8 @@ while True:
                 'CANCEL_THE_ORDER_ACTION': CANCEL_THE_ORDER_ACTION,
                 'START_POSITION':0,
                 'END_POSITION':92,
-                'CORRECTION_INDEX':0.0
+                'CORRECTION_INDEX':0.0,
+                'COLUMNS_ORDER': COLUMNS_ORDER
             }
         
         
@@ -112,7 +114,7 @@ while True:
 
             dataframe_for_training = make_dataframe_from_server_for_training(timeframe=eurusd_dict['TIMEFRAME_SMALL_MT'],
                                             start_pos=eurusd_dict['START_POSITION'],
-                                            end_pos=300)
+                                            end_pos=300, columns_order=eurusd_dict['COLUMNS_ORDER'])
             
             for col in ohlc_columns:
                 dataframe_for_training[col] = dataframe_for_training[col] - price_correction
@@ -121,26 +123,28 @@ while True:
                 dataframe_for_training[col] = dataframe_for_training[col] - price_correction
             
             print(f'Length of the resulting training dataframe: {len(dataframe_for_training)}')
+
             
             for col in columns_for_y:
                 print(f'Curreng y-column under training: {col}')
-                predict_candle(df=dataframe_for_training, base_dir=BASE_DIR_LSTM, column_for_y=col)
+                predict_candle(df=dataframe_for_training, base_dir=BASE_DIR_LSTM, column_for_y=col, columns_order=eurusd_dict['COLUMNS_ORDER'])
         
         
         
         dataframe_line = make_dataframe_line(timeframe=eurusd_dict['TIMEFRAME_SMALL_MT'],
                                             start_pos=eurusd_dict['START_POSITION'],
-                                            end_pos=eurusd_dict['END_POSITION']
+                                            end_pos=eurusd_dict['END_POSITION'],
+                                            columns_order=eurusd_dict['COLUMNS_ORDER']
                                             )
         
-        print('***************************')
-        print(dataframe_line)
-        print('***************************')
+        # print('***************************')
+        # print(dataframe_line)
+        # print('***************************')
         
         for col in ohlc_columns:
             dataframe_line[col] = dataframe_line[col] - price_correction
                 
-        predicted_dataframe, trend_direction, high_value, low_value = collect_predictions_into_dataframe(dataframe_line=dataframe_line, base_dir_lstm=eurusd_dict['BASE_DIR_LSTM'], correction_index=eurusd_dict['CORRECTION_INDEX'])
+        predicted_dataframe, _, high_value, low_value = collect_predictions_into_dataframe(dataframe_line=dataframe_line, base_dir_lstm=eurusd_dict['BASE_DIR_LSTM'], correction_index=eurusd_dict['CORRECTION_INDEX'], columns_order=eurusd_dict['COLUMNS_ORDER'])
         
         predicted_dataframe = predicted_dataframe + price_correction
 
@@ -149,6 +153,15 @@ while True:
 
         save_to_csv(df_to_csv=dataframe_line[['open', 'high', 'low', 'close']], csv_address=eurusd_dict['SAVED_DATAFRAME'])
         save_to_csv(df_to_csv=predicted_dataframe, csv_address=eurusd_dict['SAVED_PREDICTIONS'])
+
+        entry_point, take_profit, trend_direction = return_entry_point_and_takeprofit(
+            predicted_high_price=high_value,
+            predicted_low_price=low_value,
+            present_price_bid=eurusd_dict['PRESENT_PRICE_BID'],
+            present_price_ask=eurusd_dict['PRESENT_PRICE_ASK'],
+            start_pos=eurusd_dict['START_POSITION'],
+            end_pos=300
+        )
         
         time_sleep_modifier = buy_or_sell(
             min_impulse_size=0.0025,
@@ -161,8 +174,8 @@ while True:
             order_type_buy=eurusd_dict['ORDER_TYPE_BUY'],
             order_type_sell=eurusd_dict['ORDER_TYPE_SELL'],
             order_action=eurusd_dict['ORDER_ACTION'],
-            high_value=high_value,
-            low_value=low_value,
+            entry_point=entry_point,
+            take_profit=take_profit,
             trend_direction=trend_direction,
             magic=eurusd_dict['MAGIC']
         )

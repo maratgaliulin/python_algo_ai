@@ -14,10 +14,10 @@ def order_placement_buy(price_impulse_start: float, price_impulse_end: float, po
     """
 
     # Расчет точки входа
-    entry_point = price_impulse_start - 150 * point
+    entry_point = price_impulse_start - 50 * point
 
     # Уровень стоп-лосса устанавливается на 20 пипсов ниже начала импульса
-    stop_loss = price_impulse_start - 50 * point
+    stop_loss = entry_point - 100 * point
 
     # Расчет уровня тейк-профита
     take_profit = price_impulse_end - 5 * point

@@ -15,7 +15,7 @@ def make_clean_dataframe_from_server(symbol:str, timeframe, start_pos:int, end_p
 
    return df 
 
-def make_dataframe_from_server_for_training(timeframe, start_pos:int, end_pos:int) -> pd.DataFrame:
+def make_dataframe_from_server_for_training(timeframe, start_pos:int, end_pos:int, columns_order:list) -> pd.DataFrame:
     SYMBOL = [
     "EURUSD", # 0
     "AUDUSD", # 1
@@ -24,44 +24,9 @@ def make_dataframe_from_server_for_training(timeframe, start_pos:int, end_pos:in
     "XBRUSD", # 4
     ]
 
-    columns_for_reindex = [
-        "open",
-        "high",
-        "low",
-        "close",
-        "volume",
-        "ADX",
-        "ADL",
-        "ATR_14",
-        "RSI",
-        "MACD",
-        "MACD_signal",
-        "MACD_hist",
-        "open_audusd",
-        "high_audusd",
-        "low_audusd",
-        "close_audusd",
-        "volume_audusd",
-        "open_brentusd",
-        "high_brentusd",
-        "low_brentusd",
-        "close_brentusd",
-        "volume_brentusd",
-        "open_cadusd",
-        "high_cadusd",
-        "low_cadusd",
-        "close_cadusd",
-        "volume_cadusd",
-        # "open_xauusd",
-        # "high_xauusd",
-        # "low_xauusd",
-        # "close_xauusd",
-        # "volume_xauusd",
-        "open_jpyusd",
-        "high_jpyusd",
-        "low_jpyusd",
-        "close_jpyusd",
-        "volume_jpyusd",
+    columns_for_reindex = columns_order.copy()    
+    
+    columns_for_y = [
         "open_plus_5min",
         "high_plus_5min",
         "low_plus_5min",
@@ -95,6 +60,9 @@ def make_dataframe_from_server_for_training(timeframe, start_pos:int, end_pos:in
         "low_plus_40min",
         "close_plus_40min"
         ]
+    
+    for col in columns_for_y:
+        columns_for_reindex.append(col)
     
     dataframe_eurusd = make_clean_dataframe_from_server(SYMBOL[0], timeframe, start_pos, end_pos)
     dataframe_audusd = make_clean_dataframe_from_server(SYMBOL[1], timeframe, start_pos, end_pos)
@@ -173,8 +141,6 @@ def make_dataframe_from_server_for_training(timeframe, start_pos:int, end_pos:in
     close=df_joined['close'],
     window=12  # Стандартный период для ATR
     ).average_true_range()
-    
-    df_joined.drop(columns=["+DI","-DI"], inplace=True)
     
     df_joined = df_joined.loc[~df_joined.isna().any(axis=1)]
     

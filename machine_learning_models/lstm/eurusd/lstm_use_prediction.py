@@ -16,44 +16,8 @@ def create_sequences(data_x, seq_length):
     # print(X)
     return torch.FloatTensor(np.array(X))
 
-def use_prediction(dataframe_line:pd.DataFrame, predict_scaler_x:str, predict_scaler_y:str, y_predictor:str):
+def use_prediction(dataframe_line:pd.DataFrame, predict_scaler_x:str, predict_scaler_y:str, y_predictor:str, columns_order:list):
 
-    columns_order = [
-        "open",
-        "high",
-        "low",
-        "close",
-        "volume",
-        "+DI",
-        "-DI",
-        "ADX",
-        "ADL",
-        "ATR_14",
-        "RSI",
-        "MACD",
-        "MACD_signal",
-        "MACD_hist",
-        "open_audusd",
-        "high_audusd",
-        "low_audusd",
-        "close_audusd",
-        "volume_audusd",
-        "open_brentusd",
-        "high_brentusd",
-        "low_brentusd",
-        "close_brentusd",
-        "volume_brentusd",
-        "open_cadusd",
-        "high_cadusd",
-        "low_cadusd",
-        "close_cadusd",
-        "volume_cadusd",
-        "open_jpyusd",
-        "high_jpyusd",
-        "low_jpyusd",
-        "close_jpyusd",
-        "volume_jpyusd"
-    ]
     
     dataframe_line = dataframe_line.reindex(columns=columns_order)
 

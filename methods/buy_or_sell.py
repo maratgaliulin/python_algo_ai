@@ -17,8 +17,8 @@ def buy_or_sell(
     order_action,
     lot:float,
     magic:int,
-    high_value:float,
-    low_value:float,
+    entry_point:float,
+    take_profit:float,
     trend_direction:str
                 ) -> int:
     
@@ -27,7 +27,7 @@ def buy_or_sell(
     time_sleep = 0
     
     # trend_direction = trend_direction.tolist()
-    actual_impulse_size = high_value - low_value
+    actual_impulse_size = abs(entry_point - take_profit)
     
     # if(trend_direction[0] == [1, 0, 0]):
     #     trend_direction_string = 'downtrend'
@@ -42,26 +42,26 @@ def buy_or_sell(
     impulse_satisfies_minimal_size = actual_impulse_size >= min_impulse_size
     orders_of_the_symbol_is_null = orders_of_the_symbol == ()
     positions_of_the_symbol_is_null = positions_of_the_symbol == ()
-    middle_price = (high_value - low_value) / 2 + low_value
+    # middle_price = (high_value - low_value) / 2 + low_value
     # trend_is_predicted = trend_direction_string == 'uptrend' or trend_direction_string == 'downtrend'
     # trend_is_predicted = trend_direction[0] == 'uptrend' or trend_direction[0] == 'downtrend'
     trend_is_predicted = trend_direction == 'uptrend' or trend_direction == 'downtrend'
-    present_price_top_difference = high_value - present_price_ask
-    present_price_bottom_difference = present_price_bid - low_value
-    present_price_bid_to_middle_value_difference = abs(middle_price - present_price_bid)
-    present_price_ask_to_middle_value_difference = abs(middle_price - present_price_ask)
+    # present_price_top_difference = high_value - present_price_ask
+    # present_price_bottom_difference = present_price_bid - low_value
+    # present_price_bid_to_middle_value_difference = abs(middle_price - present_price_bid)
+    # present_price_ask_to_middle_value_difference = abs(middle_price - present_price_ask)
 
 
-    present_price_is_closer_to_top = present_price_top_difference < present_price_bottom_difference
-    present_price_is_closer_to_bottom = present_price_top_difference > present_price_bottom_difference
-    present_price_is_closer_to_middle_price = (
-        (present_price_bid_to_middle_value_difference < abs(present_price_top_difference)) and
-        (present_price_ask_to_middle_value_difference < abs(present_price_top_difference)) and 
-        (present_price_bid_to_middle_value_difference < abs(present_price_bottom_difference)) and
-        (present_price_ask_to_middle_value_difference < abs(present_price_bottom_difference)))
+    # present_price_is_closer_to_top = present_price_top_difference < present_price_bottom_difference
+    # present_price_is_closer_to_bottom = present_price_top_difference > present_price_bottom_difference
+    # present_price_is_closer_to_middle_price = (
+    #     (present_price_bid_to_middle_value_difference < abs(present_price_top_difference)) and
+    #     (present_price_ask_to_middle_value_difference < abs(present_price_top_difference)) and 
+    #     (present_price_bid_to_middle_value_difference < abs(present_price_bottom_difference)) and
+    #     (present_price_ask_to_middle_value_difference < abs(present_price_bottom_difference)))
 
-    print(f'Predicted high value: {high_value}.')
-    print(f'Predicted low value: {low_value}.')   
+    # print(f'Predicted high value: {high_value}.')
+    # print(f'Predicted low value: {low_value}.')   
     print('***********************************') 
     print(f'Impulse satisfies minimal_size: {impulse_satisfies_minimal_size}.')
     print(f'Impulse minimal size: {min_impulse_size}, predicted impulse size: {actual_impulse_size}.')
@@ -72,23 +72,22 @@ def buy_or_sell(
     # print(f'Trend is predicted: {trend_is_predicted}. Actual trend direction: {trend_direction_string}, {trend_direction}.')
     print(f'Trend is predicted: {trend_is_predicted}. Actual trend direction: {trend_direction}.')
     print('***********************************') 
-    print(f'Present price is closer to predicted high value: {present_price_is_closer_to_top}')
-    print(f'Present price is closer to predicted low value: {present_price_is_closer_to_bottom}')
-    print(f'Present price is closer to middle price: {present_price_is_closer_to_middle_price}')
-    print('***********************************') 
+    # print(f'Present price is closer to predicted high value: {present_price_is_closer_to_top}')
+    # print(f'Present price is closer to predicted low value: {present_price_is_closer_to_bottom}')
+    # print(f'Present price is closer to middle price: {present_price_is_closer_to_middle_price}')
+    # print('***********************************') 
 
     conditions_for_order_placement = (
-                                        # impulse_satisfies_minimal_size and 
+                                        impulse_satisfies_minimal_size and 
                                       orders_of_the_symbol_is_null and 
-                                      positions_of_the_symbol_is_null and 
-                                      (not present_price_is_closer_to_middle_price))
+                                      positions_of_the_symbol_is_null)
     
     print(f'conditions_for_order_placement: {conditions_for_order_placement}.')
     
     if(conditions_for_order_placement):
         if(trend_direction == 'uptrend'):
 
-            entry, sl, tp = order_placement_buy(price_impulse_start=low_value, price_impulse_end=high_value, point=point)
+            entry, sl, tp = order_placement_buy(price_impulse_start=entry_point, price_impulse_end=take_profit, point=point)
 
             print(f'Trend direction: {trend_direction}. Entry price: {entry}. Stoploss: {sl}. Takeprofit: {tp}. Impulse size: {abs(entry - tp)}.')
 
@@ -109,7 +108,7 @@ def buy_or_sell(
                 
         elif(trend_direction == 'downtrend'):
             
-            entry, sl, tp = order_placement_sell(price_impulse_start=high_value, price_impulse_end=low_value, point=point)
+            entry, sl, tp = order_placement_sell(price_impulse_start=entry_point, price_impulse_end=take_profit, point=point)
 
             print(f'Trend direction: {trend_direction}. Entry price: {entry}. Stoploss: {sl}. Takeprofit: {tp}. Impulse size: {abs(entry - tp)}.')
 

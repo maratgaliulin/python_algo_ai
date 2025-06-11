@@ -67,3 +67,38 @@ CANCEL_THE_ORDER_ACTION = mt.TRADE_ACTION_REMOVE
 
 TIMEFRAME_SMALL = '5min'
 TIMEFRAME_SMALL_MT = mt.TIMEFRAME_M5
+
+COLUMNS_ORDER = [
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume",
+        "ADX",
+        "ADL",
+        "ATR_14",
+        "RSI",
+        "MACD",
+        "MACD_signal",
+        "MACD_hist",
+        "open_audusd",
+        "high_audusd",
+        "low_audusd",
+        "close_audusd",
+        "volume_audusd",
+        "open_brentusd",
+        "high_brentusd",
+        "low_brentusd",
+        "close_brentusd",
+        "volume_brentusd",
+        "open_cadusd",
+        "high_cadusd",
+        "low_cadusd",
+        "close_cadusd",
+        "volume_cadusd",
+        "open_jpyusd",
+        "high_jpyusd",
+        "low_jpyusd",
+        "close_jpyusd",
+        "volume_jpyusd"
+    ]

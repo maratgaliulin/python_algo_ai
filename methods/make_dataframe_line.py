@@ -15,7 +15,7 @@ def make_clean_dataframe_from_server(symbol:str, timeframe, start_pos:int, end_p
 
    return df
 
-def make_dataframe_line(timeframe, start_pos:int, end_pos:int) -> pd.DataFrame:
+def make_dataframe_line(timeframe, start_pos:int, end_pos:int, columns_order:list) -> pd.DataFrame:
     
    SYMBOL = [
    "EURUSD", # 0
@@ -25,40 +25,6 @@ def make_dataframe_line(timeframe, start_pos:int, end_pos:int) -> pd.DataFrame:
    "XBRUSD", # 4
    ]
 
-   columns_order = [
-        "open",
-        "high",
-        "low",
-        "close",
-        "volume",
-        "ADX",
-        "ADL",
-        "ATR_14",
-        "RSI",
-        "MACD",
-        "MACD_signal",
-        "MACD_hist",
-        "open_audusd",
-        "high_audusd",
-        "low_audusd",
-        "close_audusd",
-        "volume_audusd",
-        "open_brentusd",
-        "high_brentusd",
-        "low_brentusd",
-        "close_brentusd",
-        "volume_brentusd",
-        "open_cadusd",
-        "high_cadusd",
-        "low_cadusd",
-        "close_cadusd",
-        "volume_cadusd",
-        "open_jpyusd",
-        "high_jpyusd",
-        "low_jpyusd",
-        "close_jpyusd",
-        "volume_jpyusd"
-    ]
    
    dataframe_eurusd = make_clean_dataframe_from_server(SYMBOL[0], timeframe, start_pos, end_pos)
    dataframe_audusd = make_clean_dataframe_from_server(SYMBOL[1], timeframe, start_pos, end_pos)
@@ -97,10 +63,6 @@ def make_dataframe_line(timeframe, start_pos:int, end_pos:int) -> pd.DataFrame:
 
 
    # print(df_joined.loc[df_joined.isna().any(axis=1)].head(50))
-   
-   df_joined.drop(columns=["+DI","-DI"], inplace=True)
-
-
 
    df_joined = df_joined.loc[~df_joined.isna().any(axis=1)]
    

@@ -24,44 +24,7 @@ def create_sequences(data_x, data_y, seq_length):
     # print('////////////////////')
     return torch.FloatTensor(np.array(X)), torch.FloatTensor(np.array(y)).view(-1, 1)
 
-def predict_candle(df:pd.DataFrame, base_dir:str, column_for_y:str):
-
-    columns_order = [
-        "open",
-        "high",
-        "low",
-        "close",
-        "volume",
-        "+DI",
-        "-DI",
-        "ADX",
-        "ADL",
-        "ATR_14",
-        "RSI",
-        "MACD",
-        "MACD_signal",
-        "MACD_hist",
-        "open_audusd",
-        "high_audusd",
-        "low_audusd",
-        "close_audusd",
-        "volume_audusd",
-        "open_brentusd",
-        "high_brentusd",
-        "low_brentusd",
-        "close_brentusd",
-        "volume_brentusd",
-        "open_cadusd",
-        "high_cadusd",
-        "low_cadusd",
-        "close_cadusd",
-        "volume_cadusd",
-        "open_jpyusd",
-        "high_jpyusd",
-        "low_jpyusd",
-        "close_jpyusd",
-        "volume_jpyusd"
-    ]
+def predict_candle(df:pd.DataFrame, base_dir:str, column_for_y:str, columns_order:list):
 
     columns_to_drop = [
         "open_plus_5min",
