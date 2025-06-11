@@ -31,8 +31,6 @@ def make_dataframe_line(timeframe, start_pos:int, end_pos:int) -> pd.DataFrame:
         "low",
         "close",
         "volume",
-        "+DI",
-        "-DI",
         "ADX",
         "ADL",
         "ATR_14",
@@ -99,6 +97,8 @@ def make_dataframe_line(timeframe, start_pos:int, end_pos:int) -> pd.DataFrame:
 
 
    # print(df_joined.loc[df_joined.isna().any(axis=1)].head(50))
+   
+   df_joined.drop(columns=["+DI","-DI"], inplace=True)
 
 
 

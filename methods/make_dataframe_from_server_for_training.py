@@ -13,7 +13,7 @@ def make_clean_dataframe_from_server(symbol:str, timeframe, start_pos:int, end_p
    df.drop(['spread', 'real_volume'], axis=1, inplace=True)
    df.sort_index(ascending=True, inplace=True)
 
-   return df
+   return df 
 
 def make_dataframe_from_server_for_training(timeframe, start_pos:int, end_pos:int) -> pd.DataFrame:
     SYMBOL = [
@@ -30,8 +30,6 @@ def make_dataframe_from_server_for_training(timeframe, start_pos:int, end_pos:in
         "low",
         "close",
         "volume",
-        "+DI",
-        "-DI",
         "ADX",
         "ADL",
         "ATR_14",
@@ -175,6 +173,8 @@ def make_dataframe_from_server_for_training(timeframe, start_pos:int, end_pos:in
     close=df_joined['close'],
     window=12  # Стандартный период для ATR
     ).average_true_range()
+    
+    df_joined.drop(columns=["+DI","-DI"], inplace=True)
     
     df_joined = df_joined.loc[~df_joined.isna().any(axis=1)]
     

@@ -53,7 +53,7 @@ ohlc_columns = ['open', 'high', 'low', 'close']
 
 amount_of_30_second_intervals_in_a_day = 2880
 
-interval_ordinal_number = 1
+interval_ordinal_number = 0
 
 present_price_bid = mt.symbol_info_tick("EURUSD").bid
 
@@ -132,6 +132,11 @@ while True:
                                             start_pos=eurusd_dict['START_POSITION'],
                                             end_pos=eurusd_dict['END_POSITION']
                                             )
+        
+        print('***************************')
+        print(dataframe_line)
+        print('***************************')
+        
         for col in ohlc_columns:
             dataframe_line[col] = dataframe_line[col] - price_correction
                 
