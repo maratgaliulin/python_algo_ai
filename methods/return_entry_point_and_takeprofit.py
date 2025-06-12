@@ -11,7 +11,7 @@ def return_entry_point_and_takeprofit(predicted_high_price:float, predicted_low_
 
     SYMBOL = 'EURUSD'
     TIMEFRAME_LONG_MT = mt.TIMEFRAME_M15
-    num_bins_total = 30
+    num_bins_total = 60
     
     df_joined_eurusd_15min = make_clean_dataframe_from_server(symbol=SYMBOL, timeframe=TIMEFRAME_LONG_MT, start_pos=start_pos, end_pos=end_pos)
 
@@ -22,7 +22,7 @@ def return_entry_point_and_takeprofit(predicted_high_price:float, predicted_low_
     abs_ask_present_price_difference = abs(predicted_high_price - present_price_ask)
 
 
-
+    
 
     abs_predicted_high_price_difference = abs(predicted_high_price - n_bins[0])
 
@@ -51,7 +51,7 @@ def return_entry_point_and_takeprofit(predicted_high_price:float, predicted_low_
                 minimal_price_difference_index = idx
 
         # вычисляем зону ликвидности, ближайшую к предсказанной цене high:
-        for idx in range(len(n_bins)):
+        # for idx in range(len(n_bins)):
             current_predicted_price_difference = abs(predicted_high_price - n_bins[idx])
             if (current_predicted_price_difference < abs_predicted_high_price_difference):
                 abs_predicted_high_price_difference = current_predicted_price_difference
@@ -59,6 +59,12 @@ def return_entry_point_and_takeprofit(predicted_high_price:float, predicted_low_
         
         entry_point = n_bins[minimal_price_difference_index]
         take_profit = n_bins[abs_predicted_high_price_difference_index]
+
+        print('**************************************')
+        print(n_bins)
+        print(entry_point)
+        print(take_profit)
+        print('**************************************')
 
         return entry_point, take_profit, trend_direction
                 
@@ -77,7 +83,7 @@ def return_entry_point_and_takeprofit(predicted_high_price:float, predicted_low_
             # print('minimal_price_difference_index:', minimal_price_difference_index)
 
         # вычисляем зону ликвидности, ближайшую к предсказанной цене low:
-        for idx in range(len(n_bins)):
+        # for idx in range(len(n_bins)):
             current_predicted_price_difference = abs(predicted_low_price - n_bins[idx])
             if (current_predicted_price_difference < abs_predicted_low_price_difference):
                 abs_predicted_low_price_difference = current_predicted_price_difference
@@ -86,6 +92,12 @@ def return_entry_point_and_takeprofit(predicted_high_price:float, predicted_low_
 
         entry_point = n_bins[minimal_price_difference_index]
         take_profit = n_bins[abs_predicted_low_price_difference_index]
+
+        print('**************************************')
+        print(n_bins)
+        print(entry_point)
+        print(take_profit)
+        print('**************************************')
     
     
         return entry_point, take_profit, trend_direction
