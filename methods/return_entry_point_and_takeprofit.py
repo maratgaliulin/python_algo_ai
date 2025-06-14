@@ -13,7 +13,7 @@ def return_entry_point_and_takeprofit(predicted_high_price:float, predicted_low_
     TIMEFRAME_LONG_MT = mt.TIMEFRAME_M15
     num_bins_total = 60
     
-    df_joined_eurusd_15min = make_clean_dataframe_from_server(symbol=SYMBOL, timeframe=TIMEFRAME_LONG_MT, start_pos=start_pos, end_pos=end_pos)
+    df_joined_eurusd_15min = make_clean_dataframe_from_server(symbol=SYMBOL, timeframe=TIMEFRAME_LONG_MT, start_pos=start_pos, end_pos=1500)
 
     n_bins, _ = build_dynamic_profile(data_slice=df_joined_eurusd_15min, num_bins=num_bins_total)
     

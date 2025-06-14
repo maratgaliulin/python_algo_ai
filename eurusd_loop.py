@@ -54,7 +54,7 @@ ohlc_columns = ['open', 'high', 'low', 'close']
 
 amount_of_30_second_intervals_in_a_day = 2880
 
-interval_ordinal_number = 341
+interval_ordinal_number = 689
 
 present_price_bid = mt.symbol_info_tick("EURUSD").bid
 
@@ -107,6 +107,13 @@ while True:
             }
         
         
+        # dataframe_for_training = make_dataframe_from_server_for_training(timeframe=eurusd_dict['TIMEFRAME_SMALL_MT'],
+        #                                     start_pos=eurusd_dict['START_POSITION'],
+        #                                     end_pos=300, columns_order=eurusd_dict['COLUMNS_ORDER'])
+        
+        # dataframe_for_training.to_csv('dataframe_for_training.csv')
+        
+        
         
         if(interval_ordinal_number % amount_of_30_second_intervals_in_a_day == 0):
 
@@ -115,6 +122,9 @@ while True:
             dataframe_for_training = make_dataframe_from_server_for_training(timeframe=eurusd_dict['TIMEFRAME_SMALL_MT'],
                                             start_pos=eurusd_dict['START_POSITION'],
                                             end_pos=300, columns_order=eurusd_dict['COLUMNS_ORDER'])
+            
+            
+
             
             for col in ohlc_columns:
                 dataframe_for_training[col] = dataframe_for_training[col] - price_correction
