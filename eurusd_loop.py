@@ -21,7 +21,7 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 
 
-interval_ordinal_number = 0
+interval_ordinal_number = 1
 
 present_price_bid = mt.symbol_info_tick("EURUSD").bid
 

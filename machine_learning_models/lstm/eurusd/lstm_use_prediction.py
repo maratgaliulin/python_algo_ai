@@ -1,5 +1,6 @@
 import pickle
 import joblib
+import dill
 import pandas as pd
 import numpy as np
 import torch
@@ -23,7 +24,9 @@ def use_prediction(dataframe_line:pd.DataFrame, predict_scaler_x:str, predict_sc
     production_ready_features = generate_automatic_features_for_model_test(df_raw=dataframe_line, cols_order=columns_order, base_dir=base_dir, column_for_y=column_for_y)
 
     columns_order_copy = columns_order.copy()
-    feature_columns = joblib.load(f'{base_dir}/feature_columns/feature_columns_{column_for_y}.pkl')
+
+    with open(f'{base_dir}/feature_columns/feature_columns_{column_for_y}.pkl', 'rb') as file:
+        feature_columns = dill.load(file)
 
     for col in feature_columns:
          columns_order_copy.append(col)
@@ -41,7 +44,7 @@ def use_prediction(dataframe_line:pd.DataFrame, predict_scaler_x:str, predict_sc
     with open(y_predictor, 'rb') as file:
         model = pickle.load(file)
 
-    dataframe_line = pd.merge(dataframe_line, production_ready_features, how="inner", left_index=True, right_index=True)
+    # dataframe_line = pd.merge(dataframe_line, production_ready_features, how="inner", left_index=True, right_index=True)
 
     scaled_data_x = scaler_x.fit_transform(dataframe_line)
 

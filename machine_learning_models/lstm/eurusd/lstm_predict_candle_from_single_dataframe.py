@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import pickle
 import joblib
+import dill
 import os
 import matplotlib.pyplot as plt
 import torch
@@ -66,7 +67,9 @@ def predict_candle(df:pd.DataFrame, base_dir:str, column_for_y:str, columns_orde
     features_filtered = generate_automatic_features_for_model_training(df_raw=df, cols_order=columns_order, column_for_y=column_for_y, base_dir=base_dir)
 
     columns_order_copy = columns_order.copy()
-    feature_columns = joblib.load(f'{base_dir}/feature_columns/feature_columns_{column_for_y}.pkl')
+
+    with open(f'{base_dir}/feature_columns/feature_columns_{column_for_y}.pkl', 'rb') as file:
+        feature_columns = dill.load(file)
 
     for col in feature_columns:
          columns_order_copy.append(col)
@@ -92,10 +95,10 @@ def predict_candle(df:pd.DataFrame, base_dir:str, column_for_y:str, columns_orde
     scaler_y.fit(y_train_raw)
 
     with open(base_dir + '/lstm_regressor_scaler_x.pkl', 'wb') as file:
-            pickle.dump(scaler_x, file)
+        dill.dump(scaler_x, file)
 
     with open(base_dir + f'/lstm_regressor_scaler_y_{column_for_y}.pkl', 'wb') as file:
-            pickle.dump(scaler_y, file)
+        dill.dump(scaler_y, file)
 
     # return
 
@@ -131,7 +134,8 @@ def predict_candle(df:pd.DataFrame, base_dir:str, column_for_y:str, columns_orde
     # )
     # print('len col order:', len(columns_order))
     
-    model = OHLCTransformer(input_size=len(columns_order),
+    model = OHLCTransformer(
+        input_size=len(columns_order_copy),
             hidden_size=64,
             num_layers=2,
             output_size=1
@@ -184,7 +188,7 @@ def predict_candle(df:pd.DataFrame, base_dir:str, column_for_y:str, columns_orde
         
         
     with open(complete_df_dir, 'wb') as file:
-        pickle.dump(model, file)
+        dill.dump(model, file)
     
     # return
     model.eval()

@@ -1,5 +1,7 @@
 import pandas as pd
 import joblib
+import pickle
+import dill
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import FunctionTransformer
 from tsfresh.feature_extraction import EfficientFCParameters
@@ -38,18 +40,21 @@ def generate_automatic_features_for_model_training(df_raw:pd.DataFrame, cols_ord
 
     features_filtered.set_index(['time'], inplace=True, drop=True)
 
-    print(f"Original number of features: {len(extracted_features.columns)}")
-    print(f"Number of features after selection: {len(features_filtered.columns)}")
-    print("Some selected features:")
-    print(features_filtered.head())
+    # print(f"Original number of features: {len(extracted_features.columns)}")
+    # print(f"Number of features after selection: {len(features_filtered.columns)}")
+    # print("Some selected features:")
+    # print(features_filtered.head())
 
     pipeline = Pipeline([
         ('imputer', FunctionTransformer(impute)),
         ('selector', FunctionTransformer(select_columns))
     ])
 
-    joblib.dump(pipeline, f'{base_dir}/pipelines/feature_pipeline_{column_for_y}.pkl')
-    joblib.dump(feature_columns, f'{base_dir}/feature_columns/feature_columns_{column_for_y}.pkl')
+    with open(f'{base_dir}/pipelines/feature_pipeline_{column_for_y}.pkl', 'wb') as file:
+        dill.dump(pipeline, file)
+
+    with open(f'{base_dir}/feature_columns/feature_columns_{column_for_y}.pkl', 'wb') as file:
+        dill.dump(feature_columns, file)
 
     return features_filtered
 
@@ -76,8 +81,14 @@ def generate_automatic_features_for_model_test(df_raw:pd.DataFrame, cols_order:l
         impute_function=impute, 
     )
 
-    pipeline = joblib.load(f'{base_dir}/pipelines/feature_pipeline_{column_for_y}.pkl')
-    feature_columns = joblib.load(f'{base_dir}/feature_columns/feature_columns_{column_for_y}.pkl')
+    with open(f'{base_dir}/pipelines/feature_pipeline_{column_for_y}.pkl', 'rb') as file:
+        pipeline = dill.load(file)
+
+    with open(f'{base_dir}/feature_columns/feature_columns_{column_for_y}.pkl', 'rb') as file:
+        feature_columns = dill.load(file)
+
+    # pipeline = joblib.load(f'{base_dir}/pipelines/feature_pipeline_{column_for_y}.pkl')
+    # feature_columns = joblib.load(f'{base_dir}/feature_columns/feature_columns_{column_for_y}.pkl')
 
     production_ready_features = pipeline.transform(extracted_features)
 
@@ -85,9 +96,9 @@ def generate_automatic_features_for_model_test(df_raw:pd.DataFrame, cols_order:l
 
     production_ready_features.set_index(['time'], inplace=True, drop=True)
 
-    print(f"Original number of features: {len(extracted_features.columns)}")
-    print(f"Number of features after selection: {len(production_ready_features.columns)}")
-    print("Some selected features:")
-    print(production_ready_features.head())
+    # print(f"Original number of features: {len(extracted_features.columns)}")
+    # print(f"Number of features after selection: {len(production_ready_features.columns)}")
+    # print("Some selected features:")
+    # print(production_ready_features.head())
 
     return production_ready_features.loc[:, feature_columns]
