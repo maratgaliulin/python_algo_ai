@@ -98,14 +98,14 @@ def draw_static_graph(
         fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.02, horizontal_spacing=0.05, column_widths=[1])
 
         fig.append_trace(candlesticks_actual, row=1, col=1)
-        # fig.append_trace(candlesticks_predicted, row=1, col=1)
+        fig.append_trace(candlesticks_predicted, row=1, col=1)
         fig.append_trace(candlesticks_predicted, row=2, col=1)
         
         # fig.add_trace(fig_vol, row=1, col=1)
 
         # fig.update_layout(template='none')
 
-        fig.update_xaxes(rangeslider_visible=True)
+        fig.update_xaxes(rangeslider_visible=False)
         # fig.update_yaxes(rangemode='tozero')
         fig.update_yaxes()
 

@@ -11,7 +11,7 @@ SAVED_PREDICTIONS = 'machine_learning_models/lstm/eurusd/saved_predictions.csv'
 eurusd_variables_dict = {
             'SAVED_DATAFRAME': SAVED_DATAFRAME,
             'SAVED_PREDICTIONS': SAVED_PREDICTIONS,
-            'AMOUNT_OF_CANDLES': 40
+            'AMOUNT_OF_CANDLES': 20
         }
 
 

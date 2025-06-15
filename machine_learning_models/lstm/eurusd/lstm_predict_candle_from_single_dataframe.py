@@ -64,6 +64,12 @@ def predict_candle(df:pd.DataFrame, base_dir:str, column_for_y:str, columns_orde
         "close_plus_40min"
     ]
 
+    complete_df_dir = base_dir + f'/lstm_regressor_predict_candle_{column_for_y}.pkl'
+
+    # if(os.path.isfile(complete_df_dir)): 
+    #     print(f'file lstm_regressor_predict_candle_{column_for_y}.pkl already exists. switching to another file.')
+    # else:
+
     features_filtered = generate_automatic_features_for_model_training(df_raw=df, cols_order=columns_order, column_for_y=column_for_y, base_dir=base_dir)
 
     columns_order_copy = columns_order.copy()
@@ -72,7 +78,7 @@ def predict_candle(df:pd.DataFrame, base_dir:str, column_for_y:str, columns_orde
         feature_columns = dill.load(file)
 
     for col in feature_columns:
-         columns_order_copy.append(col)
+        columns_order_copy.append(col)
     
     X_train_raw = df.drop(columns=columns_to_drop)
     
@@ -124,7 +130,7 @@ def predict_candle(df:pd.DataFrame, base_dir:str, column_for_y:str, columns_orde
     
     device = torch.device('cpu')
     
-    complete_df_dir = base_dir + f'/lstm_regressor_predict_candle_{column_for_y}.pkl'
+    
 
     # model = LSTMModel(
     #     input_size=len(columns_order),
@@ -186,11 +192,10 @@ def predict_candle(df:pd.DataFrame, base_dir:str, column_for_y:str, columns_orde
         if (epoch+1) % 10 == 0:
             print(f'Epoch {epoch+1}/{epochs} | Train Loss: {train_loss:.6f}')
         
-        
+    
     with open(complete_df_dir, 'wb') as file:
         dill.dump(model, file)
-    
-    # return
+
     model.eval()
     
     with torch.no_grad():

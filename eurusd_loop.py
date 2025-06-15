@@ -140,6 +140,9 @@ if __name__ == '__main__':
             
             predicted_dataframe = predicted_dataframe + price_correction
 
+            for col in ohlc_columns:
+                dataframe_line[col] = dataframe_line[col] + price_correction            
+
             high_value += price_correction
             low_value += price_correction
 
