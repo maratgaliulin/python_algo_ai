@@ -76,6 +76,8 @@ def collect_predictions_into_dataframe(dataframe_line:pd.DataFrame, base_dir_lst
     queue_1 = multiprocessing.Queue()
     
     for idx in range(len(columns_for_y)):
+
+        print(f'В данное время строится свеча: {columns_for_y[idx]}')
         
         complete_df_dir = base_dir_lstm + f'/lstm_regressor_predict_candle_{columns_for_y[idx]}.pkl'
         # print(idx % 4)
