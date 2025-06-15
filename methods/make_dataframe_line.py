@@ -1,19 +1,10 @@
 import pandas as pd
 import MetaTrader5 as mt
 from methods.adx_calculation import calculate_adx
+from methods.make_clean_dataframe_from_server import make_clean_dataframe_from_server
 import numpy as np
 import ta
 
-def make_clean_dataframe_from_server(symbol:str, timeframe, start_pos:int, end_pos:int) -> pd.DataFrame:
-   mt_dataframe_raw = mt.copy_rates_from_pos(symbol, timeframe, start_pos, end_pos)
-   df = pd.DataFrame(mt_dataframe_raw)
-   df['time']=pd.to_datetime(df['time'], unit='s')
-   df.set_index(['time'], inplace=True)
-   df.rename(columns={'tick_volume': 'volume'}, inplace=True)
-   df.drop(['spread', 'real_volume'], axis=1, inplace=True)
-   df.sort_index(ascending=True, inplace=True)
-
-   return df
 
 def make_dataframe_line(timeframe, start_pos:int, end_pos:int, columns_order:list) -> pd.DataFrame:
     
@@ -60,6 +51,15 @@ def make_dataframe_line(timeframe, start_pos:int, end_pos:int, columns_order:lis
       close=df_joined['close'],
       window=12  # Стандартный период для ATR
    ).average_true_range()
+
+   df_joined['40_min_vol'] = df_joined['close'].pct_change().rolling(8).std()
+   df_joined['20_min_ma'] = df_joined['close'].rolling(4).mean()
+   
+   df_joined['day_of_week'] = df_joined.index.dayofweek
+   df_joined['is_month_end'] = df_joined.index.is_month_end.astype(int)    
+   
+   df_joined['volume_ma_20_min'] = df_joined['volume'].rolling(4).mean()
+   df_joined['volume_ma_ratio'] = df_joined['volume'] / df_joined['volume_ma_20_min']
 
 
    # print(df_joined.loc[df_joined.isna().any(axis=1)].head(50))
