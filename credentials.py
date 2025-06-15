@@ -9,6 +9,9 @@ if not mt.initialize():
 authorized = mt.login(account, pw)
 
 
+ohlc_columns = ['open', 'high', 'low', 'close']
+
+amount_of_30_second_intervals_in_a_day = 2880
 
 # COMMON VARIABLES 
 
@@ -107,4 +110,40 @@ COLUMNS_ORDER = [
         "low_jpyusd",
         "close_jpyusd",
         "volume_jpyusd"
+    ]
+
+
+columns_for_y = [
+        "open_plus_5min",
+        "high_plus_5min",
+        "low_plus_5min",
+        "close_plus_5min",
+        "open_plus_10min",    
+        "high_plus_10min",
+        "low_plus_10min",
+        "close_plus_10min",
+        "open_plus_15min",
+        "high_plus_15min",
+        "low_plus_15min",
+        "close_plus_15min",
+        "open_plus_20min",
+        "high_plus_20min",
+        "low_plus_20min",
+        "close_plus_20min",
+        "open_plus_25min",
+        "high_plus_25min",
+        "low_plus_25min",
+        "close_plus_25min",
+        "open_plus_30min",
+        "high_plus_30min",
+        "low_plus_30min",
+        "close_plus_30min",
+        "open_plus_35min",
+        "high_plus_35min",
+        "low_plus_35min",
+        "close_plus_35min",
+        "open_plus_40min",
+        "high_plus_40min",
+        "low_plus_40min",
+        "close_plus_40min"
     ]

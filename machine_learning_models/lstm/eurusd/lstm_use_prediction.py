@@ -23,7 +23,7 @@ def use_prediction(dataframe_line:pd.DataFrame, predict_scaler_x:str, predict_sc
     production_ready_features = generate_automatic_features_for_model_test(df_raw=dataframe_line, cols_order=columns_order, base_dir=base_dir, column_for_y=column_for_y)
 
     columns_order_copy = columns_order.copy()
-    feature_columns = joblib.load(f'{base_dir}feature_columns/feature_columns_{column_for_y}.pkl')
+    feature_columns = joblib.load(f'{base_dir}/feature_columns/feature_columns_{column_for_y}.pkl')
 
     for col in feature_columns:
          columns_order_copy.append(col)

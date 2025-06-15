@@ -66,7 +66,7 @@ def predict_candle(df:pd.DataFrame, base_dir:str, column_for_y:str, columns_orde
     features_filtered = generate_automatic_features_for_model_training(df_raw=df, cols_order=columns_order, column_for_y=column_for_y, base_dir=base_dir)
 
     columns_order_copy = columns_order.copy()
-    feature_columns = joblib.load(f'{base_dir}feature_columns/feature_columns_{column_for_y}.pkl')
+    feature_columns = joblib.load(f'{base_dir}/feature_columns/feature_columns_{column_for_y}.pkl')
 
     for col in feature_columns:
          columns_order_copy.append(col)

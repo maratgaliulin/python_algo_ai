@@ -1,5 +1,6 @@
 import os 
 import sys 
+import multiprocessing
 
 project_directory = os.path.abspath(os.path.join(os.path.dirname(__file__), "..")) 
 sys.path.append(project_directory)
@@ -7,6 +8,20 @@ sys.path.append(project_directory)
 import pandas as pd
 
 from .eurusd.lstm_use_prediction import use_prediction
+
+def use_prediction_worker(queue, dataframe_line, 
+                    predict_scaler_x, 
+                    predict_scaler_y, 
+                    y_predictor, columns_order, column_for_y,
+                    base_dir):
+    predicted_value = use_prediction(
+        dataframe_line, 
+        predict_scaler_x, 
+        predict_scaler_y, 
+        y_predictor, columns_order, column_for_y,
+        base_dir
+        )
+    queue.put(predicted_value)  # Send result back via Queue
 
 def collect_predictions_into_dataframe(dataframe_line:pd.DataFrame, base_dir_lstm:str, correction_index:float, columns_order:list) -> tuple[pd.DataFrame, str, float, float]:
 
@@ -58,18 +73,35 @@ def collect_predictions_into_dataframe(dataframe_line:pd.DataFrame, base_dir_lst
         freq='5min'
     ).tolist()
     
-    
+    queue_1 = multiprocessing.Queue()
     
     for idx in range(len(columns_for_y)):
         
         complete_df_dir = base_dir_lstm + f'/lstm_regressor_predict_candle_{columns_for_y[idx]}.pkl'
         # print(idx % 4)
         
-        predicted_value = use_prediction(dataframe_line=dataframe_line, 
-                    predict_scaler_x=base_dir_lstm + '/lstm_regressor_scaler_x.pkl', 
-                    predict_scaler_y=base_dir_lstm + f'/lstm_regressor_scaler_y_{columns_for_y[idx]}.pkl', 
-                    y_predictor=complete_df_dir, columns_order=columns_order, column_for_y=columns_for_y[idx],
-                    base_dir=base_dir_lstm)
+        p = multiprocessing.Process(
+            target=use_prediction_worker,
+            args=(queue_1,
+                  dataframe_line, 
+                  base_dir_lstm + '/lstm_regressor_scaler_x.pkl', 
+                  base_dir_lstm + f'/lstm_regressor_scaler_y_{columns_for_y[idx]}.pkl', 
+                  complete_df_dir, 
+                  columns_order, 
+                  columns_for_y[idx],
+                  base_dir_lstm
+                  )
+            )
+        p.start()
+        p.join()
+
+        predicted_value = queue_1.get()
+
+        # predicted_value = use_prediction(dataframe_line=dataframe_line, 
+        #             predict_scaler_x=base_dir_lstm + '/lstm_regressor_scaler_x.pkl', 
+        #             predict_scaler_y=base_dir_lstm + f'/lstm_regressor_scaler_y_{columns_for_y[idx]}.pkl', 
+        #             y_predictor=complete_df_dir, columns_order=columns_order, column_for_y=columns_for_y[idx],
+        #             base_dir=base_dir_lstm)
         
         # print(predicted_value)
         if(idx % 4 == 0):

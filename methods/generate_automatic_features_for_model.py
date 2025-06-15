@@ -48,8 +48,8 @@ def generate_automatic_features_for_model_training(df_raw:pd.DataFrame, cols_ord
         ('selector', FunctionTransformer(select_columns))
     ])
 
-    joblib.dump(pipeline, f'{base_dir}pipelines/feature_pipeline_{column_for_y}.pkl')
-    joblib.dump(feature_columns, f'{base_dir}feature_columns/feature_columns_{column_for_y}.pkl')
+    joblib.dump(pipeline, f'{base_dir}/pipelines/feature_pipeline_{column_for_y}.pkl')
+    joblib.dump(feature_columns, f'{base_dir}/feature_columns/feature_columns_{column_for_y}.pkl')
 
     return features_filtered
 
@@ -76,8 +76,8 @@ def generate_automatic_features_for_model_test(df_raw:pd.DataFrame, cols_order:l
         impute_function=impute, 
     )
 
-    pipeline = joblib.load(f'{base_dir}pipelines/feature_pipeline_{column_for_y}.pkl')
-    feature_columns = joblib.load(f'{base_dir}feature_columns/feature_columns_{column_for_y}.pkl')
+    pipeline = joblib.load(f'{base_dir}/pipelines/feature_pipeline_{column_for_y}.pkl')
+    feature_columns = joblib.load(f'{base_dir}/feature_columns/feature_columns_{column_for_y}.pkl')
 
     production_ready_features = pipeline.transform(extracted_features)
 
