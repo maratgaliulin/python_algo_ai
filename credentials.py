@@ -12,7 +12,7 @@ authorized = mt.login(account, pw)
 
 # COMMON VARIABLES 
 
-sleep_time = 30
+sleep_time = 1
 
 BASE_DIR = 'machine_learning_models/random_forest/eurusd/pickle_files'
 

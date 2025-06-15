@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import pickle
+import joblib
 import os
 import matplotlib.pyplot as plt
 import torch
@@ -10,6 +11,7 @@ from sklearn.preprocessing import RobustScaler
 from machine_learning_models.classes.stock_predictor import StockPredictor
 # from machine_learning_models.lstm.lstm_model_class import LSTMModel
 from machine_learning_models.lstm.transformer_class import OHLCTransformer
+from methods.generate_automatic_features_for_model import generate_automatic_features_for_model_training
 
 # Create Sequences for LSTM ---
 
@@ -60,9 +62,23 @@ def predict_candle(df:pd.DataFrame, base_dir:str, column_for_y:str, columns_orde
         "low_plus_40min",
         "close_plus_40min"
     ]
+
+    features_filtered = generate_automatic_features_for_model_training(df_raw=df, cols_order=columns_order, column_for_y=column_for_y, base_dir=base_dir)
+
+    columns_order_copy = columns_order.copy()
+    feature_columns = joblib.load(f'{base_dir}feature_columns/feature_columns_{column_for_y}.pkl')
+
+    for col in feature_columns:
+         columns_order_copy.append(col)
     
     X_train_raw = df.drop(columns=columns_to_drop)
-    X_train_raw = X_train_raw.reindex(columns=columns_order)
+    
+    X_train_raw = pd.merge(X_train_raw, features_filtered, how="inner", left_index=True, right_index=True)
+
+    X_train_raw = X_train_raw.reindex(columns=columns_order_copy)
+
+    print('X_train_raw')
+    print(X_train_raw)
 
     y_train_raw = df[[column_for_y]]
     

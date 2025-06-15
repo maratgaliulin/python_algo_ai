@@ -1,8 +1,10 @@
 import pickle
+import joblib
 import pandas as pd
 import numpy as np
 import torch
 from sklearn.preprocessing import MinMaxScaler
+from methods.generate_automatic_features_for_model import generate_automatic_features_for_model_test
 
 
 # Примечания:
@@ -16,10 +18,19 @@ def create_sequences(data_x, seq_length):
     # print(X)
     return torch.FloatTensor(np.array(X))
 
-def use_prediction(dataframe_line:pd.DataFrame, predict_scaler_x:str, predict_scaler_y:str, y_predictor:str, columns_order:list):
-
+def use_prediction(dataframe_line:pd.DataFrame, predict_scaler_x:str, predict_scaler_y:str, y_predictor:str, columns_order:list, column_for_y:str, base_dir:str):
     
-    dataframe_line = dataframe_line.reindex(columns=columns_order)
+    production_ready_features = generate_automatic_features_for_model_test(df_raw=dataframe_line, cols_order=columns_order, base_dir=base_dir, column_for_y=column_for_y)
+
+    columns_order_copy = columns_order.copy()
+    feature_columns = joblib.load(f'{base_dir}feature_columns/feature_columns_{column_for_y}.pkl')
+
+    for col in feature_columns:
+         columns_order_copy.append(col)
+    
+    dataframe_line = pd.merge(dataframe_line, production_ready_features, how="inner", left_index=True, right_index=True)
+
+    dataframe_line = dataframe_line.reindex(columns=columns_order_copy)
 
     with open(predict_scaler_x, 'rb') as file:
         scaler_x = pickle.load(file)
@@ -29,6 +40,8 @@ def use_prediction(dataframe_line:pd.DataFrame, predict_scaler_x:str, predict_sc
 
     with open(y_predictor, 'rb') as file:
         model = pickle.load(file)
+
+    dataframe_line = pd.merge(dataframe_line, production_ready_features, how="inner", left_index=True, right_index=True)
 
     scaled_data_x = scaler_x.fit_transform(dataframe_line)
 

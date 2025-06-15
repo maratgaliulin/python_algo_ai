@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset
 from sklearn.preprocessing import MinMaxScaler
-from machine_learning_models.classes.stock_predictor import StockPredictor
+# from machine_learning_models.classes.stock_predictor import StockPredictor
 # from machine_learning_models.lstm.lstm_model_class import LSTMModel
 from machine_learning_models.lstm.transformer_class import OHLCTransformer
 

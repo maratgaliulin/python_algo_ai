@@ -2,7 +2,6 @@ import pandas as pd
 import MetaTrader5 as mt
 from methods.adx_calculation import calculate_adx
 from methods.make_clean_dataframe_from_server import make_clean_dataframe_from_server
-from methods.generate_automatic_features_for_model import generate_automatic_features_for_model_training
 import numpy as np
 import ta
 

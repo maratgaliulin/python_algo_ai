@@ -68,7 +68,8 @@ def collect_predictions_into_dataframe(dataframe_line:pd.DataFrame, base_dir_lst
         predicted_value = use_prediction(dataframe_line=dataframe_line, 
                     predict_scaler_x=base_dir_lstm + '/lstm_regressor_scaler_x.pkl', 
                     predict_scaler_y=base_dir_lstm + f'/lstm_regressor_scaler_y_{columns_for_y[idx]}.pkl', 
-                    y_predictor=complete_df_dir, columns_order=columns_order)
+                    y_predictor=complete_df_dir, columns_order=columns_order, column_for_y=columns_for_y[idx],
+                    base_dir=base_dir_lstm)
         
         # print(predicted_value)
         if(idx % 4 == 0):
