@@ -161,7 +161,7 @@ if __name__ == '__main__':
             )
             
             time_sleep_modifier = buy_or_sell(
-                min_impulse_size=0.0025,
+                min_impulse_size=0.002,
                 orders_of_the_symbol=eurusd_dict['ORDERS_OF_THE_SYMBOL'],
                 positions_of_the_symbol=eurusd_dict['POSITIONS_OF_THE_SYMBOL'],
                 present_price_bid=eurusd_dict['PRESENT_PRICE_BID'],

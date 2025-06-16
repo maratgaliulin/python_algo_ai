@@ -42,23 +42,23 @@ def buy_or_sell(
     impulse_satisfies_minimal_size = actual_impulse_size >= min_impulse_size
     orders_of_the_symbol_is_null = orders_of_the_symbol == ()
     positions_of_the_symbol_is_null = positions_of_the_symbol == ()
-    # middle_price = (high_value - low_value) / 2 + low_value
+    middle_price = (high_price - low_price) / 2 + low_price
     # trend_is_predicted = trend_direction_string == 'uptrend' or trend_direction_string == 'downtrend'
     # trend_is_predicted = trend_direction[0] == 'uptrend' or trend_direction[0] == 'downtrend'
     trend_is_predicted = trend_direction == 'uptrend' or trend_direction == 'downtrend'
-    # present_price_top_difference = high_value - present_price_ask
-    # present_price_bottom_difference = present_price_bid - low_value
-    # present_price_bid_to_middle_value_difference = abs(middle_price - present_price_bid)
-    # present_price_ask_to_middle_value_difference = abs(middle_price - present_price_ask)
+    present_price_top_difference = high_price - present_price_ask
+    present_price_bottom_difference = present_price_bid - low_price
+    present_price_bid_to_middle_value_difference = abs(middle_price - present_price_bid)
+    present_price_ask_to_middle_value_difference = abs(middle_price - present_price_ask)
 
 
-    # present_price_is_closer_to_top = present_price_top_difference < present_price_bottom_difference
-    # present_price_is_closer_to_bottom = present_price_top_difference > present_price_bottom_difference
-    # present_price_is_closer_to_middle_price = (
-    #     (present_price_bid_to_middle_value_difference < abs(present_price_top_difference)) and
-    #     (present_price_ask_to_middle_value_difference < abs(present_price_top_difference)) and 
-    #     (present_price_bid_to_middle_value_difference < abs(present_price_bottom_difference)) and
-    #     (present_price_ask_to_middle_value_difference < abs(present_price_bottom_difference)))
+    present_price_is_closer_to_top = present_price_top_difference < present_price_bottom_difference
+    present_price_is_closer_to_bottom = present_price_top_difference > present_price_bottom_difference
+    present_price_is_closer_to_middle_price = (
+        (present_price_bid_to_middle_value_difference < abs(present_price_top_difference)) and
+        (present_price_ask_to_middle_value_difference < abs(present_price_top_difference)) and 
+        (present_price_bid_to_middle_value_difference < abs(present_price_bottom_difference)) and
+        (present_price_ask_to_middle_value_difference < abs(present_price_bottom_difference)))
 
     # print(f'Predicted high value: {high_value}.')
     # print(f'Predicted low value: {low_value}.')   
@@ -72,9 +72,9 @@ def buy_or_sell(
     # print(f'Trend is predicted: {trend_is_predicted}. Actual trend direction: {trend_direction_string}, {trend_direction}.')
     print(f'Trend is predicted: {trend_is_predicted}. Actual trend direction: {trend_direction}.')
     print('***********************************') 
-    # print(f'Present price is closer to predicted high value: {present_price_is_closer_to_top}')
-    # print(f'Present price is closer to predicted low value: {present_price_is_closer_to_bottom}')
-    # print(f'Present price is closer to middle price: {present_price_is_closer_to_middle_price}')
+    print(f'Present price is closer to predicted high value: {present_price_is_closer_to_top}')
+    print(f'Present price is closer to predicted low value: {present_price_is_closer_to_bottom}')
+    print(f'Present price is closer to middle price: {present_price_is_closer_to_middle_price}')
     # print('***********************************') 
 
     conditions_for_order_placement = (
@@ -85,7 +85,8 @@ def buy_or_sell(
     print(f'conditions_for_order_placement: {conditions_for_order_placement}.')
     
     if(conditions_for_order_placement):
-        if(trend_direction == 'uptrend'):
+        if(present_price_is_closer_to_bottom):
+        # if(trend_direction == 'uptrend'):
 
             entry, sl, tp = order_placement_buy(price_impulse_start=low_price, price_impulse_end=high_price, point=point)
 
@@ -105,8 +106,8 @@ def buy_or_sell(
             )
 
                
-                
-        elif(trend_direction == 'downtrend'):
+        elif(present_price_is_closer_to_top):
+        # elif(trend_direction == 'downtrend'):
             
             entry, sl, tp = order_placement_sell(price_impulse_start=high_price, price_impulse_end=low_price, point=point)
 
