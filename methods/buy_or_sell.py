@@ -17,8 +17,8 @@ def buy_or_sell(
     order_action,
     lot:float,
     magic:int,
-    entry_point:float,
-    take_profit:float,
+    high_price:float,
+    low_price:float,
     trend_direction:str
                 ) -> int:
     
@@ -27,7 +27,7 @@ def buy_or_sell(
     time_sleep = 0
     
     # trend_direction = trend_direction.tolist()
-    actual_impulse_size = abs(entry_point - take_profit)
+    actual_impulse_size = abs(high_price - low_price)
     
     # if(trend_direction[0] == [1, 0, 0]):
     #     trend_direction_string = 'downtrend'
@@ -87,7 +87,7 @@ def buy_or_sell(
     if(conditions_for_order_placement):
         if(trend_direction == 'uptrend'):
 
-            entry, sl, tp = order_placement_buy(price_impulse_start=entry_point, price_impulse_end=take_profit, point=point)
+            entry, sl, tp = order_placement_buy(price_impulse_start=low_price, price_impulse_end=high_price, point=point)
 
             print(f'Trend direction: {trend_direction}. Entry price: {entry}. Stoploss: {sl}. Takeprofit: {tp}. Impulse size: {abs(entry - tp)}.')
 
@@ -108,7 +108,7 @@ def buy_or_sell(
                 
         elif(trend_direction == 'downtrend'):
             
-            entry, sl, tp = order_placement_sell(price_impulse_start=entry_point, price_impulse_end=take_profit, point=point)
+            entry, sl, tp = order_placement_sell(price_impulse_start=high_price, price_impulse_end=low_price, point=point)
 
             print(f'Trend direction: {trend_direction}. Entry price: {entry}. Stoploss: {sl}. Takeprofit: {tp}. Impulse size: {abs(entry - tp)}.')
 

@@ -171,8 +171,8 @@ if __name__ == '__main__':
                 order_type_buy=eurusd_dict['ORDER_TYPE_BUY'],
                 order_type_sell=eurusd_dict['ORDER_TYPE_SELL'],
                 order_action=eurusd_dict['ORDER_ACTION'],
-                entry_point=entry_point,
-                take_profit=take_profit,
+                high_price=high_value,
+                low_price=low_value,
                 trend_direction=trend_direction,
                 magic=eurusd_dict['MAGIC']
             )

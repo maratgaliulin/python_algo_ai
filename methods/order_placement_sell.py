@@ -14,13 +14,13 @@ def order_placement_sell(price_impulse_start: float, price_impulse_end: float, p
     """
 
     # Расчет точки входа
-    entry_point = price_impulse_start + 50 * point
+    entry_point = price_impulse_start
 
     # Уровень стоп-лосса устанавливается на 20 пипсов ниже начала импульса
     stop_loss = price_impulse_start + 100 * point
 
     # Расчет уровня тейк-профита
-    take_profit = price_impulse_end + 5 * point
+    take_profit = price_impulse_end
 
     # Возвращаем рассчитанные уровни
     return entry_point, stop_loss, take_profit
