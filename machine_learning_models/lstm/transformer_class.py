@@ -11,7 +11,7 @@ class OHLCTransformer(nn.Module):
         self.embedding = nn.Linear(input_size, hidden_size)
         encoder_layer = nn.TransformerEncoderLayer(
             d_model=hidden_size,
-            nhead=4,  
+            nhead=4,
             dropout=0.3,
             batch_first=True
         )

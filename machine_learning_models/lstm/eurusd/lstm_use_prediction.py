@@ -4,7 +4,7 @@ import dill
 import pandas as pd
 import numpy as np
 import torch
-from sklearn.preprocessing import MinMaxScaler
+# from sklearn.preprocessing import MinMaxScaler
 from methods.generate_automatic_features_for_model import generate_automatic_features_for_model_test
 
 
@@ -15,8 +15,7 @@ from methods.generate_automatic_features_for_model import generate_automatic_fea
 def create_sequences(data_x, seq_length):
     X = []
     for i in range(len(data_x) - seq_length):
-        X.append(data_x[i:i+seq_length])  # Input sequence (e.g., past 60 days)
-    # print(X)
+        X.append(data_x[i:i+seq_length])  
     return torch.FloatTensor(np.array(X))
 
 def use_prediction(dataframe_line:pd.DataFrame, predict_scaler_x:str, predict_scaler_y:str, y_predictor:str, columns_order:list, column_for_y:str, base_dir:str):
@@ -44,8 +43,6 @@ def use_prediction(dataframe_line:pd.DataFrame, predict_scaler_x:str, predict_sc
     with open(y_predictor, 'rb') as file:
         model = pickle.load(file)
 
-    # dataframe_line = pd.merge(dataframe_line, production_ready_features, how="inner", left_index=True, right_index=True)
-
     scaled_data_x = scaler_x.fit_transform(dataframe_line)
 
     SEQ_LENGTH = 30
@@ -53,6 +50,9 @@ def use_prediction(dataframe_line:pd.DataFrame, predict_scaler_x:str, predict_sc
     X_data = create_sequences(scaled_data_x, SEQ_LENGTH)
     
     model.eval()
+
+    # print('X_data:')
+    # print(X_data)
 
     with torch.no_grad():
         y_pred = model(X_data)

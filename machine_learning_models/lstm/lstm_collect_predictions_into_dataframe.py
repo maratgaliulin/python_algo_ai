@@ -64,8 +64,6 @@ def collect_predictions_into_dataframe(dataframe_line:pd.DataFrame, base_dir_lst
     low_values = []
     close_values = []
 
-    # print('here')
-
     last_candle_time = dataframe_line.iloc[-1].name
 
     num_future_candles = 8

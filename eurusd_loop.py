@@ -12,6 +12,7 @@ from machine_learning_models.lstm.eurusd.lstm_predict_candle_from_single_datafra
 from machine_learning_models.lstm.lstm_collect_predictions_into_dataframe import collect_predictions_into_dataframe
 from methods.make_dataframe_from_server_for_training import make_dataframe_from_server_for_training
 from methods.return_entry_point_and_takeprofit import return_entry_point_and_takeprofit
+from methods.predicted_dataframe_indexing import predicted_dataframe_indexing
 
 def predict_candle_worker(queue, df, base_dir, column_for_y, columns_order):
     result = predict_candle(df, base_dir, column_for_y, columns_order)  
@@ -136,29 +137,38 @@ if __name__ == '__main__':
             for col in ohlc_columns:
                 dataframe_line[col] = dataframe_line[col] - price_correction
                     
-            predicted_dataframe, _, high_value, low_value = collect_predictions_into_dataframe(dataframe_line=dataframe_line, base_dir_lstm=eurusd_dict['BASE_DIR_LSTM'], correction_index=eurusd_dict['CORRECTION_INDEX'], columns_order=eurusd_dict['COLUMNS_ORDER'])
+            predicted_dataframe, _, high_val, low_val = collect_predictions_into_dataframe(dataframe_line=dataframe_line, base_dir_lstm=eurusd_dict['BASE_DIR_LSTM'], correction_index=eurusd_dict['CORRECTION_INDEX'], columns_order=eurusd_dict['COLUMNS_ORDER'])
             
             predicted_dataframe = predicted_dataframe + price_correction
 
             for col in ohlc_columns:
                 dataframe_line[col] = dataframe_line[col] + price_correction 
+            
 
-            predicted_first_candle = predicted_dataframe.iloc[0]
-            actual_last_candle = dataframe_line.iloc[-1]
-
-            print('predicted first candle:')
-            print(predicted_first_candle)
-            print('predicted last candle:')
-            print(actual_last_candle)
+            # high_value += price_correction
+            # low_value += price_correction
 
             
 
-            high_value += price_correction
-            low_value += price_correction
+            print('predicted dataframe before indexing:')   
+            print(predicted_dataframe)         
+            print('//////////////////////////')
+            
+
+
+            predicted_dataframe = predicted_dataframe_indexing(predicted_dataframe=predicted_dataframe, dataframe_line=dataframe_line)
+            print('predicted dataframe after indexing:')
+            print(predicted_dataframe)
+
+            high_value = predicted_dataframe['high'].max()
+            low_value = predicted_dataframe['low'].min()
 
             print(f"high and low values: {high_value}, {low_value}")
 
-            save_to_csv(df_to_csv=dataframe_line[['open', 'high', 'low', 'close']], csv_address=eurusd_dict['SAVED_DATAFRAME'])
+            dataframe_line = dataframe_line.loc[:, ohlc_columns]
+            predicted_dataframe = predicted_dataframe.loc[:, ohlc_columns]
+
+            save_to_csv(df_to_csv=dataframe_line[ohlc_columns], csv_address=eurusd_dict['SAVED_DATAFRAME'])
             save_to_csv(df_to_csv=predicted_dataframe, csv_address=eurusd_dict['SAVED_PREDICTIONS'])
 
             entry_point, take_profit, trend_direction = return_entry_point_and_takeprofit(
