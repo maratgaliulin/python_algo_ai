@@ -1,6 +1,7 @@
 import MetaTrader5 as mt
 from account_info import *
 
+
 if not mt.initialize():
     print("initialize() failed, error code =", mt.last_error())
     quit()

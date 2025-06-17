@@ -1,15 +1,12 @@
 import numpy as np
 import pandas as pd
-import pickle
-import joblib
 import dill
-import os
-import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset
 from sklearn.preprocessing import RobustScaler
-from machine_learning_models.classes.stock_predictor import StockPredictor
+from sklearn.metrics import mean_absolute_error, mean_squared_error, root_mean_squared_error, r2_score
+# from machine_learning_models.classes.stock_predictor import StockPredictor
 # from machine_learning_models.lstm.lstm_model_class import LSTMModel
 from machine_learning_models.lstm.transformer_class import OHLCTransformer
 from methods.generate_automatic_features_for_model import generate_automatic_features_for_model_training
@@ -86,8 +83,8 @@ def predict_candle(df:pd.DataFrame, base_dir:str, column_for_y:str, columns_orde
 
     X_train_raw = X_train_raw.reindex(columns=columns_order_copy)
 
-    print('X_train_raw')
-    print(X_train_raw)
+    # print('X_train_raw')
+    # print(X_train_raw)
 
     y_train_raw = df[[column_for_y]]
     
@@ -207,7 +204,16 @@ def predict_candle(df:pd.DataFrame, base_dir:str, column_for_y:str, columns_orde
     y_train_actual = scaler_y.inverse_transform(y_train.numpy())
     
     # Calculate RMSE
-    train_rmse = np.sqrt(np.mean((y_train_actual - y_train_pred)**2))
-    print(f'\nFinal Train RMSE: {train_rmse:.6f}')
+    # train_rmse = np.sqrt(np.mean((y_train_actual - y_train_pred)**2))
+    # train_mse = np.mean((y_train_actual - y_train_pred)**2)
+    train_mse = mean_squared_error(y_true=y_train_actual, y_pred=y_train_pred)
+    train_rmse = root_mean_squared_error(y_true=y_train_actual, y_pred=y_train_pred)
+    train_mae = mean_absolute_error(y_true=y_train_actual, y_pred=y_train_pred)
+    train_r_squared = r2_score(y_true=y_train_actual, y_pred=y_train_pred)
+
+    print(f'\nFinal Train MSE: {train_mse:.10f}')
+    print(f'\nFinal Train RMSE: {train_rmse:.10f}')
+    print(f'\nFinal Train MAE: {train_mae:.10f}')
+    print(f'\nFinal Train R^2: {train_r_squared:.10f}')
 
     return

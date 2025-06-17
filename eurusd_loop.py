@@ -141,7 +141,17 @@ if __name__ == '__main__':
             predicted_dataframe = predicted_dataframe + price_correction
 
             for col in ohlc_columns:
-                dataframe_line[col] = dataframe_line[col] + price_correction            
+                dataframe_line[col] = dataframe_line[col] + price_correction 
+
+            predicted_first_candle = predicted_dataframe.iloc[0]
+            actual_last_candle = dataframe_line.iloc[-1]
+
+            print('predicted first candle:')
+            print(predicted_first_candle)
+            print('predicted last candle:')
+            print(actual_last_candle)
+
+            
 
             high_value += price_correction
             low_value += price_correction
@@ -161,7 +171,7 @@ if __name__ == '__main__':
             )
             
             time_sleep_modifier = buy_or_sell(
-                min_impulse_size=0.002,
+                min_impulse_size=0.0025,
                 orders_of_the_symbol=eurusd_dict['ORDERS_OF_THE_SYMBOL'],
                 positions_of_the_symbol=eurusd_dict['POSITIONS_OF_THE_SYMBOL'],
                 present_price_bid=eurusd_dict['PRESENT_PRICE_BID'],

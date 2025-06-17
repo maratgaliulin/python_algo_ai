@@ -27,7 +27,13 @@ def buy_or_sell(
     time_sleep = 0
     
     # trend_direction = trend_direction.tolist()
-    actual_impulse_size = abs(high_price - low_price)
+    high_price_pres_price_difference = abs(high_price - present_price_ask)
+    low_price_pres_price_difference = abs(low_price - present_price_bid)
+
+    if (high_price_pres_price_difference > low_price_pres_price_difference):
+        actual_impulse_size = high_price_pres_price_difference
+    else:
+        actual_impulse_size = low_price_pres_price_difference
     
     # if(trend_direction[0] == [1, 0, 0]):
     #     trend_direction_string = 'downtrend'
@@ -88,7 +94,7 @@ def buy_or_sell(
         if(present_price_is_closer_to_bottom):
         # if(trend_direction == 'uptrend'):
 
-            entry, sl, tp = order_placement_buy(price_impulse_start=low_price, price_impulse_end=high_price, point=point)
+            entry, sl, tp = order_placement_buy(price_impulse_start=present_price_ask, price_impulse_end=high_price, point=point)
 
             print(f'Trend direction: {trend_direction}. Entry price: {entry}. Stoploss: {sl}. Takeprofit: {tp}. Impulse size: {abs(entry - tp)}.')
 
@@ -109,7 +115,7 @@ def buy_or_sell(
         elif(present_price_is_closer_to_top):
         # elif(trend_direction == 'downtrend'):
             
-            entry, sl, tp = order_placement_sell(price_impulse_start=high_price, price_impulse_end=low_price, point=point)
+            entry, sl, tp = order_placement_sell(price_impulse_start=present_price_bid, price_impulse_end=low_price, point=point)
 
             print(f'Trend direction: {trend_direction}. Entry price: {entry}. Stoploss: {sl}. Takeprofit: {tp}. Impulse size: {abs(entry - tp)}.')
 
