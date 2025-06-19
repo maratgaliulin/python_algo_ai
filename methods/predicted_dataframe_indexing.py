@@ -3,13 +3,7 @@ import pandas as pd
 def predicted_dataframe_indexing(predicted_dataframe: pd.DataFrame, dataframe_line:pd.DataFrame) -> pd.DataFrame:
     predicted_first_candle = predicted_dataframe.iloc[0]
     actual_last_candle = dataframe_line.iloc[-1]
-
-    print('predicted first candle:')
-    print(predicted_first_candle['open'])
-    print(type(predicted_first_candle['open']))
-    print('predicted last candle:')
-    print(actual_last_candle)
-
+    
     open_index = actual_last_candle['open'] / predicted_first_candle['open']
     high_index = actual_last_candle['high'] / predicted_first_candle['high']
     low_index = actual_last_candle['low'] / predicted_first_candle['low']
