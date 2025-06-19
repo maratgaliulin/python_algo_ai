@@ -15,12 +15,20 @@ class OHLCTransformer(nn.Module):
             dropout=0.3,
             batch_first=True
         )
+
+
+
+
         self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
+
         
         self.dropout = nn.Dropout(0.3)
         self.fc1 = nn.Linear(hidden_size, 16)
         self.fc2 = nn.Linear(16, output_size)
         self.tanh = nn.Tanh()
+
+
+
         
     def forward(self, x):
         # Input shape: (batch_size, seq_len, input_size)

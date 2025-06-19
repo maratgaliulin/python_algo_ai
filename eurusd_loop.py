@@ -24,13 +24,11 @@ pd.set_option('display.max_rows', None)
 
 interval_ordinal_number = 1
 
-present_price_bid = mt.symbol_info_tick("EURUSD").bid
-
-price_correction = present_price_bid * 0.9
-
 if __name__ == '__main__':
     while True:
         try:
+            
+
             print('The number of 30-second interval is:', interval_ordinal_number)
             
             eurusd_dict = {
@@ -74,6 +72,10 @@ if __name__ == '__main__':
                     'CORRECTION_INDEX':0.0,
                     'COLUMNS_ORDER': COLUMNS_ORDER
                 }
+            
+            present_price_bid = eurusd_dict['PRESENT_PRICE_BID']
+
+            price_correction = present_price_bid * 0.9
             
             
             # dataframe_for_training = make_dataframe_from_server_for_training(timeframe=eurusd_dict['TIMEFRAME_SMALL_MT'],
