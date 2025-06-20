@@ -72,4 +72,12 @@ def predicted_dataframe_indexing(predicted_dataframe: pd.DataFrame, dataframe_li
     print('indices:')
     print(open_index, high_index, low_index, close_index)
 
+    print('old dataframe:')
+    print(predicted_dataframe)
+
+    print('----------------------------------')
+
+    print('new dataframe:')
+    print(new_dataframe)
+
     return new_dataframe
