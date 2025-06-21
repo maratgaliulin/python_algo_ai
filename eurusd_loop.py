@@ -22,7 +22,7 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 
 
-interval_ordinal_number = 1
+interval_ordinal_number = 0
 
 if __name__ == '__main__':
     while True:
